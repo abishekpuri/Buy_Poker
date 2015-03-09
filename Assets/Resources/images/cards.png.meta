@@ -1,0 +1,671 @@
+fileFormatVersion: 2
+guid: 4eec4bb658866a34698bcea81a732910
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: windows-playing-cards_0
+    21300002: windows-playing-cards_1
+    21300004: windows-playing-cards_2
+    21300006: windows-playing-cards_3
+    21300008: windows-playing-cards_4
+    21300010: windows-playing-cards_5
+    21300012: windows-playing-cards_6
+    21300014: windows-playing-cards_7
+    21300016: windows-playing-cards_8
+    21300018: windows-playing-cards_9
+    21300020: windows-playing-cards_10
+    21300022: windows-playing-cards_11
+    21300024: windows-playing-cards_12
+    21300026: windows-playing-cards_13
+    21300028: windows-playing-cards_14
+    21300030: windows-playing-cards_15
+    21300032: windows-playing-cards_16
+    21300034: windows-playing-cards_17
+    21300036: windows-playing-cards_18
+    21300038: windows-playing-cards_19
+    21300040: windows-playing-cards_20
+    21300042: windows-playing-cards_21
+    21300044: windows-playing-cards_22
+    21300046: windows-playing-cards_23
+    21300048: windows-playing-cards_24
+    21300050: windows-playing-cards_25
+    21300052: windows-playing-cards_26
+    21300054: windows-playing-cards_27
+    21300056: windows-playing-cards_28
+    21300058: windows-playing-cards_29
+    21300060: windows-playing-cards_30
+    21300062: windows-playing-cards_31
+    21300064: windows-playing-cards_32
+    21300066: windows-playing-cards_33
+    21300068: windows-playing-cards_34
+    21300070: windows-playing-cards_35
+    21300072: windows-playing-cards_36
+    21300074: windows-playing-cards_37
+    21300076: windows-playing-cards_38
+    21300078: windows-playing-cards_39
+    21300080: windows-playing-cards_40
+    21300082: windows-playing-cards_41
+    21300084: windows-playing-cards_42
+    21300086: windows-playing-cards_43
+    21300088: windows-playing-cards_44
+    21300090: windows-playing-cards_45
+    21300092: windows-playing-cards_46
+    21300094: windows-playing-cards_47
+    21300096: windows-playing-cards_48
+    21300098: windows-playing-cards_49
+    21300100: windows-playing-cards_50
+    21300102: windows-playing-cards_51
+    21300104: cards_0
+    21300106: cards_1
+    21300108: cards_2
+    21300110: cards_3
+    21300112: cards_4
+    21300114: cards_5
+    21300116: cards_6
+    21300118: cards_7
+    21300120: cards_8
+    21300122: cards_9
+    21300124: cards_10
+    21300126: cards_11
+    21300128: cards_12
+    21300130: cards_13
+    21300132: cards_14
+    21300134: cards_15
+    21300136: cards_16
+    21300138: cards_17
+    21300140: cards_18
+    21300142: cards_19
+    21300144: cards_20
+    21300146: cards_21
+    21300148: cards_22
+    21300150: cards_23
+    21300152: cards_24
+    21300154: cards_25
+    21300156: cards_26
+    21300158: cards_27
+    21300160: cards_28
+    21300162: cards_29
+    21300164: cards_30
+    21300166: cards_31
+    21300168: cards_32
+    21300170: cards_33
+    21300172: cards_34
+    21300174: cards_35
+    21300176: cards_36
+    21300178: cards_37
+    21300180: cards_38
+    21300182: cards_39
+    21300184: cards_40
+    21300186: cards_41
+    21300188: cards_42
+    21300190: cards_43
+    21300192: cards_44
+    21300194: cards_45
+    21300196: cards_46
+    21300198: cards_47
+    21300200: cards_48
+    21300202: cards_49
+    21300204: cards_50
+    21300206: cards_51
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: cards_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_1
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_2
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_3
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_4
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_5
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_6
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_7
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_8
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_9
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_10
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_11
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_12
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 297
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_14
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_15
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_16
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_17
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_18
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_19
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_20
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_21
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_22
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_23
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_24
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_25
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 198
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_27
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_28
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_29
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_30
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_31
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_32
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_33
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_34
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_35
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_36
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_37
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_38
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 99
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_39
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_40
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_41
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_42
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_43
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_44
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_45
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_46
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_47
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_48
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_49
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_50
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_51
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 0
+        width: 71
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
