@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class Deck : MonoBehaviour {
 	
-	public List<GameObject> cards;			// collection of card gameObjects.
-	public Transform referenceTransform;	// reference position, scale and rotation of entire deck. Positions should be locally coordinated.
-
-	private bool inTransit;	// true if it is in state of change
-	private Vector3 currentVelocity;
+	public List<GameObject> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
+	public Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
+	private bool inTransition;	// true if the cards should be moving around. I'm Not sure if this is the best way for animation.
+	private int transitionType;	//0 or 1 for now. 0 is to merge, and 1 is to spreadout
+	private Vector3 currentVelocity;	//Its used just for input parameter for a function SmoothDamp().
 	//public Card[] cards;
 	//public int cardCount;
 
@@ -17,48 +17,50 @@ public class Deck : MonoBehaviour {
 		cards = new List<GameObject>();
 		referenceTransform = GetComponent<Transform> ();
 
-		generateFullCardDeck ();
-		shuffle ();
-		setUpOrientation (1);
-		//orientation_toHorizontalLayout ();
-		for (int i=0; i<cards.Count; i++)
-		{
-			//SpriteRenderer sprite = cards[i].GetComponent<SpriteRenderer>();
-			//sprite.sortingOrder = i;
-			//cards[i].GetComponent<Card>().SortingOrder = i;
-			//cards[i].GetComponent<Card>().showBackground ();
-			cards[i].GetComponent<Card>().showFace ();
-		}
-		Debug.Log ("called " + cards.Count);
+		//generateFullCardDeck ();
+		//shuffle ();
+		setScaleAndOrder ();
+		//animation_spreadHorizontal ();
+		//animation_merge();
+
+		//Debug.Log ("cardCount = " + cards.Count);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
-		if (inTransit)
+		if (inTransition)	// does not work well
 		{
-			Debug.Log ("moving");
 			for (int i=0; i<cards.Count; i++) {
-				Vector3 targetLocalPos = new Vector3(i*0.3f,0,0);
+				Vector3 targetLocalPos = targetCardPos (transitionType, i);
 				Vector3 newPos = Vector3.SmoothDamp(cards[i].GetComponent<Transform>().localPosition, targetLocalPos, ref currentVelocity, 1f);
+				// I don't really get how SmoothDamp() works. We should manually implement vector translation. Temporary solution only.
 				cards[i].GetComponent<Transform>().localPosition = newPos;
-				//cards [i].GetComponent<Card> ().SortingOrder = i;
 			}
 			
 		}
 
 	}
 
-	public void orientation_toHorizontalLayout()
+	public void openDeck()
 	{
-		for (int i=0; i<cards.Count; i++) {
-			cards [i].GetComponent<Card> ().SortingOrder = i;
+		for (int i=0; i<cards.Count; i++)
+		{
+			cards[i].GetComponent<Card>().SortingOrder = i;
+			cards[i].GetComponent<Card>().showFace ();
 		}
-		inTransit = true;
 	}
 
+	public void closeDeck()
+	{
+		for (int i=0; i<cards.Count; i++)
+		{
+			cards[i].GetComponent<Card>().SortingOrder = i;
+			cards[i].GetComponent<Card>().showBackground ();
+		}
+	}
 
-	private Vector3 targetCardLocalPosition(int type, int indexReference)
+	private Vector3 targetCardPos(int type, int indexReference)	//returns target vector for each cards. Temporary solution
 	{
 		switch (type)
 		{
@@ -69,54 +71,58 @@ public class Deck : MonoBehaviour {
 		}
 	}
 
-	private void setUpOrientation(int type = 0)
+	public void animation_spreadHorizontal()
 	{
 		for (int i=0; i<cards.Count; i++) {
-			//SpriteRenderer sprite = cards[i].GetComponent<SpriteRenderer>();
-			//sprite.sortingOrder = i;
+			cards [i].GetComponent<Card> ().SortingOrder = i;
+		}
+		inTransition = true;
+		transitionType = 1;
+	}
+	public void animation_merge()
+	{
+		for (int i=0; i<cards.Count; i++) {
+			cards [i].GetComponent<Card> ().SortingOrder = i;
+		}
+		inTransition = true;
+		transitionType = 0;
+	}
+
+
+	private void setScaleAndOrder()
+	{
+		for (int i=0; i<cards.Count; i++)
+		{
 			cards [i].GetComponent<Card> ().SortingOrder = i;
 			cards[i].GetComponent<Transform>().localScale = referenceTransform.localScale;
-			cards[i].GetComponent<Transform>().localPosition = targetCardLocalPosition (type, i);
+			//cards[i].GetComponent<Transform>().localPosition = targetCardPos (type, i);
+			
+		}
+	}
+
+	public void setupOrientation(int type = 0)	// later on it should be private
+	{
+		for (int i=0; i<cards.Count; i++) {
+			cards [i].GetComponent<Card> ().SortingOrder = i;
+			//cards [i].GetComponent<Card> ().SortingOrder = i;
+			//cards[i].GetComponent<Transform>().localScale = referenceTransform.localScale;
+			cards[i].GetComponent<Transform>().localPosition = targetCardPos (type, i);
 
 		}
 	}
 
-	/*
-	public void AddCard(int suit, int rank, bool showFaceUp)
-	{
-		Card cardController = cards [cards.Count].GetComponent<Card> ();
-		cardController.rank = rank;
-		cardController.suit = suit;
 
-	}
-	*/
-	/*
 
-	public void new_card(Card card)
-	{
-		deckTransform = GetComponent<Transform> ();
-		//cards = 
-	}
-	*/
-
-	/*
-	public void new_card(int rank, int suit)
-	{
-
-		cards.Add ((Card)Instantiate (Resources.Load ("prefab/card"), Vector3.zero, Quaternion.identity));
-		cards[cards.Count-1].rank = rank;
-		cards [cards.Count - 1].suit = suit;
-	}
-	*/
-
-	public void new_card(int rank, int suit)
+	public void new_card(int rank, int suit)	// create a new card object into the scene, and adds its reference to the cardlist.
 	{
 		GameObject newCard = (GameObject)Instantiate (Resources.Load ("prefab/card"), referenceTransform.localPosition, Quaternion.identity);
-		newCard.GetComponent<Card>().rank = rank;
+		// instantiate() creates an object into the scene. Then, it returns Object class.
+		newCard.GetComponent<Card>().rank = rank;	//set rank and suit
 		newCard.GetComponent<Card>().suit = suit;
-		newCard.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();
-
-		cards.Add (newCard);
+		newCard.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();// let all new cards become a child of this deck.
+		newCard.GetComponent<Card>().showFace ();
+		cards.Add (newCard);	// add newCard to list of cards.
+		setScaleAndOrder ();
 	}
 
 	public void generateFullCardDeck()
@@ -124,7 +130,7 @@ public class Deck : MonoBehaviour {
 		for (int i=1; i<=4; ++i)
 			for (int j=1; j<=13; ++j)
 				new_card(j,i);
-	
+		setScaleAndOrder ();
 	}
 
 	public void shuffle()
@@ -136,6 +142,7 @@ public class Deck : MonoBehaviour {
 			cards[i] = cards[swap_target];
 			cards[swap_target] = temp;
 		}
+		setScaleAndOrder ();
 	}
 
 

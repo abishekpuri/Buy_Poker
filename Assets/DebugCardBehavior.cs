@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * Use this code on the card object to test card behavior.
+ * 
+ * 
+ * 
+ * 
+ * */
 public class DebugCardBehavior : MonoBehaviour {
 		
-	Card cardController;
+	Card theCardToBeChallenged;
 	int state=0;
 
 	// Use this for initialization
 	void Start () {
 
-		cardController = GetComponent<Card>();
+		theCardToBeChallenged = GetComponent<Card>();
 
 
 	}
@@ -19,20 +26,20 @@ public class DebugCardBehavior : MonoBehaviour {
 	
 	}
 
-	void OnMouseDown()
+	void OnMouseDown()	// this function is called whenever you click. YOU NEED "collider" component on gameObject to make this work.
 	{
-		Debug.Log ("mouse up");
+		//Debug.Log ("mouse up");
 		state++;
 		switch (state) {
 		case 1:
-				cardController.showBackground ();
+				theCardToBeChallenged.showBackground ();
 				break;
 		case 2:
-				cardController.showFace ();
+				theCardToBeChallenged.showFace ();
 				state = 0;
 				break;
 		case 3:
-				cardController.hideCard ();
+				theCardToBeChallenged.hideCard ();
 				
 				break;
 		}

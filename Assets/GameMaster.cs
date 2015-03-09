@@ -4,6 +4,11 @@ using System.Collections;
 public class GameMaster : MonoBehaviour {
 
 
+	void Awake() {
+		Card.cardSpriteList = Resources.LoadAll <Sprite> ("images/cards");
+		Debug.Log ("Card sprite resourses loaded once and for all");
+	}
+
 	// Use this for initialization
 	void Start () {
 		//deck = new Deck ();

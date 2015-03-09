@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{D6B9C9AC-9DD7-5454-7A0F-79FB538EE559}</ProjectGuid>
+	<ProjectGuid>{08A51559-8A6D-154D-DF16-BF6974CF02AA}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Card.cs" />
+     <Compile Include="Assets\ChangeScene.cs" />
      <Compile Include="Assets\DebugCardBehavior.cs" />
+     <Compile Include="Assets\DebugDeckBehavior.cs" />
      <Compile Include="Assets\Deck.cs" />
      <Compile Include="Assets\GameMaster.cs" />
  <Reference Include="UnityEngine.UI">
