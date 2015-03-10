@@ -20,13 +20,11 @@ public class Card : MonoBehaviour {
 		set{suit = value;}
 	}
 
-	public int SortingOrder{
-		set{
-			sortingOrder = value;
-			GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
-		}
+	public void setSortingOrder(int value)
+	{
+		sortingOrder = value;
+		GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
 	}
-
 
 
 

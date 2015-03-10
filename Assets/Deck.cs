@@ -24,6 +24,7 @@ public class Deck : MonoBehaviour {
 		//animation_merge();
 
 		//Debug.Log ("cardCount = " + cards.Count);
+		GameMaster.reportDeckToGameMaster (this);
 	}
 	
 	// Update is called once per frame
@@ -32,10 +33,12 @@ public class Deck : MonoBehaviour {
 		if (inTransition)	// does not work well
 		{
 			for (int i=0; i<cards.Count; i++) {
-				Vector3 targetLocalPos = targetCardPos (transitionType, i);
-				Vector3 newPos = Vector3.SmoothDamp(cards[i].GetComponent<Transform>().localPosition, targetLocalPos, ref currentVelocity, 1f);
+				Vector3 targetLocalPos = getTargetCardPos (transitionType, i);
+				//Vector3 newPos = Vector3.SmoothDamp(cards[i].GetComponent<Transform>().localPosition, targetLocalPos, ref currentVelocity, 1f);
 				// I don't really get how SmoothDamp() works. We should manually implement vector translation. Temporary solution only.
-				cards[i].GetComponent<Transform>().localPosition = newPos;
+				Vector3 deltaPos = targetLocalPos-cards[i].GetComponent<Transform>().localPosition;
+				//cards[i].GetComponent<Transform>().localPosition = newPos;
+				cards[i].GetComponent<Transform>().localPosition += 2*deltaPos*Time.deltaTime;
 			}
 			
 		}
@@ -44,23 +47,24 @@ public class Deck : MonoBehaviour {
 
 	public void openDeck()
 	{
+		setScaleAndOrder ();
 		for (int i=0; i<cards.Count; i++)
 		{
-			cards[i].GetComponent<Card>().SortingOrder = i;
+			//cards[i].GetComponent<Card>().SortingOrder = i;
 			cards[i].GetComponent<Card>().showFace ();
 		}
 	}
 
 	public void closeDeck()
 	{
+		setScaleAndOrder ();
 		for (int i=0; i<cards.Count; i++)
 		{
-			cards[i].GetComponent<Card>().SortingOrder = i;
 			cards[i].GetComponent<Card>().showBackground ();
 		}
 	}
 
-	private Vector3 targetCardPos(int type, int indexReference)	//returns target vector for each cards. Temporary solution
+	private Vector3 getTargetCardPos(int type, int indexReference)	//returns target vector for each cards. Temporary solution
 	{
 		switch (type)
 		{
@@ -73,17 +77,21 @@ public class Deck : MonoBehaviour {
 
 	public void animation_spreadHorizontal()
 	{
+		setScaleAndOrder ();
+		/*
 		for (int i=0; i<cards.Count; i++) {
 			cards [i].GetComponent<Card> ().SortingOrder = i;
-		}
+		}*/
 		inTransition = true;
 		transitionType = 1;
 	}
 	public void animation_merge()
 	{
+		setScaleAndOrder ();
+		/*
 		for (int i=0; i<cards.Count; i++) {
 			cards [i].GetComponent<Card> ().SortingOrder = i;
-		}
+		}*/
 		inTransition = true;
 		transitionType = 0;
 	}
@@ -93,7 +101,7 @@ public class Deck : MonoBehaviour {
 	{
 		for (int i=0; i<cards.Count; i++)
 		{
-			cards [i].GetComponent<Card> ().SortingOrder = i;
+			cards [i].GetComponent<Card> ().setSortingOrder (i);
 			cards[i].GetComponent<Transform>().localScale = referenceTransform.localScale;
 			//cards[i].GetComponent<Transform>().localPosition = targetCardPos (type, i);
 			
@@ -103,10 +111,10 @@ public class Deck : MonoBehaviour {
 	public void setupOrientation(int type = 0)	// later on it should be private
 	{
 		for (int i=0; i<cards.Count; i++) {
-			cards [i].GetComponent<Card> ().SortingOrder = i;
+			cards [i].GetComponent<Card> ().setSortingOrder (i);
 			//cards [i].GetComponent<Card> ().SortingOrder = i;
 			//cards[i].GetComponent<Transform>().localScale = referenceTransform.localScale;
-			cards[i].GetComponent<Transform>().localPosition = targetCardPos (type, i);
+			cards[i].GetComponent<Transform>().localPosition = getTargetCardPos (type, i);
 
 		}
 	}
