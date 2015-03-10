@@ -82,7 +82,9 @@ public class Deck : MonoBehaviour {
 		newCard.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();// let all new cards become a child of this deck.
 		newCard.GetComponent<Card>().showFace ();
 		cards.Add (newCard);	// add newCard to list of cards.
-		setScaleAndOrder ();
+		Debug.Log (cards.Count + " cards count ");
+        setupLayout(currentLayoutType);
+		setupLayout(currentLayoutType);
 	}
 
 	public void destroyAll()
@@ -91,8 +93,6 @@ public class Deck : MonoBehaviour {
 		{
 			Destroy (cards[0].gameObject);
 			cards.Remove (cards[0]);
-			//cards [i].GetComponent<Card> ().setSortingOrder (i);
-			//cards[i].GetComponent<Transform>().localScale = referenceTransform.localScale;
 		}
 		Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}

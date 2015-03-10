@@ -66,9 +66,9 @@ public class Card : MonoBehaviour {
 		if (GetComponent<SpriteRenderer> () == null)
 			this.gameObject.AddComponent ("SpriteRenderer");	//Adds component to the gameObject if sprite is null
 		GetComponent<SpriteRenderer> ().sprite = getCardSprite ();
-		movementEnabled = false;
+		movementEnabled = true;
 
-		//Debug.Log ("Card start");
+		Debug.Log ("Card initialized");
 	}
 
 	// Awake is called before Start()
