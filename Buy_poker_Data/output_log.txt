@@ -12,21 +12,21 @@ Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assemb
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.071 seconds
+- Completed reload, in  0.072 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.dll (this message is harmless)
-UnloadTime: 8.463410 ms
+UnloadTime: 2.957575 ms
 Card sprite resourses loaded once and for all
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 256.
-Total: 2.212433 ms (FindLiveObjects: 0.037770 ms CreateObjectMapping: 0.026274 ms MarkObjects: 0.513182 ms  DeleteObjects: 0.011905 ms)
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 261.
+Total: 0.760742 ms (FindLiveObjects: 0.014779 ms CreateObjectMapping: 0.009442 ms MarkObjects: 0.188030 ms  DeleteObjects: 0.004516 ms)
 
 Deck 1reported to gameMaster
  

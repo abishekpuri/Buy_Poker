@@ -6,7 +6,7 @@ public class Deck : MonoBehaviour {
 	
 	public List<GameObject> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
 	public Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
-	private bool inTransition;	// true if the cards should be moving around. I'm Not sure if this is the best way for animation.
+	private bool moveEnabled;	// true if the cards should be moving around. I'm Not sure if this is the best way for animation.
 	private int transitionType;	//0 or 1 for now. 0 is to merge, and 1 is to spreadout
 	private Vector3 currentVelocity;	//Its used just for input parameter for a function SmoothDamp().
 	//public Card[] cards;
@@ -30,7 +30,7 @@ public class Deck : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		if (inTransition)	// does not work well
+		if (moveEnabled)	// does not work well
 		{
 			for (int i=0; i<cards.Count; i++) {
 				Vector3 targetLocalPos = getTargetCardPos (transitionType, i);
@@ -82,7 +82,7 @@ public class Deck : MonoBehaviour {
 		for (int i=0; i<cards.Count; i++) {
 			cards [i].GetComponent<Card> ().SortingOrder = i;
 		}*/
-		inTransition = true;
+		moveEnabled = true;
 		transitionType = 1;
 	}
 	public void animation_merge()
@@ -92,7 +92,7 @@ public class Deck : MonoBehaviour {
 		for (int i=0; i<cards.Count; i++) {
 			cards [i].GetComponent<Card> ().SortingOrder = i;
 		}*/
-		inTransition = true;
+		moveEnabled = true;
 		transitionType = 0;
 	}
 
