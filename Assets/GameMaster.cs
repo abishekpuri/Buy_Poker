@@ -14,7 +14,7 @@ public class GameMaster : MonoBehaviour {
 	}
 
 
-
+	//Awake is called before start
 	void Awake() {
 		Card.cardSpriteList = Resources.LoadAll <Sprite> ("images/cards");
 		Debug.Log ("Card sprite resourses loaded once and for all");

@@ -6,6 +6,7 @@ public class DebugDeckBehavior : MonoBehaviour {
 	Deck theDeckToBeChallenged;
 	int rankTextField;
 	int suitTextField;
+	int layoutTextField;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +25,28 @@ public class DebugDeckBehavior : MonoBehaviour {
 	
 	}
 
-	void add_new()
+	public void setLayoutTextField(string value)
+	{
+		layoutTextField = int.Parse(value);
+	}
+
+	public void setRankTextField(string value)
+	{
+		rankTextField = int.Parse(value);
+	}
+
+	public void setSuitTextField(string value)
+	{
+		suitTextField = int.Parse(value);
+	}
+
+	public void spread()
+	{
+		theDeckToBeChallenged.setupLayout (layoutTextField);
+	}
+
+
+	public void add_new()
 	{
 		theDeckToBeChallenged.new_card (rankTextField, suitTextField);
 	}
