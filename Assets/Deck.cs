@@ -95,7 +95,7 @@ public class Deck : MonoBehaviour {
 	public void addExistingCard(GameObject card)	//add existing card. It should be distinguished from new_card
 	{
 		cards.Add (card);
-		//setupLayout (currentLayoutType);
+		setupLayout (currentLayoutType);
 		card.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();
 		Debug.Log ("control transfer successful");
 	}
