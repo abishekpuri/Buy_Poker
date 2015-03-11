@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Card : MonoBehaviour {
 
+	const float rotationSpeed=3f;
+	const float movementSpeed = 4f;
+
 	static public Sprite[] cardSpriteList;// = Resources.LoadAll <Sprite> ("images/cards");	//preLoaded array of sprites from Assets/Resources/images folder
 
 	public int rank;	// 1 to 13, 1 is Ace
@@ -10,6 +13,7 @@ public class Card : MonoBehaviour {
 
 	private int sortingOrder;	// order in 2D graphics layer. Sprite with higher order is drawn on top.
 	private Vector3 targetLocalPos;		// target position of the card, in local coordinate system. Animation script is Moved from Deck class to Card class.
+	private Vector3 targetLocalRotation;		// target rotation of the card, in local coordinate system. Euler rotation.
 	private bool movementEnabled;		//if enabled, card moves towards to the targetPosition
 
 
@@ -48,10 +52,11 @@ public class Card : MonoBehaviour {
 		GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
 	}
 
-	public void setTargetPos(Vector4 pos)
+	public void setTargetPos(Vector3[] pos)
 	{
 		movementEnabled = true;
-		targetLocalPos = pos;
+		targetLocalPos = pos[0];
+		targetLocalRotation = pos [1];
 	}
 
 	private Sprite getCardSprite()	//returns card sprite based on rank and suit
@@ -81,8 +86,22 @@ public class Card : MonoBehaviour {
 		if (movementEnabled)
 		{
 			Vector3 deltaPos = targetLocalPos-GetComponent<Transform>().localPosition;
-			GetComponent<Transform>().localPosition += 4*deltaPos*Time.deltaTime;
-			
+			GetComponent<Transform>().localPosition += movementSpeed*deltaPos*Time.deltaTime;
+
+			transform.rotation = Quaternion.Slerp(GetComponent<Transform>().localRotation, Quaternion.Euler (targetLocalRotation),Time.deltaTime * rotationSpeed);
 		}
 	}
 }
+
+
+
+
+
+
+/*
+ * 
+ * lw $t0, 28($s0)
+ * addi $t0, $t0, 11
+ * sw $t0, 8($s0)
+ * 
+ * */

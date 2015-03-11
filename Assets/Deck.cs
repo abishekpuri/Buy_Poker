@@ -12,7 +12,14 @@ public class Deck : MonoBehaviour {
 
 
 
-
+	public void transferTopCardTo(Deck another)
+	{
+		Debug.Log ("Card count = " + cards.Count);
+		Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
+		another.addExistingCard (cards[cards.Count-1]);
+		cards.Remove (cards [cards.Count - 1]);
+		setupLayout(currentLayoutType);
+	}
 
 	/*
 	 * type 0 = collapse
@@ -20,7 +27,8 @@ public class Deck : MonoBehaviour {
 	 * type 2 = spread horizontal, from middle
 	 * type 3 = complete seperation, to the right
 	 * type 4 = complete seperation, from middle
-	 * type 4 = hand spread, with angle. Spread to right.
+	 * type 5 = hand spread, with angle. Spread to right.
+	 * type 6 = hand spread, with angle. Spreads from middle.
 	 * */
 	public void setupLayout(int type)
 	{
@@ -83,9 +91,17 @@ public class Deck : MonoBehaviour {
 		newCard.GetComponent<Card>().showFace ();
 		cards.Add (newCard);	// add newCard to list of cards.
 		Debug.Log (cards.Count + " cards count ");
-        setupLayout(currentLayoutType);
 		setupLayout(currentLayoutType);
 	}
+
+	public void addExistingCard(GameObject card)	//add existing card. It should be distinguished from new_card
+	{
+		cards.Add (card);
+		setupLayout (currentLayoutType);
+		card.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();
+		Debug.Log ("control transfer successful");
+	}
+
 
 	public void destroyAll()
 	{
@@ -97,31 +113,49 @@ public class Deck : MonoBehaviour {
 		Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}
 	
-	private Vector4 computeIndividualCardTargetPos(int orientationType, int indexReference)	//returns target vector for each cards. Temporary solution
+	private Vector3[] computeIndividualCardTargetPos(int orientationType, int indexReference)	//returns target vector for each cards. Temporary solution
 	{
-		// 4th vector represents rotation.
+		// 0th index represents position.
+		// 1th index represents Euler rotation.
+		Vector3[] pos = new Vector3[2];
+		pos[0] = new Vector3(0,0,0);
+		pos [1] = new Vector3 (0,0,0);
 		switch (orientationType)
 		{
 		case 1:
-			return new Vector3 (indexReference*0.3f,0,0);
+			pos[0] = new Vector3 (indexReference*0.3f,0,0);
+			break;
 		case 2:
-			return new Vector3 (indexReference*0.3f - (0.3f*(cards.Count-1))*0.5f,0,0);
+			pos[0] = new Vector3 (indexReference*0.3f - (0.3f*(cards.Count-1))*0.5f,0,0);
+			break;
 		case 3:
-			return new Vector3 (indexReference*1f,0,0);
+			pos[0] = new Vector3 (indexReference*1f,0,0);
+			break;
 		case 4:
-			return new Vector3 (indexReference*1f - (1f*(cards.Count-1))*0.5f,0,0);
+			pos[0] = new Vector3 (indexReference*1f - (1f*(cards.Count-1))*0.5f,0,0);
+			break;
 		case 5:
-			return new Vector4 (indexReference*0.2f,0,0,indexReference*5);
+			pos[0] = new Vector3 (indexReference*0.3f,0,0);
+			pos[1] = new Vector3 (0,0,indexReference*(-40f)/(cards.Count));
+			break;
+		case 6:			// seems to be kinda working only with a lot of cards
+			float middleCardIndex = cards.Count/2f;		//reference point for yDist=0
+			float yDist = Mathf.Abs(indexReference-middleCardIndex);	//Y distance from middle
+			yDist = (1-Mathf.Cos(yDist/(cards.Count/2f)))*150;		// y distance transformed from linear to curve
+			pos[0] = new Vector3 (indexReference*0.3f - (0.3f*(cards.Count-1))*0.5f,-yDist/(cards.Count),0);
+			pos[1] = new Vector3 (0,0,(indexReference*(-40f))/(cards.Count) + 20f);
+			break;
 		default:
-			return new Vector3(0,0,0);
+			break;
 		}
+		return pos;
 	}
 
 	// Use this for initialization
 	void Start () {
 		cards = new List<GameObject>();
 		referenceTransform = GetComponent<Transform> ();
-		GameMaster.reportDeckToGameMaster (this);
+		GameMaster.reportDeckToGameMaster (this.gameObject);
 	}
 	
 	// Update is called once per frame
