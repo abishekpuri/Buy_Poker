@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Card : MonoBehaviour {
 
-	const float rotationSpeed=3f;
-	const float movementSpeed = 4f;
+	const float rotationSpeed=2f;
+	const float movementSpeed = 2f;
 
 	static public Sprite[] cardSpriteList;// = Resources.LoadAll <Sprite> ("images/cards");	//preLoaded array of sprites from Assets/Resources/images folder
 

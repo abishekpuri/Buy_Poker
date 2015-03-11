@@ -5,11 +5,9 @@ using System.Collections.Generic;
 public class Deck : MonoBehaviour {
 	
 	public List<GameObject> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
-	public Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
-	private bool moveEnabled;	// true if the cards should be moving around. I'm Not sure if this is the best way for animation.
-	private int currentLayoutType;	//0 or 1 for now. 0 is to merge, and 1 is to spreadout
-	private Vector3 currentVelocity;	//Its used just for input parameter for a function SmoothDamp().
-
+	public int deckID;
+	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
+	private int currentLayoutType;	//current layout type
 
 
 	public void transferTopCardTo(Deck another)
@@ -97,7 +95,7 @@ public class Deck : MonoBehaviour {
 	public void addExistingCard(GameObject card)	//add existing card. It should be distinguished from new_card
 	{
 		cards.Add (card);
-		setupLayout (currentLayoutType);
+		//setupLayout (currentLayoutType);
 		card.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();
 		Debug.Log ("control transfer successful");
 	}
@@ -136,7 +134,7 @@ public class Deck : MonoBehaviour {
 			break;
 		case 5:
 			pos[0] = new Vector3 (indexReference*0.3f,0,0);
-			pos[1] = new Vector3 (0,0,indexReference*(-40f)/(cards.Count));
+			pos[1] = new Vector3 (indexReference*(-120f)/(cards.Count),0,0);
 			break;
 		case 6:			// seems to be kinda working only with a lot of cards
 			float middleCardIndex = cards.Count/2f;		//reference point for yDist=0
@@ -153,9 +151,11 @@ public class Deck : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//deckID = 99;
 		cards = new List<GameObject>();
 		referenceTransform = GetComponent<Transform> ();
 		GameMaster.reportDeckToGameMaster (this.gameObject);
+
 	}
 	
 	// Update is called once per frame
