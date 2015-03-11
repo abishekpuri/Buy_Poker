@@ -8,15 +8,48 @@ public class GameMaster : MonoBehaviour {
 	public static List<GameObject> deckList = new List<GameObject>();
 	public int debugSourceIDField; 
 	public int debugDestinationIDField;
+	public int debugDeckIDField;
+	public int debugOrientationField;
+	public int debugXField;
+	public int debugYField;
+	public int debugZField;
 
-	public void setDebugSourceIDField(string value)
+	public void setDebugDeckIDField(string value)
 	{
-		debugSourceIDField = int.Parse(value);
+		debugDeckIDField = int.Parse(value);
+	}
+	public void setDebugOrientationField(string value)
+	{
+		debugOrientationField = int.Parse(value);
+	}
+	public void setDebugXField(string value)
+	{
+		debugXField = int.Parse(value);
+	}
+	public void setDebugYField(string value)
+	{
+		debugYField = int.Parse(value);
 	}
 
+	public void setDebugZField(string value)
+	{
+		debugZField = int.Parse(value);
+	}
+	public void setDebugSourceIDField(string value)
+	{
+		debugSourceIDField = int.Parse (value);
+	}
 	public void setDebugDestinationIDField(string value)
 	{
 		debugDestinationIDField = int.Parse (value);
+	}
+	public void debugTransferCards()
+	{
+		transferCards (debugSourceIDField, debugDestinationIDField);
+	}
+	public void debugGenerateNewDeck()
+	{
+		generateNewDeck (debugDeckIDField, new Vector3(debugXField, debugYField, debugZField), new Vector3(0,0,0), debugOrientationField);
 	}
 
 	public static void reportDeckToGameMaster(GameObject currentDeck)
@@ -39,7 +72,7 @@ public class GameMaster : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
+		//gm.generateNewDeck (2, 0, 0, 0);
 		//deck = new Deck ();
 		//deck.new_card (3,3);
 		//deck.new_card (2,1);
@@ -50,14 +83,15 @@ public class GameMaster : MonoBehaviour {
 	
 	}
 
-	public void generateNewDeck(int id, int x, int y, int z)
+	public void generateNewDeck(int id, Vector3 pos, Vector3 rotation, int orientation)
 	{
 		if (id > 0)
 		{
-			GameObject newDeck = (GameObject)Instantiate (new GameObject(),new Vector3(x,y,z), Quaternion.identity);
+			GameObject newDeck = (GameObject)Instantiate (new GameObject(),pos, Quaternion.Euler (rotation));
 			newDeck.transform.localScale = new Vector3(1.1f, 1.1f, 0);
 			newDeck.AddComponent ("Deck");
 			newDeck.GetComponent <Deck>().deckID = id;
+			newDeck.GetComponent<Deck>().setupLayout(orientation);
 		}
 		else
 		{
@@ -65,10 +99,7 @@ public class GameMaster : MonoBehaviour {
 		}
 	}
 
-	public void debugTransferCards()
-	{
-		transferCards (debugSourceIDField, debugDestinationIDField);
-	}
+
 
 	public void transferCards(int sourceID, int destinationID)
 	{

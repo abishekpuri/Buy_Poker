@@ -12,11 +12,14 @@ public class Deck : MonoBehaviour {
 
 	public void transferTopCardTo(Deck another)
 	{
-		Debug.Log ("Card count = " + cards.Count);
-		Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
-		another.addExistingCard (cards[cards.Count-1]);
-		cards.Remove (cards [cards.Count - 1]);
-		setupLayout(currentLayoutType);
+		if (cards.Count>0)
+		{
+			Debug.Log ("Card count = " + cards.Count);
+			Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
+			another.addExistingCard (cards[cards.Count-1]);
+			cards.Remove (cards [cards.Count - 1]);
+			setupLayout(currentLayoutType);
+		}
 	}
 
 	/*
