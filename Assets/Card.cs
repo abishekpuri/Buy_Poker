@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Card : MonoBehaviour {
 
-	const float rotationSpeed=2f;
-	const float movementSpeed = 2f;
+	const float rotationSpeed=3f;
+	const float movementSpeed = 3f;
 
 	static public Sprite[] cardSpriteList;// = Resources.LoadAll <Sprite> ("images/cards");	//preLoaded array of sprites from Assets/Resources/images folder
 
@@ -29,21 +29,16 @@ public class Card : MonoBehaviour {
 
 	public void showFace()
 	{
-		renderer.enabled=true;
+		//renderer.enabled=true;
 		GetComponent<SpriteRenderer> ().sprite = getCardSprite ();
 		GetComponent<SpriteRenderer> ().color = Color.white;
 	}
 	
 	public void showBackground()
 	{
-		renderer.enabled=true;
+		//renderer.enabled=true;
 		GetComponent<SpriteRenderer> ().sprite = cardSpriteList[13];
 		GetComponent<SpriteRenderer>().color = Color.red;
-	}
-	
-	public void hideCard()
-	{
-		renderer.enabled = false;
 	}
 
 	public void setSortingOrder(int value)
@@ -73,7 +68,7 @@ public class Card : MonoBehaviour {
 		GetComponent<SpriteRenderer> ().sprite = getCardSprite ();
 		movementEnabled = true;
 
-		Debug.Log ("Card initialized");
+		//Debug.Log ("Card initialized");
 	}
 
 	// Awake is called before Start()
