@@ -38,6 +38,10 @@ public class DebugCardBehavior : MonoBehaviour {
 				theCardToBeChallenged.showFace ();
 				state = 0;
 				break;
+		case 3:
+				theCardToBeChallenged.hideCard ();
+				
+				break;
 		}
 	}
 
