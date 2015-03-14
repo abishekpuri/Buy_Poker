@@ -9,7 +9,7 @@ using System.Collections.Generic;
  * Only deck ID from 1 to 99 are valid right now.
  * deck ID 0 is preserved for main card deck.
  * deck ID 100 is preserved for auction.
- * 
+ * deck ID 101 is preserved for dump
  * 
  * 
  * 
@@ -20,7 +20,9 @@ using System.Collections.Generic;
 public class GameMaster : MonoBehaviour {
 	
 	public static GameMaster gm;
-	public static List<GameObject> deckList = new List<GameObject>();	//GameMaster keeps track of all decks in game.
+	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
+	public static List<Player> playerList = new List<Player>();		//GameMaster keeps track of all players in game
+	public static bool auctionInProgress = false;
 	public int debugSourceIDField; 
 	public int debugDestinationIDField;
 	public int debugDeckIDField;
@@ -60,19 +62,22 @@ public class GameMaster : MonoBehaviour {
 	}
 	public void debugTransferCards()
 	{
-		transferCards (debugSourceIDField, debugDestinationIDField, false);
+		requestCardTransfer (debugSourceIDField, debugDestinationIDField);
 	}
 	public void debugGenerateNewDeck()
 	{
 		generateNewDeck (debugDeckIDField, new Vector3(debugXField, debugYField, debugZField), new Vector3(0,0,0), debugOrientationField);
 	}
 	
-	public static void reportDeckToGameMaster(GameObject currentDeck)	// Every Decks in scene report themselves to gameMaster
+	public static void reportDeckToGameMaster(Deck currentDeck)	// Every Decks in scene report themselves to gameMaster
 	{
 		deckList.Add (currentDeck);
-		Debug.Log ("Deck " + (deckList.Count-1) + "reported to gameMaster");
+		Debug.Log ("Deck " + currentDeck.DeckID + " reported to gameMaster");
 	}
-	
+	public static void terminateCurrentAuction()
+	{
+		auctionInProgress = false;
+	}
 	
 	//Awake is called before start
 	void Awake() {
@@ -92,22 +97,29 @@ public class GameMaster : MonoBehaviour {
 
 	public IEnumerator coStart()	//Must be called through StartCoroutine()
 	{
-		yield return new WaitForSeconds(0.01f);
+		yield return new WaitForFixedUpdate();
 		generateNewDeck (1, new Vector3(0,-3,0), new Vector3(0,0,0),6);
 		generateNewDeck (2, new Vector3(-5f,-3,0), new Vector3(0,0,0),6);
 		generateNewDeck (3, new Vector3(5f,-3,0), new Vector3(0,0,0),6);
-		searchByID (0).GetComponent <Deck> ().generateFullCardDeck ();
+		searchByID (0).generateFullCardDeck ();
 		yield return new WaitForFixedUpdate();		// WAIT until sprites in deck 0 are loaded
-		searchByID (0).GetComponent <Deck> ().closeDeck ();
-		searchByID (0).GetComponent <Deck> ().shuffle ();
+		searchByID (0).closeDeck ();
+		searchByID (0).shuffle ();
 		
 		StartCoroutine (dealCards (5));
 
 		yield return new WaitForSeconds(10f);
 
-		transferCards (0,100,true);
-		yield return new WaitForSeconds(1f);
 
+		for (int i=0; i<5; i++) {
+			requestCardTransfer (0,100,false, true);
+			yield return new WaitForSeconds (1f);
+			auctionInProgress = true;
+			searchByID (100).gameObject.AddComponent ("CountdownTimer");
+			while (auctionInProgress){yield return new WaitForSeconds (1f);}	// file auction is in progress
+			requestCardTransfer (100,101,false, false);
+			yield return new WaitForSeconds (1f);
+		}
 	}
 	
 	// Update is called once per frame
@@ -123,8 +135,8 @@ public class GameMaster : MonoBehaviour {
 			GameObject newDeck = (GameObject)Instantiate (new GameObject(),pos, Quaternion.Euler (rotation));
 			newDeck.transform.localScale = new Vector3(1.1f, 1.1f, 0);
 			Deck newDeckComponent = (Deck)newDeck.AddComponent ("Deck");
-			Debug.Log ("NEW Layout "+orientation+" setup for Deck ID = " + newDeck.GetComponent <Deck>().deckID);
-			newDeckComponent.deckID = id;
+			newDeckComponent.DeckID = id;
+			Debug.Log ("NEW DECK => Deck ID = "+newDeckComponent.DeckID+", Layout = " + orientation);
 			newDeckComponent.setLayoutType(orientation);
 			
 		}
@@ -133,40 +145,35 @@ public class GameMaster : MonoBehaviour {
 			Debug.LogWarning("Operation denied. positive and unique ID value required.");
 		}
 	}
+
+	public void startTimer()
+	{
+		//AddCom
+	}
 	
 	public IEnumerator dealCards(int numberOfCards)	//must be called through StartCoroutine(dealCards(int));
 	{
 		yield return new WaitForSeconds(1f);	//DO NOT ERASE THIS PART. DEALING SHOULD NOT START BEFORE HANDS ARE REPORTED TO GAMEMASTER
-		Debug.LogWarning("Card dealt to "+deckList.Count+" hands");
+		Debug.Log("Card dealt to "+(deckList.Count-2)+" hands");
 		for (int i=0; i<numberOfCards; i++)
 			for (int j=0; j<deckList.Count; j++)
-				if (deckList[j].GetComponent<Deck>().deckID>0 && deckList[j].GetComponent<Deck>().deckID<100)
+				if (deckList[j].DeckID>0 && deckList[j].DeckID<100)
 				{
-					searchByID(0).GetComponent<Deck>().transferTopCardTo (deckList[j].GetComponent<Deck>(), deckList[j].GetComponent<Deck>().deckID==1);
+					searchByID(0).transferTopCardTo (deckList[j], deckList[j].DeckID==1);
 					yield return new WaitForSeconds(0.5f);
 					
 				}
-		
 	}
 	
-	public void transferCards(int sourceID, int destinationID, bool openCard)
+	public static void requestCardTransfer(int sourceID, int destinationID, bool searchByPlayerID=false, bool openCard=false)
 	{
-
-		//Debug.Log (" source hand ID = " + sourceID);
-		//Debug.Log (" destination hand ID = " + destinationID);
-		//Debug.Log (" source hand currently has " + searchByID (sourceID).GetComponent<Deck>().cards.Count + " cards");
-		//Debug.Log (" target hand currently has " + searchByID (destinationID).GetComponent<Deck>().cards.Count + " cards");
-		//Debug.Log (" current hand currently has " + deckList[2].GetComponent<Deck>().cards.Count + " cards");
-		//Debug.Log (" target hand currently has " + deckList[1].GetComponent<Deck>().cards.Count + " cards");
-
 		searchByID (sourceID).GetComponent<Deck>().transferTopCardTo(searchByID (destinationID).GetComponent<Deck>(), openCard);
-
 	}
 	
 	
-	private GameObject searchByID(int searchID)
+	private static Deck searchByID(int searchID)
 	{
-		return deckList.Find (x=>x.GetComponent<Deck>().deckID == searchID);
+		return deckList.Find (x=>x.DeckID == searchID);
 	}
 	
 	

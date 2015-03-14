@@ -16,7 +16,7 @@ public class DebugDeckBehavior : MonoBehaviour {
 		//theDeckToBeChallenged.setupOrientation (1);
 		//theDeckToBeChallenged.openDeck ();
 		//theDeckToBeChallenged.animation_merge ();
-		Debug.Log ("cardCount = " + theDeckToBeChallenged.cards.Count);
+		//Debug.Log ("cardCount = " + theDeckToBeChallenged.cards.Count);
 
 	}
 	

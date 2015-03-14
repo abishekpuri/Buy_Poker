@@ -3,12 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Deck : MonoBehaviour {
-	
-	public List<GameObject> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
-	public int deckID;
+
+	public int reserveDeckID;
+	private List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
+	private int deckID;
+	private bool initializeFlag = true;
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
 	private int currentLayoutType;	//current layout type
 
+	public int DeckID{	//c# simplified getter and setter technique.
+		get{return deckID;}
+		set{if (initializeFlag){deckID = value; initializeFlag=false;}else{Debug.LogError ("Deck ID assignment denied");}}
+	}
 
 	public void transferTopCardTo(Deck another, bool cardOpen)
 	{
@@ -24,38 +30,16 @@ public class Deck : MonoBehaviour {
 		}
 	}
 
-	/*
-	 * type 0 = collapse
-	 * type 1 = spread horizontal, right
-	 * type 2 = spread horizontal, from middle
-	 * type 3 = complete seperation, to the right
-	 * type 4 = complete seperation, from middle
-	 * type 5 = hand spread, with angle. Spread to right.
-	 * type 6 = hand spread, with angle. Spreads from middle.
-	 * */
 	public void setupLayout(int type)
 	{
-		setScaleAndOrder ();
 		currentLayoutType = type;
+		setScaleAndOrder ();
 		for (int i=0; i<cards.Count; i++)
-			cards[i].GetComponent<Card>().setTargetPos(computeIndividualCardTargetPos (type, i));
+			cards[i].setTargetPos(computeIndividualCardTargetPos (type, i));
 	}
 	public void setLayoutType(int type)
 	{
 		currentLayoutType = type;
-	}
-
-	public void shuffle()
-	{
-		for (int i=0; i<cards.Count; i++)
-		{
-			int swap_target = Random.Range (0,cards.Count);
-			GameObject temp = cards[i];
-			cards[i] = cards[swap_target];
-			cards[swap_target] = temp;
-		}
-		setScaleAndOrder ();
-		setupLayout (currentLayoutType);
 	}
 
 	public void openDeck()	// show face of all cards in deck
@@ -70,18 +54,11 @@ public class Deck : MonoBehaviour {
 			cards[i].GetComponent<Card>().showBackground ();
 	}
 
-	public void generateFullCardDeck()
-	{
-		for (int i=1; i<=4; ++i)
-			for (int j=1; j<=13; ++j)
-				new_card(j,i);
-	}
-
 	private void setScaleAndOrder()
 	{
 		for (int i=0; i<cards.Count; i++)
 		{
-			cards [i].GetComponent<Card> ().setSortingOrder (i+deckID*100);
+			cards [i].setSortingOrder (i+deckID*100);
 			cards[i].GetComponent<Transform>().localScale = referenceTransform.localScale;
 		}
 	}
@@ -90,21 +67,20 @@ public class Deck : MonoBehaviour {
 	{
 		GameObject newCard = (GameObject)Instantiate (Resources.Load ("prefab/card"), referenceTransform.localPosition, Quaternion.identity);
 		// instantiate() creates an object into the scene. Then, it returns Object class.
-		newCard.GetComponent<Card>().rank = rank;	//set rank and suit
-		newCard.GetComponent<Card>().suit = suit;
+		newCard.GetComponent<Card>().initializeCard (rank,suit);	//set rank and suit
 		newCard.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();// let all new cards become a child of this deck.
 		newCard.GetComponent<Card>().showFace ();
-		cards.Add (newCard);	// add newCard to list of cards.
+		cards.Add (newCard.GetComponent<Card>());	// add newCard to list of cards.
 		//Debug.Log (cards.Count + " cards count ");
 		setupLayout(currentLayoutType);
 	}
 
-	public void addExistingCard(GameObject card)	//add existing card. It should be distinguished from new_card
+	public void addExistingCard(Card card)	//add existing card. It should be distinguished from new_card
 	{
 		cards.Add (card);
 		card.GetComponent <Transform>().parent = (Transform)this.GetComponent <Transform>();
 		setupLayout (currentLayoutType);
-		Debug.Log ("control transfer successful");
+		//Debug.Log ("control transfer successful");
 	}
 
 
@@ -115,7 +91,7 @@ public class Deck : MonoBehaviour {
 			Destroy (cards[0].gameObject);
 			cards.Remove (cards[0]);
 		}
-		Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
+		//Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}
 	
 	private Vector3[] computeIndividualCardTargetPos(int orientationType, int indexReference)	//returns target vector for each cards. Temporary solution
@@ -167,12 +143,35 @@ public class Deck : MonoBehaviour {
 		return pos;
 	}
 
+	public void generateFullCardDeck()
+	{
+		for (int i=1; i<=4; ++i)
+			for (int j=1; j<=13; ++j)
+				new_card(j,i);
+	}
+
+	public void shuffle()
+	{
+		for (int i=0; i<cards.Count; i++)
+		{
+			int swap_target = Random.Range (0,cards.Count);
+			Card temp = cards[i];
+			cards[i] = cards[swap_target];
+			cards[swap_target] = temp;
+		}
+		setScaleAndOrder ();
+		setupLayout (currentLayoutType);
+	}
+
 	// Use this for initialization
 	void Start () {
-		//deckID = 99;
-		cards = new List<GameObject>();
+		if (reserveDeckID>200)
+			deckID = 0;
+		else if (reserveDeckID >= 100)
+			deckID = reserveDeckID;
+		cards = new List<Card>();
 		referenceTransform = GetComponent<Transform> ();
-		GameMaster.reportDeckToGameMaster (this.gameObject);
+		GameMaster.reportDeckToGameMaster (this);
 
 	}
 	

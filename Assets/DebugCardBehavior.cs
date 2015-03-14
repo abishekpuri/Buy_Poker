@@ -31,13 +31,13 @@ public class DebugCardBehavior : MonoBehaviour {
 		//Debug.Log ("mouse up");
 		state++;
 		switch (state) {
-		case 1:
-				theCardToBeChallenged.showBackground ();
-				break;
 		case 2:
-				theCardToBeChallenged.showFace ();
-				state = 0;
-				break;
+			theCardToBeChallenged.showBackground ();
+			state = 0;
+			break;
+		case 1:
+			theCardToBeChallenged.showFace ();
+			break;
 		}
 	}
 

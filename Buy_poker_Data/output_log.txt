@@ -12,123 +12,83 @@ Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assemb
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.038 seconds
+- Completed reload, in  0.040 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.dll (this message is harmless)
-UnloadTime: 3.022862 ms
+UnloadTime: 7.335664 ms
 Card sprite resourses loaded once and for all
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 397.
-Total: 1.244780 ms (FindLiveObjects: 0.035307 ms CreateObjectMapping: 0.010263 ms MarkObjects: 0.433538 ms  DeleteObjects: 0.006158 ms)
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 405.
+Total: 1.421315 ms (FindLiveObjects: 0.041054 ms CreateObjectMapping: 0.012316 ms MarkObjects: 0.511131 ms  DeleteObjects: 0.009853 ms)
 
-Deck 0reported to gameMaster
+Deck 100 reported to gameMaster
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Deck 1reported to gameMaster
+Deck 101 reported to gameMaster
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-cardCount = 0
+Deck 0 reported to gameMaster
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-NEW Layout 6 setup for Deck ID = 0
+NEW DECK => Deck ID = 1, Layout = 6
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-NEW Layout 6 setup for Deck ID = 0
+NEW DECK => Deck ID = 2, Layout = 6
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-NEW Layout 6 setup for Deck ID = 0
+NEW DECK => Deck ID = 3, Layout = 6
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Deck 2reported to gameMaster
+Deck 1 reported to gameMaster
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Deck 3reported to gameMaster
+Deck 2 reported to gameMaster
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Deck 4reported to gameMaster
+Deck 3 reported to gameMaster
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Card dealt to 5 hands
+Card dealt to 4 hands
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-control transfer successful
+Pressed!!!
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-control transfer successful
+Deliver!!!
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-control transfer successful
+Pressed!!!
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-control transfer successful
+Deliver!!!
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-control transfer successful
+Pressed!!!
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-control transfer successful
+Deliver!!!
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
