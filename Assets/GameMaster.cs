@@ -20,9 +20,9 @@ using System.Collections.Generic;
 public class GameMaster : MonoBehaviour {
 	
 	public static GameMaster gm;
-	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
-	public static List<Player> playerList = new List<Player>();		//GameMaster keeps track of all players in game
-	public static bool auctionInProgress = false;
+	private static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
+	private static List<Player> playerList = new List<Player>();		//GameMaster keeps track of all players in game
+	private static bool auctionInProgress = false;
 	public int debugSourceIDField; 
 	public int debugDestinationIDField;
 	public int debugDeckIDField;
@@ -106,9 +106,9 @@ public class GameMaster : MonoBehaviour {
 		searchByID (0).closeDeck ();
 		searchByID (0).shuffle ();
 		
-		StartCoroutine (dealCards (5));
+		StartCoroutine (dealCards (3));
 
-		yield return new WaitForSeconds(10f);
+		yield return new WaitForSeconds(7f);
 
 
 		for (int i=0; i<5; i++) {
@@ -116,7 +116,7 @@ public class GameMaster : MonoBehaviour {
 			yield return new WaitForSeconds (1f);
 			auctionInProgress = true;
 			searchByID (100).gameObject.AddComponent ("CountdownTimer");
-			while (auctionInProgress){yield return new WaitForSeconds (1f);}	// file auction is in progress
+			while (auctionInProgress){yield return new WaitForSeconds (1f);}	// while auction is in progress
 			requestCardTransfer (100,101,false, false);
 			yield return new WaitForSeconds (1f);
 		}

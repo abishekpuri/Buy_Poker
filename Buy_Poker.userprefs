@@ -2,14 +2,14 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\GameMaster.cs">
     <Files>
-      <File FileName="Assets\GameMaster.cs" Line="113" Column="3" />
-      <File FileName="Assets\Card.cs" Line="18" Column="2" />
-      <File FileName="Assets\Deck.cs" Line="84" Column="3" />
-      <File FileName="Assets\DebugCardBehavior.cs" Line="28" Column="1" />
+      <File FileName="Assets\Card.cs" Line="72" Column="2" />
+      <File FileName="Assets\Deck.cs" Line="34" Column="3" />
+      <File FileName="Assets\GameMaster.cs" Line="129" Column="2" />
+      <File FileName="Assets\DebugCardBehavior.cs" Line="17" Column="17" />
       <File FileName="Assets\ChangeScene.cs" Line="10" Column="1" />
-      <File FileName="Assets\DebugDeckBehavior.cs" Line="11" Column="32" />
-      <File FileName="Assets\CountdownTimer.cs" Line="51" Column="3" />
-      <File FileName="Assets\Player.cs" Line="21" Column="40" />
+      <File FileName="Assets\DebugDeckBehavior.cs" Line="10" Column="2" />
+      <File FileName="Assets\CountdownTimer.cs" Line="27" Column="27" />
+      <File FileName="Assets\Player.cs" Line="7" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

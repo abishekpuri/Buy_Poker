@@ -8,20 +8,22 @@ using System.Collections;
  * 2. Button pressing action cannot be done automatically
  * 
  * 
+ * After done counting, it destroys itself
+ * 
  * */
 public class CountdownTimer : MonoBehaviour {
 
-	public float timeRemaining;
-	public float speedMultiplier;
-	public bool auctionInProcess;
-	public bool buttonClicked;
+	private float timeRemaining;
+	private float speedMultiplier;
+	private bool auctionInProcess;
+	private bool buttonClicked;
 	private double timerStopTime;
 	const double BUTTON_DELAY = 1;
 
-	// Use this for initialization
+	// Use this for initialization. Default time and speed settings
 	void Start () {
 		timeRemaining = 100;
-		speedMultiplier = 8;
+		speedMultiplier = 10;
 		auctionInProcess = true;
 		buttonClicked = false;
 	}

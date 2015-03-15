@@ -58,7 +58,7 @@ public class Deck : MonoBehaviour {
 	{
 		for (int i=0; i<cards.Count; i++)
 		{
-			cards [i].setSortingOrder (i+deckID*100);
+			cards [i].setSortingOrder (i+(deckID%100)*100);
 			cards[i].GetComponent<Transform>().localScale = referenceTransform.localScale;
 		}
 	}
