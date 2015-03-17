@@ -86,7 +86,8 @@ public class Card : MonoBehaviour {
 
 	}
 
-	// Update is called once per frame
+	// Update is called once per frame. Every single cards move towards the target location every frame. This is a simplied PID control.
+	// Minor bug found. LocalPosition of cards does not follow its Parent's coordinate system.
 	void Update () {
 		if (movementEnabled)
 		{

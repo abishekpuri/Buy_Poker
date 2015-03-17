@@ -2,25 +2,34 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
+/*
+ * 
+ * This class controls behavior of collection of cards.
+ * Each deck should be assigned a unique ID for GameMaster to refer to.
+ * 
+ * 
+ * 
+ * */
 public class Deck : MonoBehaviour {
 
 	public int reserveDeckID;
 	private List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
 	private int deckID;
-	public string value; //consider making private later
-	private bool initializeFlag = true;
+	public string CombinationType; //consider making private later.
+	private bool initializeFlag = true;			// Once ID is set, it cannot be changed again. I added variable just for the sake of protection, but I might be complicating things.
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
 	private int currentLayoutType;	//current layout type
 
-	public int DeckID{	//c# simplified getter and setter technique.
+	public int DeckID{	//c# simplified getter and setter technique. deckList[i].DeckID is enough! getDeckID() does not work!
 		get{return deckID;}
 		set{if (initializeFlag){deckID = value; initializeFlag=false;}else{Debug.LogError ("Deck ID assignment denied");}}
 	}
 
 	public void evaluateDeck()
 	{
-		value = "Two Pair";
-		Debug.Log (value);
+		CombinationType = "Two Pair";
+		Debug.Log (CombinationType);
 	}
 	public void transferTopCardTo(Deck another, bool cardOpen)
 	{
@@ -36,18 +45,13 @@ public class Deck : MonoBehaviour {
 		}
 	}
 
-	public void setupLayout(int type)
+	public void setupLayout(int type)	// sets position of every and each cards inside the deck.
 	{
 		currentLayoutType = type;
 		setScaleAndOrder ();
 		for (int i=0; i<cards.Count; i++)
 			cards[i].setTargetPos(computeIndividualCardTargetPos (type, i));
 	}
-	public void setLayoutType(int type)
-	{
-		currentLayoutType = type;
-	}
-
 	public void openDeck()	// show face of all cards in deck
 	{
 		for (int i=0; i<cards.Count; i++)
@@ -60,7 +64,7 @@ public class Deck : MonoBehaviour {
 			cards[i].GetComponent<Card>().showBackground ();
 	}
 
-	private void setScaleAndOrder()
+	private void setScaleAndOrder()		// Sets every card's scale corresponding to its parent's transform, and sets sorting order as well.
 	{
 		for (int i=0; i<cards.Count; i++)
 		{
@@ -99,8 +103,21 @@ public class Deck : MonoBehaviour {
 		}
 		//Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}
-	
-	private Vector3[] computeIndividualCardTargetPos(int orientationType, int indexReference)	//returns target vector for each cards. Temporary solution
+
+
+	/*
+	 * Default case: collapse
+	 * Case 1: spread by overlapping with each other. To the right.
+	 * Case 2: same, spreads from middle
+	 * Case 3: spreads with distance. To right.
+	 * Case 4: spreads with distance. Spreads from middle.
+	 * Case 5: rotates in a weird axis.
+	 * Case 6: Spreads in an arc shape. (Shape of 1-cos function to be precise)
+	 * 
+	 * 
+	 * */
+	//returns two 3D vectors (position, rotation in eulerian form) for each cards, relative to its index in the list.
+	private Vector3[] computeIndividualCardTargetPos(int orientationType, int indexReference)
 	{
 		// 0th index represents position.
 		// 1th index represents Euler rotation.
@@ -125,7 +142,7 @@ public class Deck : MonoBehaviour {
 			pos[0] = new Vector3 (indexReference*0.3f,0,0);
 			pos[1] = new Vector3 (indexReference*(-120f)/(cards.Count),0,0.001f);
 			break;
-		case 6:			// DO NOT USE THIS WITH ANY MORE THAN 100 CARDS. (1-cos) wave is drawn on Y-axis
+		case 6:			// DO NOT USE THIS WITH ANY MORE THAN 100 CARDS. You will see (1-cos) wave drawn on Y-axis
 			float maximumTilt = 30f;
 			maximumTilt *= Mathf.Sqrt (cards.Count)/7;		//maximum angle normalization
 			float middleCardIndex = cards.Count/2f-0.5f;		//reference point for yDist=0
