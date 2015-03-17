@@ -7,6 +7,7 @@ public class Deck : MonoBehaviour {
 	public int reserveDeckID;
 	private List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
 	private int deckID;
+	public string value; //consider making private later
 	private bool initializeFlag = true;
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
 	private int currentLayoutType;	//current layout type
@@ -16,6 +17,11 @@ public class Deck : MonoBehaviour {
 		set{if (initializeFlag){deckID = value; initializeFlag=false;}else{Debug.LogError ("Deck ID assignment denied");}}
 	}
 
+	public void evaluateDeck()
+	{
+		value = "Two Pair";
+		Debug.Log (value);
+	}
 	public void transferTopCardTo(Deck another, bool cardOpen)
 	{
 		if (cards.Count>0)
@@ -110,10 +116,10 @@ public class Deck : MonoBehaviour {
 			pos[0] = new Vector3 (indexReference*0.3f - (0.3f*(cards.Count-1))*0.5f,0,0.001f);
 			break;
 		case 3:
-			pos[0] = new Vector3 (indexReference*1f,0,0.001f);
+			pos[0] = new Vector3 (indexReference*1.4f,0,0.001f);
 			break;
 		case 4:
-			pos[0] = new Vector3 (indexReference*1f - (1f*(cards.Count-1))*0.5f,0,0.001f);
+			pos[0] = new Vector3 (indexReference*1.4f - (1.4f*(cards.Count-1))*0.5f,0,0.001f);
 			break;
 		case 5:
 			pos[0] = new Vector3 (indexReference*0.3f,0,0);

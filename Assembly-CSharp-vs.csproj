@@ -46,9 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AuctionTimer.cs" />
      <Compile Include="Assets\Card.cs" />
      <Compile Include="Assets\ChangeScene.cs" />
-     <Compile Include="Assets\CountdownTimer.cs" />
      <Compile Include="Assets\DebugCardBehavior.cs" />
      <Compile Include="Assets\DebugDeckBehavior.cs" />
      <Compile Include="Assets\Deck.cs" />

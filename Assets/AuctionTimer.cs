@@ -11,7 +11,7 @@ using System.Collections;
  * After done counting, it destroys itself
  * 
  * */
-public class CountdownTimer : MonoBehaviour {
+public class AuctionTimer : MonoBehaviour {
 
 	private float timeRemaining;
 	private float speedMultiplier;

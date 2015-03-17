@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 /*
  * Each deck is assigned a unique ID. It is manually assigned so far.
- * Only deck ID from 1 to 99 are valid right now.
+ * Only deck ID from 1 to 99 should be valid right now.
  * deck ID 0 is preserved for main card deck.
  * deck ID 100 is preserved for auction.
  * deck ID 101 is preserved for dump
@@ -20,8 +20,8 @@ using System.Collections.Generic;
 public class GameMaster : MonoBehaviour {
 	
 	public static GameMaster gm;
-	private static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
-	private static List<Player> playerList = new List<Player>();		//GameMaster keeps track of all players in game
+	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
+	public static List<Deck> playerList = new List<Deck>();		//GameMaster keeps track of all players in game
 	private static bool auctionInProgress = false;
 	public int debugSourceIDField; 
 	public int debugDestinationIDField;
@@ -69,7 +69,7 @@ public class GameMaster : MonoBehaviour {
 		generateNewDeck (debugDeckIDField, new Vector3(debugXField, debugYField, debugZField), new Vector3(0,0,0), debugOrientationField);
 	}
 	
-	public static void reportDeckToGameMaster(Deck currentDeck)	// Every Decks in scene report themselves to gameMaster
+	public static void reportDeckToGameMaster(Deck currentDeck,bool Player=false)	// Every Decks in scene report themselves to gameMaster
 	{
 		deckList.Add (currentDeck);
 		Debug.Log ("Deck " + currentDeck.DeckID + " reported to gameMaster");
@@ -98,9 +98,9 @@ public class GameMaster : MonoBehaviour {
 	public IEnumerator coStart()	//Must be called through StartCoroutine()
 	{
 		yield return new WaitForFixedUpdate();
-		generateNewDeck (1, new Vector3(0,-3,0), new Vector3(0,0,0),6);
-		generateNewDeck (2, new Vector3(-5f,-3,0), new Vector3(0,0,0),6);
-		generateNewDeck (3, new Vector3(5f,-3,0), new Vector3(0,0,0),6);
+		generateNewDeck (1, new Vector3(0,-3,0), new Vector3(0,0,0f),6,true);
+		generateNewDeck (2, new Vector3(-5f,-3,0), new Vector3(0,0,0),6,true);
+		generateNewDeck (3, new Vector3(5f,-3,0), new Vector3(0,0,0),6,true);
 		searchByID (0).generateFullCardDeck ();
 		yield return new WaitForFixedUpdate();		// WAIT until sprites in deck 0 are loaded
 		searchByID (0).closeDeck ();
@@ -108,18 +108,26 @@ public class GameMaster : MonoBehaviour {
 		
 		StartCoroutine (dealCards (3));
 
-		yield return new WaitForSeconds(7f);
+		yield return new WaitForSeconds(5f);
 
 
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<2; i++) {
 			requestCardTransfer (0,100,false, true);
 			yield return new WaitForSeconds (1f);
 			auctionInProgress = true;
-			searchByID (100).gameObject.AddComponent ("CountdownTimer");
+			searchByID (100).gameObject.AddComponent ("AuctionTimer");
 			while (auctionInProgress){yield return new WaitForSeconds (1f);}	// while auction is in progress
 			requestCardTransfer (100,101,false, false);
 			yield return new WaitForSeconds (1f);
+			for (int j=0; j<playerList.Count; j++)
+			{
+				playerList[j].evaluateDeck ();
+			}
+			Debug.Log (deckList.Count);												
 		}
+		searchByID (102).setupLayout (3);
+		for (int i=0; i<10; i++)
+			requestCardTransfer (1,102,false, true);
 	}
 	
 	// Update is called once per frame
@@ -127,7 +135,7 @@ public class GameMaster : MonoBehaviour {
 
 	}
 	
-	public void generateNewDeck(int id, Vector3 pos, Vector3 rotation, int orientation)
+	public void generateNewDeck(int id, Vector3 pos, Vector3 rotation, int orientation,bool Player=false)
 	{
 		
 		if (id > 0 && id < 100 && searchByID (id)==null)
@@ -137,6 +145,9 @@ public class GameMaster : MonoBehaviour {
 			Deck newDeckComponent = (Deck)newDeck.AddComponent ("Deck");
 			newDeckComponent.DeckID = id;
 			Debug.Log ("NEW DECK => Deck ID = "+newDeckComponent.DeckID+", Layout = " + orientation);
+			if (Player) {
+				playerList.Add (newDeckComponent);
+			}
 			newDeckComponent.setLayoutType(orientation);
 			
 		}
