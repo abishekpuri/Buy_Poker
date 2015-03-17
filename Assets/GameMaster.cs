@@ -180,7 +180,7 @@ public class GameMaster : MonoBehaviour {
 			if (Player) {
 				playerList.Add (newDeckComponent);
 			}
-			newDeckComponent.setupLayout(orientation);
+			newDeckComponent.setLayoutType(orientation);
 			
 		}
 		else

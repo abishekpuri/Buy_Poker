@@ -52,6 +52,10 @@ public class Deck : MonoBehaviour {
 		for (int i=0; i<cards.Count; i++)
 			cards[i].setTargetPos(computeIndividualCardTargetPos (type, i));
 	}
+	public void setLayoutType(int type)	// sets position of every and each cards inside the deck.
+	{
+		currentLayoutType = type;
+	}
 	public void openDeck()	// show face of all cards in deck
 	{
 		for (int i=0; i<cards.Count; i++)
