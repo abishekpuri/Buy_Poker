@@ -2,15 +2,15 @@
 using System.Collections;
 
 public class Card : MonoBehaviour {
-
-	const float rotationSpeed=2f;
-	const float movementSpeed = 2f;
-
 	static public Sprite[] cardSpriteList;// = Resources.LoadAll <Sprite> ("images/cards");	//preLoaded array of sprites from Assets/Resources/images folder
+	const float rotationSpeed=3f;
+	const float movementSpeed = 3f;
 
-	public int rank;	// 1 to 13, 1 is Ace
-	public int suit;	// 1 to 4, Clover, Heart, Spade and Diamond respectively.
 
+	private int rank;	// 1 to 13, 1 is Ace
+	private int suit;	// 1 to 4, Clover, Heart, Spade and Diamond respectively.
+
+	private bool initializeFlag = true;
 	private int sortingOrder;	// order in 2D graphics layer. Sprite with higher order is drawn on top.
 	private Vector3 targetLocalPos;		// target position of the card, in local coordinate system. Animation script is Moved from Deck class to Card class.
 	private Vector3 targetLocalRotation;		// target rotation of the card, in local coordinate system. Euler rotation.
@@ -19,31 +19,36 @@ public class Card : MonoBehaviour {
 
 	public int Rank{	//c# simplified getter and setter technique.
 		get{return rank;}
-		set{rank = value;}
+		//set{rank = value;}
 	}
 	public int Suit{
 		get{return suit;}
-		set{suit = value;}
 	}
-
+	public void initializeCard(int rank, int suit)
+	{
+		if (!initializeFlag)
+		{
+			Debug.LogError ("Card field assignment denied");
+			return;
+		}
+		this.rank = rank;
+		this.suit = suit;
+		initializeFlag = false;
+	}
 
 	public void showFace()
 	{
-		renderer.enabled=true;
+		//renderer.enabled=true;
 		GetComponent<SpriteRenderer> ().sprite = getCardSprite ();
-		GetComponent<SpriteRenderer> ().color = Color.white;
+		//GetComponent<SpriteRenderer> ().color = Color.white;
 	}
 	
 	public void showBackground()
 	{
-		renderer.enabled=true;
-		GetComponent<SpriteRenderer> ().sprite = cardSpriteList[13];
-		GetComponent<SpriteRenderer>().color = Color.red;
-	}
-	
-	public void hideCard()
-	{
-		renderer.enabled = false;
+		//renderer.enabled=true;
+		//GetComponent<SpriteRenderer>().color = Color.red;
+		//GetComponent<SpriteRenderer> ().sprite = cardSpriteList[13];
+		GetComponent<SpriteRenderer> ().sprite = Resources.Load <Sprite> ("images/playing-card-back");
 	}
 
 	public void setSortingOrder(int value)
@@ -70,10 +75,10 @@ public class Card : MonoBehaviour {
 	void Start () {
 		if (GetComponent<SpriteRenderer> () == null)
 			this.gameObject.AddComponent ("SpriteRenderer");	//Adds component to the gameObject if sprite is null
-		GetComponent<SpriteRenderer> ().sprite = getCardSprite ();
+		GetComponent<SpriteRenderer> ().sprite = Resources.Load <Sprite> ("images/playing-card-back");//getCardSprite ();
 		movementEnabled = true;
 
-		Debug.Log ("Card initialized");
+		//Debug.Log ("Card initialized");
 	}
 
 	// Awake is called before Start()
@@ -81,7 +86,8 @@ public class Card : MonoBehaviour {
 
 	}
 
-	// Update is called once per frame
+	// Update is called once per frame. Every single cards move towards the target location every frame. This is a simplied PID control.
+	// Minor bug found. LocalPosition of cards does not follow its Parent's coordinate system.
 	void Update () {
 		if (movementEnabled)
 		{
@@ -92,16 +98,3 @@ public class Card : MonoBehaviour {
 		}
 	}
 }
-
-
-
-
-
-
-/*
- * 
- * lw $t0, 28($s0)
- * addi $t0, $t0, 11
- * sw $t0, 8($s0)
- * 
- * */
