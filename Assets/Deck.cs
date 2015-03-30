@@ -34,7 +34,7 @@ public class Deck : MonoBehaviour {
 				List<int> suit = new List<int> ();
 
 				for (int i = 0; i < 15; i++) {
-						if (i < 4) {
+						if (i < 5) {
 								suit.Add (0);
 						}
 						value.Add (0);
