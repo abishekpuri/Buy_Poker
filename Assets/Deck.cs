@@ -28,9 +28,61 @@ public class Deck : MonoBehaviour {
 
 	public void evaluateDeck()
 	{
-		CombinationType = "Two Pair";
-		Debug.Log (CombinationType);
-	}
+				int counter = 0;
+				bool straight = false;
+				List<int> value = new List<int> ();
+				List<int> suit = new List<int> ();
+
+				for (int i = 0; i < 15; i++) {
+						if (i < 4) {
+								suit.Add (0);
+						}
+						value.Add (0);
+				}
+				;
+
+				for (int i = 0; i < cards.Count; i++) {
+						value [cards [i].Rank]++;
+						suit [cards [i].Suit]++;
+				}
+
+				for (int i = 0; i < value.Count; i++) {
+						if (value [i] > 0) {
+								counter++;
+						} else {
+								counter = 0;
+						}
+						if (counter == 5) {
+								straight = true;
+								break;
+						}
+				}
+				int pairs = value.FindAll (a => a == 2).Count;
+				int three_kind = value.FindAll (a => a == 3).Count;
+				int four_kind = value.FindAll (a => a == 4).Count;
+				int flush = suit.FindAll (a => a == 5).Count;
+				counter = 0;
+				if ((flush != 0) && straight) {
+						CombinationType = "Straight Flush";
+				} else if (four_kind >= 1) {
+						CombinationType = "Four of a Kind";
+				} else if (three_kind > 1 || (three_kind == 1 && pairs >= 1)) {
+						CombinationType = "Full House";
+				} else if (flush >= 1) {
+						CombinationType = "Flush";
+				} else if (straight) {
+						CombinationType = "Straight";
+				} else if (three_kind >= 1) {
+						CombinationType = "Three of a Kind";
+				} else if (pairs >= 2) {
+						CombinationType = "Two Pair";
+				} else if (pairs == 1) {
+						CombinationType = "One Pair";
+				} else {
+						CombinationType = "High Card";
+				}
+				Debug.Log (CombinationType);
+		}
 	public void transferTopCardTo(Deck another, bool cardOpen)
 	{
 		if (cards.Count>0)
