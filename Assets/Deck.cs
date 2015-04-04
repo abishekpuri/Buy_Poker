@@ -83,6 +83,12 @@ public class Deck : MonoBehaviour {
 				}
 				Debug.Log (CombinationType);
 		}
+
+	public Card peekTopCard()
+	{
+		return cards [cards.Count - 1];
+	}
+
 	public void transferTopCardTo(Deck another, bool cardOpen)
 	{
 		if (cards.Count>0)
@@ -243,7 +249,8 @@ public class Deck : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
+
 		if (reserveDeckID>200)
 			deckID = 0;
 		else if (reserveDeckID >= 100)
@@ -251,7 +258,6 @@ public class Deck : MonoBehaviour {
 		cards = new List<Card>();
 		referenceTransform = GetComponent<Transform> ();
 		GameMaster.reportDeckToGameMaster (this);
-
 	}
 	
 	// Update is called once per frame

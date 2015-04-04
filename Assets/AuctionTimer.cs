@@ -32,7 +32,7 @@ public class AuctionTimer : MonoBehaviour {
 	
 	// Update is Implicitly called once per frame
 	void Update () {
-		if (timeRemaining > 1 && auctionInProcess) {
+		if (timeRemaining >= 10 && auctionInProcess) {
 			timeRemaining -= Time.deltaTime * speedMultiplier;
 
 		}
@@ -44,7 +44,7 @@ public class AuctionTimer : MonoBehaviour {
 			Destroy (this,0.2f);
 			GameMaster.terminateCurrentAuction();
 		}
-		else if (timeRemaining <= 1)	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
+		else if (timeRemaining < 10)	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
 		{
 			Destroy (this,0.2f);
 			GameMaster.terminateCurrentAuction();
@@ -59,7 +59,7 @@ public class AuctionTimer : MonoBehaviour {
 		Vector3 pos = transform.localPosition;//(Vector2)Camera.WorldToScreenPoint(pos)
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
 		Vector2 convertedGUIPos = GUIUtility.ScreenToGUIPoint(screenPos);
-		if (timeRemaining>1)
+		if (timeRemaining>=10)
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
 			if (GUI.Button (new Rect(convertedGUIPos.x, convertedGUIPos.y-100, 70, 35), "Bid for "+(int)timeRemaining) && !buttonClicked)
