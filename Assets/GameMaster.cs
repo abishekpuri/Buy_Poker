@@ -162,6 +162,7 @@ public class GameMaster : MonoBehaviour {
 		searchDeckByID (0).generateFullCardDeck ();
 		yield return new WaitForFixedUpdate();		// WAIT until all sprites in deck 0 are loaded. Otherwise, closeDeck() might not work.
 
+		// enable AI control
 		((PlayerHand)searchDeckByID (2)).setAIControl ();
 		((PlayerHand)searchDeckByID (3)).setAIControl ();
 
@@ -175,7 +176,7 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		// Starts auction.
-		for (int i=0; i<2; i++) {
+		for (int i=0; i<5; i++) {
 			yield return StartCoroutine(auction ());
 		}
 
@@ -224,7 +225,7 @@ public class GameMaster : MonoBehaviour {
 		{
 			playerList[j].evaluateDeck ();
 		}
-		Debug.Log (deckList.Count);												
+		//Debug.Log (deckList.Count);												
 
 		
 	}
@@ -237,6 +238,7 @@ public class GameMaster : MonoBehaviour {
 	void OnGUI()	//Overrided
 	{
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
+		//GUI.Button (new Rect (500, 500, 200, 200), " Player Cash = " + ((PlayerHand)searchDeckByID (1)).Cash);
 	}
 	
 	public void registerNewPlayerHand(int id, Vector3 pos, Vector3 rotation, int orientation,bool Player=false)

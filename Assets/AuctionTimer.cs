@@ -34,7 +34,7 @@ public class AuctionTimer : MonoBehaviour {
 	
 	// Update is Implicitly called once per frame
 	void Update () {
-		if (GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).pullAuctionCard((int)timeRemaining)) {
+		if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction((int)timeRemaining)) {
 			buttonClicked=true;
 			auctionInProcess=false;
 			timerStopTime = Time.time;
@@ -48,8 +48,9 @@ public class AuctionTimer : MonoBehaviour {
 		}
 		else if (buttonClicked && timerStopTime+BUTTON_DELAY < Time.time)	//After delay time, it transfers card from auction deck to player hand.
 		{
-			Debug.Log ("Deliver!!!");
-			GameMaster.requestCardTransfer (100,transferID, true);	// THIS PART IS HARD CODED
+			//Debug.Log ("Deliver!!!");
+			GameMaster.requestCardTransfer (100,transferID, true);
+			((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard((int)timeRemaining);
 			buttonClicked=false;
 			Destroy (this,0.2f);
 			GameMaster.terminateCurrentAuction();
@@ -74,7 +75,7 @@ public class AuctionTimer : MonoBehaviour {
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
 			if (GUI.Button (new Rect(convertedGUIPos.x, convertedGUIPos.y-100, 70, 35), "Bid for "+(int)timeRemaining) && !buttonClicked)
 			{
-				Debug.Log ("Pressed!!!");
+				//Debug.Log ("Pressed!!!");
 				//buttonClicked = true;
 				((PlayerHand)GameMaster.searchDeckByID (GameMaster.UserID)).setBidValue ((int)timeRemaining);
 				//auctionInProcess=false;

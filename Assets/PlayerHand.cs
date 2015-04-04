@@ -22,33 +22,44 @@ public class PlayerHand : Deck {
 		return AIControlled;
 	}
 
+	public void setBidValue(int val)
+	{
+		BidValue = val;
+	}
+	
+	public int getBidValue()
+	{
+		return BidValue;
+	}
+
+
+
 	public void CalculateAIBid(Card auctionCard)
 	{
 		BidValue = auctionCard.Rank*5;
 	}
 
-	public int getBidValue()
+	public void takeAuctionCard(int price)
 	{
-		return BidValue;
-	}
-	public void setBidValue(int val)
-	{
-		BidValue = val;
+		cash -= price;
+		BidValue = 0;
+		Debug.Log ("Player "+DeckID+ "'s current cash = "+cash + "!!");
 	}
 
-	public bool pullAuctionCard(int price)
+	public bool bidForAuction(int price)
 	{
 		if (cash>=price)
 		{
-			cash -= price;
-			Debug.LogWarning ("Player " + DeckID + " wins auction!");
-			//GameMaster.requestCardTransfer (100,DeckID, false, true);	//from auction deck to player's deck
+			//cash -= price;
 			return true;
 		}
 		else
 		{
-			BidValue=0;
-			Debug.LogWarning ("Request denied. Not enough cash");
+			// if auction fails, AI keeps attempting to bid.
+			if (AIControlled)
+				BidValue=price;
+			else
+				BidValue=0;
 			return false;
 		}
 	}
