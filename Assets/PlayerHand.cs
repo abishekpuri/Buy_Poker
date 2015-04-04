@@ -5,7 +5,8 @@ public class PlayerHand : Deck {
 
 	private float cash;
 	private bool AIControlled;
-	private int AIBidValue;
+	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
+	private int BidValue;
 
 	public float Cash
 	{
@@ -23,24 +24,32 @@ public class PlayerHand : Deck {
 
 	public void CalculateAIBid(Card auctionCard)
 	{
-		AIBidValue = auctionCard.Rank*5;
+		BidValue = auctionCard.Rank*5;
 	}
 
-	public int getAIBidValue()
+	public int getBidValue()
 	{
-		return AIBidValue;
+		return BidValue;
+	}
+	public void setBidValue(int val)
+	{
+		BidValue = val;
 	}
 
-	public void pullAuctionCard(int price)
+	public bool pullAuctionCard(int price)
 	{
 		if (cash>=price)
 		{
 			cash -= price;
-			GameMaster.requestCardTransfer (100,DeckID, false, true);	//from auction deck to player's deck
+			Debug.LogWarning ("Player " + DeckID + " wins auction!");
+			//GameMaster.requestCardTransfer (100,DeckID, false, true);	//from auction deck to player's deck
+			return true;
 		}
 		else
 		{
+			BidValue=0;
 			Debug.LogWarning ("Request denied. Not enough cash");
+			return false;
 		}
 	}
 
@@ -49,7 +58,7 @@ public class PlayerHand : Deck {
 		base.Start ();	// access base class
 		cash = 100;
 		AIControlled = false;
-		AIBidValue = 0;
+		BidValue = 0;
 	}
 	
 	// Update is called once per frame

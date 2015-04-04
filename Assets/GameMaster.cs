@@ -25,13 +25,15 @@ using System.Collections.Generic;
  * 
  * */
 public class GameMaster : MonoBehaviour {
-	
+
+	// constant player ID value
+	public static int UserID = 1;
+
 	public static GameMaster gm;		// Enables gameMaster instance to be referenced from other classes, so that non-static functions can be called. It is currently never used.
 	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
 	public static List<PlayerHand> playerList = new List<PlayerHand>();		//GameMaster keeps track of all players in game
 	private static bool auctionInProgress = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
-
 
 	/*************************************This part is purely bound to Buttons in gameScene*******************************/
 	public int debugDestinationIDField;
@@ -96,6 +98,35 @@ public class GameMaster : MonoBehaviour {
 	public static void requestCardTransfer(int sourceID, int destinationID, bool searchByPlayerID=false, bool openCard=false)
 	{
 		searchDeckByID (sourceID).GetComponent<Deck>().transferTopCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard);
+	}
+	public static int getHighestBidderID()
+	{
+		int currentMaxBid = 0;
+		int currentPlayerID = 0;
+		for (int i=0; i<playerList.Count; i++)
+		{
+			if (playerList[i].getBidValue ()>=currentMaxBid)
+			{
+				currentMaxBid=playerList[i].getBidValue ();
+				currentPlayerID=playerList[i].DeckID;
+			}
+		}
+		return currentPlayerID;
+	}
+	// bad design + laziness
+	public static int getHighestBidValue()
+	{
+		int currentMaxBid = 0;
+		int currentPlayerID = 0;
+		for (int i=0; i<playerList.Count; i++)
+		{
+			if (playerList[i].getBidValue ()>=currentMaxBid)
+			{
+				currentMaxBid=playerList[i].getBidValue ();
+				currentPlayerID=playerList[i].DeckID;
+			}
+		}
+		return currentMaxBid;
 	}
 
 	/*************************************Functions above are explicitly called by external calasses*******************************/
@@ -180,8 +211,10 @@ public class GameMaster : MonoBehaviour {
 		{
 			if (playerList[j].isAIControlled ())
 				playerList[j].CalculateAIBid (searchDeckByID (100).peekTopCard ());
-			Debug.Log("AI " + j + " bid value = " + playerList[j].getAIBidValue());
+			Debug.Log("Player " + j + " bid value = " + playerList[j].getBidValue());
 		}
+
+		// start auction
 		while (auctionInProgress){yield return new WaitForSeconds (1f);}	// while auction is in progress
 
 		// throws auction card into dump if no one pays for auction.
@@ -228,19 +261,12 @@ public class GameMaster : MonoBehaviour {
 		}
 	}
 
-	private void startAuction()
-	{
-		//AddCom
-	}
 	
-
-	
-	private static Deck searchDeckByID(int searchID)
+	public static Deck searchDeckByID(int searchID)
 	{
 		return deckList.Find (x => x.DeckID == searchID);
 	}
-	
-	
+
 	
 }
 
