@@ -16,7 +16,7 @@ public class Deck : MonoBehaviour {
 	public int reserveDeckID;
 	private List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
 	private int deckID;
-	public string CombinationType; //consider making private later.
+	public string CombinationType = "Evaluating Hand .."; //consider making private later.
 	private bool initializeFlag = true;			// Once ID is set, it cannot be changed again. I added variable just for the sake of protection, but I might be complicating things.
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
 	private int currentLayoutType;	//current layout type

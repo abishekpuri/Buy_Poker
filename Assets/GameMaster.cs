@@ -195,6 +195,7 @@ public class GameMaster : MonoBehaviour {
 				if (deckList[j].DeckID>0 && deckList[j].DeckID<100)
 				{
 					searchDeckByID(0).transferTopCardTo (deckList[j], deckList[j].DeckID==1);
+					deckList[j].evaluateDeck();
 					yield return new WaitForSeconds(0.5f);
 				
 				}
@@ -237,8 +238,9 @@ public class GameMaster : MonoBehaviour {
 
 	void OnGUI()	//Overrided
 	{
+		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
-		//GUI.Button (new Rect (500, 500, 200, 200), " Player Cash = " + ((PlayerHand)searchDeckByID (1)).Cash);
+		GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
 	}
 	
 	public void registerNewPlayerHand(int id, Vector3 pos, Vector3 rotation, int orientation,bool Player=false)
