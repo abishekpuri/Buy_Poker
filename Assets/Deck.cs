@@ -18,6 +18,7 @@ public class Deck : MonoBehaviour {
 	private int deckID;
 	public string CombinationType = "Evaluating Hand .."; //consider making private later.
 	public int CombinationValue; // used to break ties if CombinationType same
+	public int CombinationRank; // Number that tracks hand value, better than enumerating hand types
 	private bool initializeFlag = true;			// Once ID is set, it cannot be changed again. I added variable just for the sake of protection, but I might be complicating things.
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
 	private int currentLayoutType;	//current layout type
@@ -26,7 +27,9 @@ public class Deck : MonoBehaviour {
 		get{return deckID;}
 		set{if (initializeFlag){deckID = value; initializeFlag=false;}else{Debug.LogError ("Deck ID assignment denied");}}
 	}
-
+	public List<Card> CARDS {
+				get{ return cards;}
+		}
 	public void evaluateDeck()
 	{
 		int counter = 0;
@@ -59,34 +62,42 @@ public class Deck : MonoBehaviour {
 				int three_kind = value.FindAll (a => a == 3).Count;
 				int four_kind = value.FindAll (a => a == 4).Count;
 				int flush = suit.FindAll (a => a >= 5).Count;
-				int CombinationValue;	
 				counter = 0;
 				if ((flush != 0) && straight) {
+						CombinationRank = 1;
 						CombinationType = "Straight Flush";
 				} else if (four_kind >= 1) {
+						CombinationRank = 2;
 						CombinationValue = value.FindLastIndex (a => a == 4); 
 						CombinationType = "Four of a Kind";
 				} else if (three_kind > 1 || (three_kind == 1 && pairs >= 1)) {
+						CombinationRank = 3;
 						CombinationValue = value.FindLastIndex (a => a == 3);
 						CombinationType = "Full House";
 				} else if (flush >= 1) {
+						CombinationRank = 4;
 						CombinationType = "Flush";
 				} else if (straight) {
+						CombinationRank = 5;
 						CombinationType = "Straight";
 				} else if (three_kind >= 1) {
+						CombinationRank = 6;
 						CombinationValue = value.FindLastIndex (a => a == 3);
 						CombinationType = "Three of a Kind";
 				} else if (pairs >= 2) {
+						CombinationRank = 7;
 						CombinationValue = value.FindLastIndex (a => a == 2);
 						CombinationType = "Two Pair";
 				} else if (pairs == 1) {
+						CombinationRank = 8;
 						CombinationValue = value.FindLastIndex (a => a == 2);
 						CombinationType = "One Pair";
 				} else {
+						CombinationRank = 9;
 						CombinationValue = value.FindLastIndex (a => a == 1);
 						CombinationType = "High Card";
 				}
-		}
+	}
 
 	public Card peekTopCard()
 	{

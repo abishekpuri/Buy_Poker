@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class PlayerHand : Deck {
 
@@ -41,7 +43,20 @@ public class PlayerHand : Deck {
 
 	public void CalculateAIBid(Card auctionCard)
 	{
-		BidValue = auctionCard.Rank*5;
+		this.evaluateDeck ();
+		int current_rank = CombinationRank;
+		int current_score = CombinationValue;
+		CARDS.Add (auctionCard);
+		this.evaluateDeck ();
+		if (current_rank > CombinationRank) {
+						BidValue = (int)(0.7 * cash);
+				} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
+						BidValue = (int)(0.5 * cash);
+				}
+		else {
+						BidValue = (int)(0.1 * cash);
+				}
+		CARDS.Remove (auctionCard);
 	}
 
 	public void takeAuctionCard(int price)
