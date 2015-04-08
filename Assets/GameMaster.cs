@@ -33,7 +33,7 @@ public class GameMaster : MonoBehaviour {
 	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
 	public static List<PlayerHand> playerList = new List<PlayerHand>();		//GameMaster keeps track of all players in game
 	private static bool auctionInProgress = false;
-	public int winnerID;
+	public static int winnerID;
 	public bool gameEnd = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
 
@@ -209,15 +209,21 @@ public class GameMaster : MonoBehaviour {
 			yield return StartCoroutine(auction ());
 		}
 
-		// take cards up to the table
+
 		searchDeckByID (102).setupLayout (3);
+
+		// returns winner hand
+		PlayerHand winner = getWinner (playerList);
+		winnerID = winner.DeckID;
+
+		// take winners' cards up to the table
 		for (int i=0; i<20; i++)
-			requestCardTransfer (1,102,false, true);
+			requestCardTransfer (winnerID,102,false, true);
+
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
 		}
-		PlayerHand winner = getWinner (playerList);
-		winnerID = winner.DeckID;
+
 		gameEnd = true;
 	}
 

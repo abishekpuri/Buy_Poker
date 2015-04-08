@@ -87,8 +87,7 @@ public class PlayerHand : Deck {
 		if (showGUI){
 			Vector3 pos = transform.localPosition;//(Vector2)Camera.WorldToScreenPoint(pos)
 			Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
-			Vector2 convertedGUIPos = GUIUtility.ScreenToGUIPoint(screenPos);
-			GUI.Box (new Rect (convertedGUIPos.x, 600-convertedGUIPos.y - 120, 100, (showCombination?60:45)), "Cash = " + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":CombinationType));
+			GUI.Box (new Rect (screenPos.x, Camera.main.pixelHeight-screenPos.y- 120, 100, (showCombination?60:45)), "Cash = " + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":CombinationType));
 		}
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.

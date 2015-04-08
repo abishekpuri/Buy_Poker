@@ -69,11 +69,10 @@ public class AuctionTimer : MonoBehaviour {
 		// Converts localPosition of the transform to position vector in screenSpace, then to GUI space. I found some unidentified bug, and it needs rectification.
 		Vector3 pos = transform.localPosition;//(Vector2)Camera.WorldToScreenPoint(pos)
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
-		Vector2 convertedGUIPos = GUIUtility.ScreenToGUIPoint(screenPos);
 		if (timeRemaining>=10)
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
-			if (GUI.Button (new Rect(convertedGUIPos.x, 600-convertedGUIPos.y-100, 70, 35), "Bid for "+(int)timeRemaining) && !buttonClicked)
+			if (GUI.Button (new Rect(screenPos.x, Camera.main.pixelHeight-screenPos.y-100, 70, 35), "Bid for "+(int)timeRemaining) && !buttonClicked)
 			{
 				//Debug.Log ("Pressed!!!");
 				//buttonClicked = true;
@@ -83,7 +82,7 @@ public class AuctionTimer : MonoBehaviour {
 			}
 		}
 		else{
-			GUI.Button (new Rect(convertedGUIPos.x, convertedGUIPos.y-100, 70, 35), "Bid over");
+			GUI.Button (new Rect(screenPos.x, Camera.main.pixelHeight-screenPos.y, 70, 35), "Bid over");
 		}
 	}
 }
