@@ -57,10 +57,10 @@ public class Deck : MonoBehaviour {
 								break;
 						}
 				}
-				int pairs = value.FindAll (a => a == 2).Count;
-				int three_kind = value.FindAll (a => a == 3).Count;
-				int four_kind = value.FindAll (a => a == 4).Count;
-				int flush = suit.FindAll (a => a == 5).Count;
+				int pairs = value.FindAll (a => a >= 2).Count;
+				int three_kind = value.FindAll (a => a >= 3).Count;
+				int four_kind = value.FindAll (a => a >= 4).Count;
+				int flush = suit.FindAll (a => a >= 5).Count;
 				counter = 0;
 				if ((flush != 0) && straight) {
 						CombinationType = "Straight Flush";

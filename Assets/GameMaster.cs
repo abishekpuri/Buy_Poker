@@ -173,6 +173,10 @@ public class GameMaster : MonoBehaviour {
 
 		yield return StartCoroutine (dealCards (3));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
 
+		for (int i=0; i<playerList.Count; i++) {
+			playerList[i].showGUI=true;
+		}
+
 		yield return new WaitForSeconds(0.5f);
 
 		// Starts auction.
@@ -182,8 +186,11 @@ public class GameMaster : MonoBehaviour {
 
 		// take cards up to the table
 		searchDeckByID (102).setupLayout (3);
-		for (int i=0; i<10; i++)
+		for (int i=0; i<20; i++)
 			requestCardTransfer (1,102,false, true);
+		for (int i=0; i<playerList.Count; i++) {
+			playerList[i].showCombination=true;
+		}
 	}
 
 	private IEnumerator dealCards(int numberOfCards)	//must be called through StartCoroutine(dealCards(int));
@@ -240,7 +247,7 @@ public class GameMaster : MonoBehaviour {
 	{
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
-		GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
+		//GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
 	}
 	
 	public void registerNewPlayerHand(int id, Vector3 pos, Vector3 rotation, int orientation,bool Player=false)
