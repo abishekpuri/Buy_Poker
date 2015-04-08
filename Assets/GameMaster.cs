@@ -33,6 +33,8 @@ public class GameMaster : MonoBehaviour {
 	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
 	public static List<PlayerHand> playerList = new List<PlayerHand>();		//GameMaster keeps track of all players in game
 	private static bool auctionInProgress = false;
+	public int winnerID;
+	public bool gameEnd = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
 
 	/*************************************This part is purely bound to Buttons in gameScene*******************************/
@@ -129,6 +131,29 @@ public class GameMaster : MonoBehaviour {
 		return currentMaxBid;
 	}
 
+	public static PlayerHand getWinner(List<PlayerHand> players) {
+		List<string> Types= new List<string>();
+		Types.Add ("High Card");
+		Types.Add ("One Pair");
+		Types.Add ("Two Pair");
+		Types.Add ("Three of a Kind");
+		Types.Add ("Straight");
+		Types.Add ("Flush");
+		Types.Add ("Full House");
+		Types.Add ("Four of a Kind");
+		Types.Add ("Straight Flush");
+		PlayerHand winner = players [0];
+		for (int i = 1; i < players.Count; i++) {
+						if (Types.FindIndex (a => a == players [i].CombinationType) > Types.FindIndex (a => a == winner.CombinationType)) {
+								winner = players [i];
+						} else if (Types.FindIndex (a => a == players [i].CombinationType) == Types.FindIndex (a => a == winner.CombinationType)) {
+								if (players [i].CombinationValue > winner.CombinationValue) {
+										winner = players [i];
+								}
+						}
+				}
+		return winner;
+		}
 	/*************************************Functions above are explicitly called by external calasses*******************************/
 
 
@@ -191,6 +216,9 @@ public class GameMaster : MonoBehaviour {
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
 		}
+		PlayerHand winner = getWinner (playerList);
+		winnerID = winner.DeckID;
+		gameEnd = true;
 	}
 
 	private IEnumerator dealCards(int numberOfCards)	//must be called through StartCoroutine(dealCards(int));
@@ -245,7 +273,9 @@ public class GameMaster : MonoBehaviour {
 
 	void OnGUI()	//Overrided
 	{
-		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
+		if (gameEnd) {
+			GUI.Label(new Rect(590,290,200,20),"The Winner is DECK ID : "+ winnerID);
+				}
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
 		//GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
 	}

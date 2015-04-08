@@ -17,6 +17,7 @@ public class Deck : MonoBehaviour {
 	private List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
 	private int deckID;
 	public string CombinationType = "Evaluating Hand .."; //consider making private later.
+	public int CombinationValue; // used to break ties if CombinationType same
 	private bool initializeFlag = true;			// Once ID is set, it cannot be changed again. I added variable just for the sake of protection, but I might be complicating things.
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
 	private int currentLayoutType;	//current layout type
@@ -28,19 +29,16 @@ public class Deck : MonoBehaviour {
 
 	public void evaluateDeck()
 	{
-				int counter = 0;
-				bool straight = false;
-				List<int> value = new List<int> ();
-				List<int> suit = new List<int> ();
-
-				for (int i = 0; i < 15; i++) {
+		int counter = 0;
+		bool straight = false;
+		List<int> value = new List<int> ();
+		List<int> suit = new List<int> ();
+		for (int i = 0; i < 15; i++) {
 						if (i < 5) {
 								suit.Add (0);
 						}
 						value.Add (0);
-				}
-				;
-
+		};
 				for (int i = 0; i < cards.Count; i++) {
 						value [cards [i].Rank]++;
 						suit [cards [i].Suit]++;
@@ -57,31 +55,37 @@ public class Deck : MonoBehaviour {
 								break;
 						}
 				}
-				int pairs = value.FindAll (a => a >= 2).Count;
-				int three_kind = value.FindAll (a => a >= 3).Count;
-				int four_kind = value.FindAll (a => a >= 4).Count;
+				int pairs = value.FindAll (a => a == 2).Count;
+				int three_kind = value.FindAll (a => a == 3).Count;
+				int four_kind = value.FindAll (a => a == 4).Count;
 				int flush = suit.FindAll (a => a >= 5).Count;
+				int CombinationValue;	
 				counter = 0;
 				if ((flush != 0) && straight) {
 						CombinationType = "Straight Flush";
 				} else if (four_kind >= 1) {
+						CombinationValue = value.FindLastIndex (a => a == 4); 
 						CombinationType = "Four of a Kind";
 				} else if (three_kind > 1 || (three_kind == 1 && pairs >= 1)) {
+						CombinationValue = value.FindLastIndex (a => a == 3);
 						CombinationType = "Full House";
 				} else if (flush >= 1) {
 						CombinationType = "Flush";
 				} else if (straight) {
 						CombinationType = "Straight";
 				} else if (three_kind >= 1) {
+						CombinationValue = value.FindLastIndex (a => a == 3);
 						CombinationType = "Three of a Kind";
 				} else if (pairs >= 2) {
+						CombinationValue = value.FindLastIndex (a => a == 2);
 						CombinationType = "Two Pair";
 				} else if (pairs == 1) {
+						CombinationValue = value.FindLastIndex (a => a == 2);
 						CombinationType = "One Pair";
 				} else {
+						CombinationValue = value.FindLastIndex (a => a == 1);
 						CombinationType = "High Card";
 				}
-				Debug.Log (CombinationType);
 		}
 
 	public Card peekTopCard()
@@ -230,10 +234,17 @@ public class Deck : MonoBehaviour {
 
 	public void generateFullCardDeck()
 	{
-		for (int i=1; i<=4; ++i)
-			for (int j=1; j<=13; ++j)
-				new_card(j,i);
-	}
+				for (int i=1; i<=4; ++i) {
+						for (int j=1; j<=10; ++j) {
+								new_card (j, i);
+						}
+				}
+				for (int i = 1; i <= 4; ++ i) {
+						new_card (11, i);
+						new_card (12, i);
+						new_card (13, i);
+				}
+		}
 
 	public void shuffle()
 	{
