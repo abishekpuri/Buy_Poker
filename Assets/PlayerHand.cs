@@ -9,7 +9,6 @@ public class PlayerHand : Deck {
 	private bool AIControlled;
 	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
-
 	// below are non-ingame temporary variables. Feel free to force change the variables anywhere.
 	public bool showGUI = false;
 	public bool showCombination = true;

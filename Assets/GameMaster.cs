@@ -36,7 +36,8 @@ public class GameMaster : MonoBehaviour {
 	public static int winnerID;
 	public bool gameEnd = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
-	public int wins = 0;
+	public int wins;
+	public int total_games;
 	/*************************************This part is purely bound to Buttons in gameScene*******************************/
 	public int debugDestinationIDField;
 	public int debugDeckIDField;
@@ -173,13 +174,18 @@ public class GameMaster : MonoBehaviour {
 	
 	// Use this for initialization. Overrides ***Start() in MonoBehavior***
 	void Start () {
-
+		//ResetPrefs();
 		StartCoroutine (coStart ());
 	}
-
+	public void ResetPrefs() {
+				PlayerPrefs.SetInt ("wins", 0);
+				PlayerPrefs.SetInt ("total_games", 0);
+		}
 	public IEnumerator coStart()	//Must be called through StartCoroutine()
 	{
 		yield return new WaitForFixedUpdate();
+		wins = PlayerPrefs.GetInt ("wins",0);
+		total_games = PlayerPrefs.GetInt ("total_games");
 		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
 		registerNewPlayerHand (1, new Vector3(0,-3,0), new Vector3(0,0,0f),6,true);
 		registerNewPlayerHand (2, new Vector3(-5f,-3,0), new Vector3(0,0,0),6,true);
@@ -216,7 +222,8 @@ public class GameMaster : MonoBehaviour {
 		PlayerHand winner = getWinner (playerList);
 		winnerID = winner.DeckID;
 		if (winnerID == 1) {
-						wins ++;
+			PlayerPrefs.SetInt("wins",wins+1);
+			PlayerPrefs.Save();
 				}
 		// take winners' cards up to the table
 		for (int i=0; i<20; i++)
@@ -225,7 +232,7 @@ public class GameMaster : MonoBehaviour {
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
 		}
-
+		PlayerPrefs.SetInt ("total_games", total_games + 1);
 		gameEnd = true;
 	}
 
@@ -282,7 +289,9 @@ public class GameMaster : MonoBehaviour {
 	void OnGUI()	//Overrided
 	{
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
-		GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + wins);
+		GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
+		GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
+
 		if (gameEnd) {
 			GUI.Label(new Rect(screenPos.x-70,Camera.main.pixelHeight-screenPos.y-120,200,20),"The Winner is DECK ID : "+ winnerID);
 			if(GUI.Button(new Rect(screenPos.x-70,Camera.main.pixelHeight-screenPos.y-100,200,20),"Play Again")) {
