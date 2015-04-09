@@ -1,0 +1,619 @@
+fileFormatVersion: 2
+guid: 4619c5def0ab20b46abec6acb46f0c28
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: cards_smooth_0
+    21300002: cards_smooth_1
+    21300004: cards_smooth_2
+    21300006: cards_smooth_3
+    21300008: cards_smooth_4
+    21300010: cards_smooth_5
+    21300012: cards_smooth_6
+    21300014: cards_smooth_7
+    21300016: cards_smooth_8
+    21300018: cards_smooth_9
+    21300020: cards_smooth_10
+    21300022: cards_smooth_11
+    21300024: cards_smooth_12
+    21300026: cards_smooth_13
+    21300028: cards_smooth_14
+    21300030: cards_smooth_15
+    21300032: cards_smooth_16
+    21300034: cards_smooth_17
+    21300036: cards_smooth_18
+    21300038: cards_smooth_19
+    21300040: cards_smooth_20
+    21300042: cards_smooth_21
+    21300044: cards_smooth_22
+    21300046: cards_smooth_23
+    21300048: cards_smooth_24
+    21300050: cards_smooth_25
+    21300052: cards_smooth_26
+    21300054: cards_smooth_27
+    21300056: cards_smooth_28
+    21300058: cards_smooth_29
+    21300060: cards_smooth_30
+    21300062: cards_smooth_31
+    21300064: cards_smooth_32
+    21300066: cards_smooth_33
+    21300068: cards_smooth_34
+    21300070: cards_smooth_35
+    21300072: cards_smooth_36
+    21300074: cards_smooth_37
+    21300076: cards_smooth_38
+    21300078: cards_smooth_39
+    21300080: cards_smooth_40
+    21300082: cards_smooth_41
+    21300084: cards_smooth_42
+    21300086: cards_smooth_43
+    21300088: cards_smooth_44
+    21300090: cards_smooth_45
+    21300092: cards_smooth_46
+    21300094: cards_smooth_47
+    21300096: cards_smooth_48
+    21300098: cards_smooth_49
+    21300100: cards_smooth_50
+    21300102: cards_smooth_51
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 2
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: cards_smooth_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_1
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_2
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_3
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_4
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_5
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_6
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_7
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_8
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_9
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_10
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_11
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_12
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 294
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_14
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_15
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_16
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_17
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_18
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_19
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_20
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_21
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_22
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_23
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_24
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_25
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 196
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_27
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_28
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_29
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_30
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_31
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_32
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_33
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_34
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_35
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_36
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_37
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_38
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 98
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_39
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_40
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_41
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_42
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_43
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_44
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_45
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_46
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_47
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_48
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_49
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_50
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cards_smooth_51
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 0
+        width: 73
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

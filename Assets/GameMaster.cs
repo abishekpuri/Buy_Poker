@@ -172,7 +172,7 @@ public class GameMaster : MonoBehaviour {
 	
 	//Awake is called before start. All static resources in game are loaded here. ***Overrides Awake() in MonoBehavior***
 	void Awake() {
-		Card.cardSpriteList = Resources.LoadAll <Sprite> ("images/cards");
+		Card.cardSpriteList = Resources.LoadAll <Sprite> ("images/cards_smooth");
 		Debug.Log ("Card sprite resourses loaded once and for all");
 		//deckList = new List<Deck>();
 		if (gm == null) {
