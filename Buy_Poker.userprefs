@@ -1,10 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Deck.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameMaster.cs">
     <Files>
-      <File FileName="Assets/GameMaster.cs" Line="224" Column="39" />
-      <File FileName="Assets/Deck.cs" Line="90" Column="1" />
-      <File FileName="Assets/PlayerHand.cs" Line="59" Column="30" />
+      <File FileName="Assets/GameMaster.cs" Line="285" Column="41" />
+      <File FileName="Assets/Deck.cs" Line="105" Column="1" />
+      <File FileName="Assets/PlayerHand.cs" Line="22" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

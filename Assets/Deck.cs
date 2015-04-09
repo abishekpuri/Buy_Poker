@@ -43,7 +43,12 @@ public class Deck : MonoBehaviour {
 						value.Add (0);
 		};
 				for (int i = 0; i < cards.Count; i++) {
-						value [cards [i].Rank]++;
+						if(cards[i].Rank == 1) {
+							value[14] ++;
+						}
+						else {
+							value [cards [i].Rank]++;
+						}
 						suit [cards [i].Suit]++;
 				}
 

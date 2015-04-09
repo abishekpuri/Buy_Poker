@@ -19,6 +19,9 @@ public class PlayerHand : Deck {
 		get{return Cash;}
 		//set{playerID = value;}
 	}
+	public void setCash(float value) {
+				cash = value;
+		}
 	public void setAIControl()
 	{
 		AIControlled = true;

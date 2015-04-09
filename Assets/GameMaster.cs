@@ -36,7 +36,7 @@ public class GameMaster : MonoBehaviour {
 	public static int winnerID;
 	public bool gameEnd = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
-
+	public int wins = 0;
 	/*************************************This part is purely bound to Buttons in gameScene*******************************/
 	public int debugDestinationIDField;
 	public int debugDeckIDField;
@@ -215,7 +215,9 @@ public class GameMaster : MonoBehaviour {
 		// returns winner hand
 		PlayerHand winner = getWinner (playerList);
 		winnerID = winner.DeckID;
-
+		if (winnerID == 1) {
+						wins ++;
+				}
 		// take winners' cards up to the table
 		for (int i=0; i<20; i++)
 			requestCardTransfer (winnerID,102,false, true);
@@ -279,8 +281,20 @@ public class GameMaster : MonoBehaviour {
 
 	void OnGUI()	//Overrided
 	{
+		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
+		GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + wins);
 		if (gameEnd) {
-			GUI.Label(new Rect(590,290,200,20),"The Winner is DECK ID : "+ winnerID);
+			GUI.Label(new Rect(screenPos.x-70,Camera.main.pixelHeight-screenPos.y-120,200,20),"The Winner is DECK ID : "+ winnerID);
+			if(GUI.Button(new Rect(screenPos.x-70,Camera.main.pixelHeight-screenPos.y-100,200,20),"Play Again")) {
+				for(int i = 0;i < deckList.Count;i++) {
+					deckList[i].destroyAll();
+				}
+				for(int i = 0;i < playerList.Count;++i) {
+					playerList[i].setCash(100);
+				}
+				gameEnd = false;
+				Start ();
+			}
 				}
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
 		//GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
