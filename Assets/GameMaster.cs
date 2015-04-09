@@ -106,27 +106,35 @@ public class GameMaster : MonoBehaviour {
 	{
 		int currentMaxBid = 0;
 		int currentPlayerID = 0;
+		int currentPlayerPos = 0;
 		for (int i=0; i<playerList.Count; i++)
 		{
 			if (playerList[i].getBidValue ()>=currentMaxBid)
 			{
 				currentMaxBid=playerList[i].getBidValue ();
 				currentPlayerID=playerList[i].DeckID;
+				currentPlayerPos = i;
 			}
 		}
+		for (int i = 0; i<playerList.Count; ++i) {
+			if (playerList [i].isAIControlled ()) {
+				float value = playerList[currentPlayerPos].cash;
+				playerList[i].WinningBidPercentage.Add(currentMaxBid/value);
+						}
+				}
 		return currentPlayerID;
 	}
 	// bad design + laziness
 	public static int getHighestBidValue()
 	{
 		int currentMaxBid = 0;
-		int currentPlayerID = 0;
+		//int currentPlayerID = 0;
 		for (int i=0; i<playerList.Count; i++)
 		{
 			if (playerList[i].getBidValue ()>=currentMaxBid)
 			{
 				currentMaxBid=playerList[i].getBidValue ();
-				currentPlayerID=playerList[i].DeckID;
+				//currentPlayerID=playerList[i].DeckID;
 			}
 		}
 		return currentMaxBid;
@@ -180,11 +188,12 @@ public class GameMaster : MonoBehaviour {
 	public void ResetPrefs() {
 				PlayerPrefs.SetInt ("wins", 0);
 				PlayerPrefs.SetInt ("total_games", 0);
+				PlayerPrefs.SetFloat ("bottomCap", 0.1f);
 		}
 	public IEnumerator coStart()	//Must be called through StartCoroutine()
 	{
 		yield return new WaitForFixedUpdate();
-		wins = PlayerPrefs.GetInt ("wins",0);
+		wins = PlayerPrefs.GetInt ("wins");
 		total_games = PlayerPrefs.GetInt ("total_games");
 		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
 		registerNewPlayerHand (1, new Vector3(0,-3,0), new Vector3(0,0,0f),6,true);
@@ -202,7 +211,7 @@ public class GameMaster : MonoBehaviour {
 		searchDeckByID (0).shuffle ();
 
 
-		yield return StartCoroutine (dealCards (5));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
+		yield return StartCoroutine (dealCards (3));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
 
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showGUI=true;
@@ -211,7 +220,7 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		// Starts auction.
-		for (int i=0; i<7; i++) {
+		for (int i=0; i<3; i++) {
 			yield return StartCoroutine(auction ());
 		}
 
@@ -264,7 +273,7 @@ public class GameMaster : MonoBehaviour {
 		{
 			if (playerList[j].isAIControlled ())
 				playerList[j].CalculateAIBid (searchDeckByID (100).peekTopCard ());
-			Debug.Log("Player " + j + " bid value = " + playerList[j].getBidValue());
+			//Debug.Log("Player " + j + " bid value = " + playerList[j].getBidValue());
 		}
 
 		// start auction

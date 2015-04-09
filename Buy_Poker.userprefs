@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameMaster.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AuctionTimer.cs">
     <Files>
-      <File FileName="Assets/GameMaster.cs" Line="252" Column="40" />
-      <File FileName="Assets/PlayerHand.cs" Line="1" Column="1" />
+      <File FileName="Assets/GameMaster.cs" Line="245" Column="1" />
+      <File FileName="Assets/PlayerHand.cs" Line="125" Column="7" />
       <File FileName="Assets/Deck.cs" Line="1" Column="1" />
-      <File FileName="Assets/ChangeScene.cs" Line="1" Column="1" />
+      <File FileName="Assets/AuctionTimer.cs" Line="41" Column="50" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -6,17 +6,18 @@ using System.Collections.Generic;
 
 public class PlayerHand : Deck {
 
-	private float cash;
+	public float cash;
 	private bool AIControlled;
 	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
+	public List<float> WinningBidPercentage = new List<float>();
 	// below are non-ingame temporary variables. Feel free to force change the variables anywhere.
 	public bool showGUI = false;
 	public bool showCombination = true;
 
 	public float Cash
 	{
-		get{return Cash;}
+		get{ return cash;}
 		//set{playerID = value;}
 	}
 	public void setCash(float value) {
@@ -42,10 +43,33 @@ public class PlayerHand : Deck {
 		return BidValue;
 	}
 
-
+	//Debugging Function to check if winning bids are being entered
+	public void showWinningBids() {
+				for (int i = 0; i < WinningBidPercentage.Count; ++i) {
+						Debug.Log (WinningBidPercentage [i]);
+				}
+		}
 
 	public void CalculateAIBid(Card auctionCard)
 	{
+		/*To prevent players from catching on to AI's lower point for useless cards, we will track all bets made below 50% of 
+		 * total cash, and remember the percentge, adjusting ours accordingly*/
+		float avgBetPercentage = 0;
+		float bottomCap = PlayerPrefs.GetFloat("bottomCap");
+		for (int i = 0; i < WinningBidPercentage.Count; ++i) {
+						if (WinningBidPercentage [i] < 0.5) {
+								avgBetPercentage += WinningBidPercentage [i];
+						}
+				}
+		avgBetPercentage /= WinningBidPercentage.FindAll(a => a <0.5).Count;
+		if (avgBetPercentage > bottomCap) {
+						bottomCap += 0.05f;
+			PlayerPrefs.SetFloat("bottomCap",bottomCap);
+				}
+		if (avgBetPercentage < bottomCap) {
+						bottomCap -= 0.05f;
+			PlayerPrefs.SetFloat("bottomCap",bottomCap);
+		}
 				/*Strategy 1 : If the card will allow me to increase the ranking of my hand, pay 70% of current cash. 
 		If it will increase the value of my hand but keep the ranking same  ie go from pair 4's to pair 9's
 		 then pay 50% of current cash. Otherwise, only bid 10% of current cash.*/
@@ -65,11 +89,12 @@ public class PlayerHand : Deck {
 						if (bluff) {
 								BidValue = (int)(0.6 * cash);
 						} else {
-								BidValue = (int)(0.1 * cash);
+								BidValue = (int)(bottomCap * cash);
 						}
-				}
+	}
+	BidValue = (int)(bottomCap*cash);
 		CARDS.Remove (auctionCard);
-		}
+	}
 
 	public void takeAuctionCard(int price)
 	{
