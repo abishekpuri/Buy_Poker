@@ -329,7 +329,7 @@ public class GameMaster : MonoBehaviour {
 		if (id > 0 && id < 100 && searchDeckByID (id)==null)
 		{
 			GameObject newDeck = (GameObject)Instantiate (new GameObject(),pos, Quaternion.Euler (rotation));
-			newDeck.transform.localScale = new Vector3(1.1f, 1.1f, 0);	//We can change this around.
+			newDeck.transform.localScale = new Vector3(1.2f, 1.2f, 0);	//We can change this around.
 			PlayerHand newHandComponent = (PlayerHand)newDeck.AddComponent ("PlayerHand");
 			newHandComponent.DeckID = id;
 			Debug.Log ("NEW DECK => Deck ID = "+newHandComponent.DeckID+", Layout = " + orientation);
