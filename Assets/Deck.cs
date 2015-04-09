@@ -215,10 +215,10 @@ public class Deck : MonoBehaviour {
 			pos[0] = new Vector3 (indexReference*0.3f - (0.3f*(cards.Count-1))*0.5f,0,0.001f);
 			break;
 		case 3:
-			pos[0] = new Vector3 (indexReference*1.4f,0,0.001f);
+			pos[0] = new Vector3 (indexReference*1.2f,0,0.001f);
 			break;
 		case 4:
-			pos[0] = new Vector3 (indexReference*1.4f - (1.4f*(cards.Count-1))*0.5f,0,0.001f);
+			pos[0] = new Vector3 (indexReference*1.2f - (1.2f*(cards.Count-1))*0.5f,0,0.001f);
 			break;
 		case 5:
 			pos[0] = new Vector3 (indexReference*0.3f,0,0);

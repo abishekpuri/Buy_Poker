@@ -199,6 +199,7 @@ public class GameMaster : MonoBehaviour {
 		registerNewPlayerHand (1, new Vector3(0,-3,0), new Vector3(0,0,0f),6,true);
 		registerNewPlayerHand (2, new Vector3(-5f,-3,0), new Vector3(0,0,0),6,true);
 		registerNewPlayerHand (3, new Vector3(5f,-3,0), new Vector3(0,0,0),6,true);
+
 		searchDeckByID (0).generateFullCardDeck ();
 		yield return new WaitForFixedUpdate();		// WAIT until all sprites in deck 0 are loaded. Otherwise, closeDeck() might not work.
 
@@ -250,14 +251,19 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(1f);	//DO NOT ERASE THIS PART. DEALING SHOULD NOT START BEFORE HANDS ARE REPORTED TO GAMEMASTER
 		Debug.Log("Card dealt to "+(deckList.Count-2)+" hands");
 		for (int i=0; i<numberOfCards; i++)
+		{
 			for (int j=0; j<deckList.Count; j++)
+			{
 				if (deckList[j].DeckID>0 && deckList[j].DeckID<100)
 				{
 					searchDeckByID(0).transferTopCardTo (deckList[j], deckList[j].DeckID==1);
 					deckList[j].evaluateDeck();
-					yield return new WaitForSeconds(0.1f);
+					yield return new WaitForSeconds(0.2f);
 				
 				}
+			}
+			yield return new WaitForSeconds(0.2f);
+		}
 		yield return new WaitForSeconds (2f);
 	}
 
