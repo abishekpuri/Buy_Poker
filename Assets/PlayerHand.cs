@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -45,21 +46,30 @@ public class PlayerHand : Deck {
 
 	public void CalculateAIBid(Card auctionCard)
 	{
-		this.evaluateDeck ();
-		int current_rank = CombinationRank;
-		int current_score = CombinationValue;
-		CARDS.Add (auctionCard);
-		this.evaluateDeck ();
-		if (current_rank > CombinationRank) {
+				/*Strategy 1 : If the card will allow me to increase the ranking of my hand, pay 70% of current cash. 
+		If it will increase the value of my hand but keep the ranking same  ie go from pair 4's to pair 9's
+		 then pay 50% of current cash. Otherwise, only bid 10% of current cash.*/
+				System.Random rndm = new System.Random ();
+				this.evaluateDeck ();
+				int current_rank = CombinationRank;
+				int current_score = CombinationValue;
+				bool bluff = (rndm.Next (1, 10) <= 5 ? true : false);
+				CARDS.Add (auctionCard);
+				this.evaluateDeck ();
+				if (current_rank > CombinationRank) {
 						BidValue = (int)(0.7 * cash);
 				} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
 						BidValue = (int)(0.5 * cash);
-				}
-		else {
-						BidValue = (int)(0.1 * cash);
+				} else {
+						//Create a bluff, this card cannot help at all, but 10% of the time, the program will act like its an important card.
+						if (bluff) {
+								BidValue = (int)(0.6 * cash);
+						} else {
+								BidValue = (int)(0.1 * cash);
+						}
 				}
 		CARDS.Remove (auctionCard);
-	}
+		}
 
 	public void takeAuctionCard(int price)
 	{

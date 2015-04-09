@@ -202,7 +202,7 @@ public class GameMaster : MonoBehaviour {
 		searchDeckByID (0).shuffle ();
 
 
-		yield return StartCoroutine (dealCards (3));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
+		yield return StartCoroutine (dealCards (5));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
 
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showGUI=true;
@@ -211,7 +211,7 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		// Starts auction.
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<7; i++) {
 			yield return StartCoroutine(auction ());
 		}
 
@@ -293,17 +293,21 @@ public class GameMaster : MonoBehaviour {
 		GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
 
 		if (gameEnd) {
-			GUI.Label(new Rect(screenPos.x-70,Camera.main.pixelHeight-screenPos.y-120,200,20),"The Winner is DECK ID : "+ winnerID);
-			if(GUI.Button(new Rect(screenPos.x-70,Camera.main.pixelHeight-screenPos.y-100,200,20),"Play Again")) {
-				for(int i = 0;i < deckList.Count;i++) {
-					deckList[i].destroyAll();
+						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
+						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {
+								for (int i = 0; i < deckList.Count; i++) {
+										deckList [i].destroyAll ();
+								}
+								for (int i = 0; i < playerList.Count; ++i) {
+										playerList [i].setCash (100);
+								}
+								gameEnd = false;
+								Start ();
+						}
+
 				}
-				for(int i = 0;i < playerList.Count;++i) {
-					playerList[i].setCash(100);
-				}
-				gameEnd = false;
-				Start ();
-			}
+		if (GUI.Button (new Rect (screenPos.x-390, Camera.main.pixelHeight - screenPos.y + 150, 80, 20), "Reset")) {
+						ResetPrefs ();
 				}
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
 		//GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
