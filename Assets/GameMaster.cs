@@ -246,9 +246,10 @@ public class GameMaster : MonoBehaviour {
 				{
 					searchDeckByID(0).transferTopCardTo (deckList[j], deckList[j].DeckID==1);
 					deckList[j].evaluateDeck();
-					yield return new WaitForSeconds(0.5f);
+					yield return new WaitForSeconds(0.1f);
 				
 				}
+		yield return new WaitForSeconds (2f);
 	}
 
 	private IEnumerator auction()
