@@ -11,7 +11,7 @@ public class PlayerHand : Deck {
 	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
 	private int Points = PlayerPrefs.GetInt ("Points");
-	private float Multiplier = PlayerPrefs.GetFloat ("Multiplier");
+	private float Multiplier = (PlayerPrefs.HasKey ("Float")?PlayerPrefs.GetFloat ("Multiplier"):1);
 	public List<float> WinningBidPercentage = new List<float>();
 	// below are non-ingame temporary variables. Feel free to force change the variables anywhere.
 	public bool showGUI = false;
@@ -32,7 +32,7 @@ public class PlayerHand : Deck {
 	}
 	public void Winner() 
 	{
-		Points += (int)(10 * Multiplier);
+		Points += (5 + (int)(10 * Multiplier));
 		PlayerPrefs.SetInt ("Points", Points);
 		Multiplier += 0.1f;
 		if (Multiplier > 2) {
@@ -153,7 +153,7 @@ public class PlayerHand : Deck {
 	// Use this for initialization
 	void Start () {
 		base.Start ();	// access base class
-		cash = 100;
+		cash = 200;
 		AIControlled = false;
 		BidValue = 0;
 	}
