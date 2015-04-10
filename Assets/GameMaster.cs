@@ -326,7 +326,7 @@ public class GameMaster : MonoBehaviour {
 										deckList [i].destroyAll ();
 								}
 								for (int i = 0; i < playerList.Count; ++i) {
-										playerList [i].setCash (100);
+										playerList [i].setCash (200);
 								}
 								gameEnd = false;
 								auctionCardsLeft = 7;
