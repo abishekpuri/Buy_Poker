@@ -28,6 +28,7 @@ public class PlayerHand : Deck {
 	public void setAIControl()
 	{
 		AIControlled = true;
+		Points = 0;
 		showCombination = false;
 	}
 	public void Winner() 
@@ -48,16 +49,13 @@ public class PlayerHand : Deck {
 	{
 		return AIControlled;
 	}
-	public bool buyPrize(int prizeVal) 
+	public void buyPrize(int prizeVal) 
 	{
 				if (Points >= prizeVal) {
 						Points -= prizeVal;
 						PlayerPrefs.SetInt ("Points", Points);
 						//10 prize is getting a free new card
-						return true;
-				} else {
-						return false;
-				}
+				} 
 		}
 
 
@@ -166,9 +164,20 @@ public class PlayerHand : Deck {
 
 	void OnGUI()	//Overrided
 	{
+		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
+		if (Points >= 10) {
+						if (GUI.Button (new Rect (screenPos.x, Camera.main.pixelHeight - screenPos.y - 110, 100, (showCombination ? 60 : 45)), "50 More Cash")) {
+								buyPrize (10);
+								cash += 50;
+						}
+				}
+		if (Points >= 40) {
+						if (GUI.Button (new Rect (screenPos.x - 330, Camera.main.pixelHeight - screenPos.y-190, 50, 80), "40 Pt")) {
+										buyPrize(40);
+										GameMaster.requestCardTransfer (0, 1, false, true);
+						}
+				}
 		if (showGUI){
-			Vector3 pos = transform.localPosition;//(Vector2)Camera.WorldToScreenPoint(pos)
-			Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
 			GUI.Box (new Rect (screenPos.x, Camera.main.pixelHeight-screenPos.y- 120, 100, (showCombination?60:45)), "Cash = " + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":CombinationType));
 		}
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");

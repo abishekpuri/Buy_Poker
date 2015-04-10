@@ -313,12 +313,6 @@ public class GameMaster : MonoBehaviour {
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
 		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 180, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"));
 		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 150, 200, 20), "Cards Left : " + auctionCardsLeft);
-		if (GUI.Button (new Rect (screenPos.x - 330, Camera.main.pixelHeight - screenPos.y-50, 50, 80), "40 Pt")) {
-						bool prize = playerList [0].buyPrize (40);
-						if (prize == true) {
-							requestCardTransfer (0,1,false, true);
-						}
-				}
 		if (gameEnd) {
 						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
 						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {
