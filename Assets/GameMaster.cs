@@ -232,8 +232,11 @@ public class GameMaster : MonoBehaviour {
 		PlayerHand winner = getWinner (playerList);
 		winnerID = winner.DeckID;
 		if (winnerID == 1) {
-			PlayerPrefs.SetInt("wins",wins+1);
-			PlayerPrefs.Save();
+						playerList [0].Winner ();
+						PlayerPrefs.SetInt ("wins", wins + 1);
+						PlayerPrefs.Save ();
+				} else {
+						playerList [0].Loser ();
 				}
 		// take winners' cards up to the table
 		for (int i=0; i<20; i++)
@@ -305,9 +308,15 @@ public class GameMaster : MonoBehaviour {
 	void OnGUI()	//Overrided
 	{
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
-		GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
-		GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
-
+		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
+		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
+		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 180, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"));
+		if (GUI.Button (new Rect (screenPos.x - 330, Camera.main.pixelHeight - screenPos.y-50, 50, 80), "10 Pt")) {
+						bool prize = playerList [0].buyPrize (10);
+						if (prize == true) {
+							requestCardTransfer (0,1,false, true);
+						}
+				}
 		if (gameEnd) {
 						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
 						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {

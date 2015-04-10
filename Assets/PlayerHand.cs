@@ -10,6 +10,8 @@ public class PlayerHand : Deck {
 	private bool AIControlled;
 	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
+	private int Points = PlayerPrefs.GetInt ("Points");
+	private float Multiplier = PlayerPrefs.GetFloat ("Multiplier");
 	public List<float> WinningBidPercentage = new List<float>();
 	// below are non-ingame temporary variables. Feel free to force change the variables anywhere.
 	public bool showGUI = false;
@@ -28,10 +30,36 @@ public class PlayerHand : Deck {
 		AIControlled = true;
 		showCombination = false;
 	}
+	public void Winner() 
+	{
+		Points += (int)(10 * Multiplier);
+		PlayerPrefs.SetInt ("Points", Points);
+		Multiplier += 0.1f;
+		if (Multiplier > 2) {
+			Multiplier = 2;
+		}
+		PlayerPrefs.SetFloat ("Multiplier", Multiplier);
+	}
+	public void Loser() 
+	{
+		PlayerPrefs.SetInt ("Multiplier", 1);
+	}
 	public bool isAIControlled()
 	{
 		return AIControlled;
 	}
+	public bool buyPrize(int prizeVal) 
+	{
+				if (Points >= prizeVal) {
+						Points -= prizeVal;
+						PlayerPrefs.SetInt ("Points", Points);
+						//10 prize is getting a free new card
+						return true;
+				} else {
+						return false;
+				}
+		}
+
 
 	public void setBidValue(int val)
 	{
@@ -62,14 +90,16 @@ public class PlayerHand : Deck {
 						}
 				}
 		avgBetPercentage /= WinningBidPercentage.FindAll(a => a <0.5).Count;
-		if (avgBetPercentage > bottomCap) {
-						bottomCap += 0.05f;
-			PlayerPrefs.SetFloat("bottomCap",bottomCap);
+		if (WinningBidPercentage.FindAll (a => a < 0.5).Count > 3) {
+						if (avgBetPercentage > bottomCap) {
+								bottomCap += 0.05f;
+								PlayerPrefs.SetFloat ("bottomCap", bottomCap);
+						}
+						if (avgBetPercentage < bottomCap) {
+								bottomCap -= 0.05f;
+								PlayerPrefs.SetFloat ("bottomCap", bottomCap);
+						}
 				}
-		if (avgBetPercentage < bottomCap) {
-						bottomCap -= 0.05f;
-			PlayerPrefs.SetFloat("bottomCap",bottomCap);
-		}
 				/*Strategy 1 : If the card will allow me to increase the ranking of my hand, pay 70% of current cash. 
 		If it will increase the value of my hand but keep the ranking same  ie go from pair 4's to pair 9's
 		 then pay 50% of current cash. Otherwise, only bid 10% of current cash.*/
@@ -91,8 +121,7 @@ public class PlayerHand : Deck {
 						} else {
 								BidValue = (int)(bottomCap * cash);
 						}
-	}
-	BidValue = (int)(bottomCap*cash);
+		}
 		CARDS.Remove (auctionCard);
 	}
 
