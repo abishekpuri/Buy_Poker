@@ -227,11 +227,12 @@ public class GameMaster : MonoBehaviour {
 
 		// Starts auction.
 		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
-			Debug.Log ("HERE");
 						yield return StartCoroutine (auction ());
 						auctionCardsLeft --;
 				}
-
+		if (earlyAuctionEnd) {
+						earlyAuctionEnd = false;
+				}
 		searchDeckByID (102).setupLayout (3);
 
 		// returns winner hand

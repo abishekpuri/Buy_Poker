@@ -15,7 +15,7 @@ public class Deck : MonoBehaviour {
 
 	public int reserveDeckID;
 	private List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
-	private int deckID;
+	public int deckID;
 	public string CombinationType = "Evaluating Hand .."; //consider making private later.
 	public int CombinationValue; // used to break ties if CombinationType same
 	public int CombinationRank; // Number that tracks hand value, better than enumerating hand types
@@ -32,11 +32,11 @@ public class Deck : MonoBehaviour {
 		}
 	public void evaluateDeck()
 	{
-		int counter = 0;
-		bool straight = false;
-		List<int> value = new List<int> ();
-		List<int> suit = new List<int> ();
-		for (int i = 0; i < 15; i++) {
+				int counter = 0;
+				bool straight = false;
+				List<int> value = new List<int> ();
+				List<int> suit = new List<int> ();
+				for (int i = 0; i < 15; i++) {
 						if (i < 5) {
 								suit.Add (0);
 						}
@@ -61,25 +61,24 @@ public class Deck : MonoBehaviour {
 										straight = true;
 								}
 						}
-			counter = 0;
-						for (int i = 0; i < value.Count; i++) {
-								if (value [i] > 0) {
-										CombinationValue = (counter == 0 ? i : CombinationValue);
-										counter++;
-								} else {
-										counter = 0;
-								}
-								if (counter == 5) {
-										straight = true;
-										break;
-								}
+				}
+				counter = 0;
+				for (int i = 0; i < value.Count; i++) {
+						if (value [i] > 0) {
+								CombinationValue = (counter == 0 ? i : CombinationValue);
+								counter++;
+						} else {
+								counter = 0;
+						}
+						if (counter == 5) {
+								straight = true;
+								break;
 						}
 				}
 				int pairs = value.FindAll (a => a == 2).Count;
 				int three_kind = value.FindAll (a => a == 3).Count;
 				int four_kind = value.FindAll (a => a == 4).Count;
 				int flush = suit.FindAll (a => a >= 5).Count;
-				counter = 0;
 				if ((flush != 0) && straight) {
 						CombinationRank = 1;
 						CombinationType = "Straight Flush";

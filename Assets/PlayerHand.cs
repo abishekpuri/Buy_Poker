@@ -81,7 +81,6 @@ public class PlayerHand : Deck {
 		/*To prevent players from catching on to AI's lower point for useless cards, we will track all bets made below 50% of 
 		 * total cash, and remember the percentge, adjusting ours accordingly*/
 		float avgBetPercentage = 0;
-		float cashy = (cash < 100 ? cash : 100);
 		float bottomCap = PlayerPrefs.GetFloat("bottomCap");
 		for (int i = 0; i < WinningBidPercentage.Count; ++i) {
 						if (WinningBidPercentage [i] < 0.5) {
@@ -107,20 +106,28 @@ public class PlayerHand : Deck {
 				int current_rank = CombinationRank;
 				int current_score = CombinationValue;
 				bool bluff = (rndm.Next (1, 10) <= 5 ? true : false);
+
 				CARDS.Add (auctionCard);
 				this.evaluateDeck ();
 				if (current_rank > CombinationRank) {
-						BidValue = (int)(0.7 * cashy);
-				} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
-						BidValue = (int)(0.5 * cashy);
-				} else {
+			float rankVal = (float)(current_rank - CombinationRank);
+			rankVal /= 10;
+			rankVal += 0.50f;
+			BidValue = (int)(cash *  rankVal);
+			Debug.Log (BidValue);
+		} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
+						BidValue = (int)(0.3 * cash);
+		} else {
 						//Create a bluff, this card cannot help at all, but 10% of the time, the program will act like its an important card.
 						if (bluff) {
-								BidValue = (int)(0.6 * cashy);
+								BidValue = (int)((0.4+rndm.Next(1,3)/10) * cash);
 						} else {
-								BidValue = (int)(bottomCap * cashy);
+								BidValue = (int)(bottomCap * cash);
 						}
 		}
+		if (BidValue >= 100) {
+						BidValue = 99;
+				}
 		CARDS.Remove (auctionCard);
 	}
 
@@ -181,7 +188,7 @@ public class PlayerHand : Deck {
 			}
 		}
 		if (Points >= 40) {
-						if (GUI.Button (new Rect (screenPos.x - 450, Camera.main.pixelHeight - screenPos.y-170, 70, 70), "Extra Card",buttonStyle)){
+						if (GUI.Button (new Rect (screenPos.x - 450, Camera.main.pixelHeight - screenPos.y-170, 70, 70), "Extra" +"\n"+"Card",buttonStyle)){
 										buyPrize(40);
 										GameMaster.requestCardTransfer (0, 1, false, true);
 						}
