@@ -37,6 +37,7 @@ public class GameMaster : MonoBehaviour {
 	public bool gameEnd = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
 	public int wins;
+	public int auctionCardsLeft = 7;
 	public int total_games;
 	/*************************************This part is purely bound to Buttons in gameScene*******************************/
 	public int debugDestinationIDField;
@@ -212,7 +213,7 @@ public class GameMaster : MonoBehaviour {
 		searchDeckByID (0).shuffle ();
 
 
-		yield return StartCoroutine (dealCards (3));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
+		yield return StartCoroutine (dealCards (5));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
 
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showGUI=true;
@@ -221,10 +222,10 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		// Starts auction.
-		for (int i=0; i<3; i++) {
-			yield return StartCoroutine(auction ());
-		}
-
+		while (auctionCardsLeft!= 0) {
+						yield return StartCoroutine (auction ());
+						auctionCardsLeft --;
+				}
 
 		searchDeckByID (102).setupLayout (3);
 
@@ -311,8 +312,9 @@ public class GameMaster : MonoBehaviour {
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
 		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 180, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"));
-		if (GUI.Button (new Rect (screenPos.x - 330, Camera.main.pixelHeight - screenPos.y-50, 50, 80), "10 Pt")) {
-						bool prize = playerList [0].buyPrize (10);
+		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 150, 200, 20), "Cards Left : " + auctionCardsLeft);
+		if (GUI.Button (new Rect (screenPos.x - 330, Camera.main.pixelHeight - screenPos.y-50, 50, 80), "40 Pt")) {
+						bool prize = playerList [0].buyPrize (40);
 						if (prize == true) {
 							requestCardTransfer (0,1,false, true);
 						}

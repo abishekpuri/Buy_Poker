@@ -83,6 +83,7 @@ public class PlayerHand : Deck {
 		/*To prevent players from catching on to AI's lower point for useless cards, we will track all bets made below 50% of 
 		 * total cash, and remember the percentge, adjusting ours accordingly*/
 		float avgBetPercentage = 0;
+		float cashy = (cash < 100 ? cash : 100);
 		float bottomCap = PlayerPrefs.GetFloat("bottomCap");
 		for (int i = 0; i < WinningBidPercentage.Count; ++i) {
 						if (WinningBidPercentage [i] < 0.5) {
@@ -111,15 +112,15 @@ public class PlayerHand : Deck {
 				CARDS.Add (auctionCard);
 				this.evaluateDeck ();
 				if (current_rank > CombinationRank) {
-						BidValue = (int)(0.7 * cash);
+						BidValue = (int)(0.7 * cashy);
 				} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
-						BidValue = (int)(0.5 * cash);
+						BidValue = (int)(0.5 * cashy);
 				} else {
 						//Create a bluff, this card cannot help at all, but 10% of the time, the program will act like its an important card.
 						if (bluff) {
-								BidValue = (int)(0.6 * cash);
+								BidValue = (int)(0.6 * cashy);
 						} else {
-								BidValue = (int)(bottomCap * cash);
+								BidValue = (int)(bottomCap * cashy);
 						}
 		}
 		CARDS.Remove (auctionCard);
