@@ -33,6 +33,7 @@ public class GameMaster : MonoBehaviour {
 	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
 	public static List<PlayerHand> playerList = new List<PlayerHand>();		//GameMaster keeps track of all players in game
 	private static bool auctionInProgress = false;
+	public static bool earlyAuctionEnd = false;
 	public static int winnerID;
 	public bool gameEnd = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
@@ -83,6 +84,9 @@ public class GameMaster : MonoBehaviour {
 	public void debugGenerateNewDeck()
 	{
 		registerNewPlayerHand (debugDeckIDField, new Vector3(debugXField, debugYField, debugZField), new Vector3(0,0,0), debugOrientationField);
+	}
+	public static void endAuctionEarly() {
+		earlyAuctionEnd = true;
 	}
 	/*************************************This part is purely bound to Buttons in gameScene*******************************/
 
@@ -222,7 +226,8 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		// Starts auction.
-		while (auctionCardsLeft!= 0) {
+		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
+			Debug.Log ("HERE");
 						yield return StartCoroutine (auction ());
 						auctionCardsLeft --;
 				}
@@ -308,11 +313,13 @@ public class GameMaster : MonoBehaviour {
 
 	void OnGUI()	//Overrided
 	{
+		GUIStyle style = new GUIStyle(GUI.skin.label);
+		style.normal.textColor = Color.black;
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
-		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 180, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"));
-		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 150, 200, 20), "Cards Left : " + auctionCardsLeft);
+		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 180, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"),style);
+		GUI.Label (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 150, 200, 20), "Cards Left : " + auctionCardsLeft,style);
 		if (gameEnd) {
 						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
 						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {
@@ -328,9 +335,9 @@ public class GameMaster : MonoBehaviour {
 						}
 
 				}
-		if (GUI.Button (new Rect (screenPos.x-390, Camera.main.pixelHeight - screenPos.y + 150, 80, 20), "Reset")) {
+		/*if (GUI.Button (new Rect (screenPos.x-390, Camera.main.pixelHeight - screenPos.y + 150, 80, 20), "Reset")) {
 						ResetPrefs ();
-				}
+				}*/
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
 		//GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
 	}

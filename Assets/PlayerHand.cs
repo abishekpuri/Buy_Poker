@@ -164,15 +164,24 @@ public class PlayerHand : Deck {
 
 	void OnGUI()	//Overrided
 	{
+		GUIStyle buttonStyle = new GUIStyle (GUI.skin.button);
+		buttonStyle.normal.textColor = Color.black;
+		buttonStyle.hover.textColor = Color.green;
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
 		if (Points >= 10) {
-						if (GUI.Button (new Rect (screenPos.x, Camera.main.pixelHeight - screenPos.y - 110, 100, (showCombination ? 60 : 45)), "50 More Cash")) {
+						if (GUI.Button (new Rect (screenPos.x-450, Camera.main.pixelHeight - screenPos.y - 330, 70,70), "50 Cash",buttonStyle)) {
 								buyPrize (10);
 								cash += 50;
 						}
 				}
+		if(Points >= 20) {
+			if (GUI.Button (new Rect (screenPos.x-450, Camera.main.pixelHeight - screenPos.y - 250, 70,70), "Stop"+"\n"+"Auction",buttonStyle)) {
+				buyPrize (20);
+				GameMaster.endAuctionEarly();
+			}
+		}
 		if (Points >= 40) {
-						if (GUI.Button (new Rect (screenPos.x - 330, Camera.main.pixelHeight - screenPos.y-190, 50, 80), "40 Pt")) {
+						if (GUI.Button (new Rect (screenPos.x - 450, Camera.main.pixelHeight - screenPos.y-170, 70, 70), "Extra Card",buttonStyle)){
 										buyPrize(40);
 										GameMaster.requestCardTransfer (0, 1, false, true);
 						}

@@ -34,31 +34,27 @@ public class AuctionTimer : MonoBehaviour {
 	
 	// Update is Implicitly called once per frame
 	void Update () {
-		if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction((int)timeRemaining)) {
-			buttonClicked=true;
-			auctionInProcess=false;
-			timerStopTime = Time.time;
-			transferID = GameMaster.getHighestBidderID ();
-		}
+						if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) {
+								buttonClicked = true;
+								auctionInProcess = false;
+								timerStopTime = Time.time;
+								transferID = GameMaster.getHighestBidderID ();
+						}
 
 
-		if (timeRemaining >= 10 && auctionInProcess) {
-			timeRemaining -= Time.deltaTime * speedMultiplier;
+						if (timeRemaining >= 10 && auctionInProcess) {
+								timeRemaining -= Time.deltaTime * speedMultiplier;
 
-		}
-		else if (buttonClicked && timerStopTime+BUTTON_DELAY < Time.time)	//After delay time, it transfers card from auction deck to player hand.
-		{
-			//Debug.Log ("Deliver!!!");
-			GameMaster.requestCardTransfer (100,transferID, true);
-			((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard((int)timeRemaining);
-			buttonClicked=false;
-			Destroy (this,0.2f);
-			GameMaster.terminateCurrentAuction();
-		}
-		else if (timeRemaining < 10)	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
-		{
-			Destroy (this,0.2f);
-			GameMaster.terminateCurrentAuction();
+						} else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	//After delay time, it transfers card from auction deck to player hand.
+								//Debug.Log ("Deliver!!!");
+								GameMaster.requestCardTransfer (100, transferID, true);
+								((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
+								buttonClicked = false;
+								Destroy (this, 0.2f);
+								GameMaster.terminateCurrentAuction ();
+						} else if (timeRemaining < 10) {	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
+								Destroy (this, 0.2f);
+								GameMaster.terminateCurrentAuction ();
 		}
 	}
 
