@@ -41,26 +41,38 @@ public class Deck : MonoBehaviour {
 								suit.Add (0);
 						}
 						value.Add (0);
-		};
+				}
 				for (int i = 0; i < cards.Count; i++) {
-						if(cards[i].Rank == 1) {
-							value[14] ++;
-						}
-						else {
-							value [cards [i].Rank]++;
+						if (cards [i].Rank == 1) {
+								value [14] ++;
+						} else {
+								value [cards [i].Rank]++;
 						}
 						suit [cards [i].Suit]++;
 				}
-
-				for (int i = 0; i < value.Count; i++) {
-						if (value [i] > 0) {
-								counter++;
-						} else {
-								counter = 0;
+				//Check for A to 5 straight
+				if (value [14] > 0) {
+						for (int i = 2; i < 6; ++i) {
+								if (value [i] > 0) {
+										counter++;
+								}
+								if (counter == 4) {
+										CombinationValue = 1;
+										straight = true;
+								}
 						}
-						if (counter == 5) {
-								straight = true;
-								break;
+			counter = 0;
+						for (int i = 0; i < value.Count; i++) {
+								if (value [i] > 0) {
+										CombinationValue = (counter == 0 ? i : CombinationValue);
+										counter++;
+								} else {
+										counter = 0;
+								}
+								if (counter == 5) {
+										straight = true;
+										break;
+								}
 						}
 				}
 				int pairs = value.FindAll (a => a == 2).Count;
@@ -80,9 +92,18 @@ public class Deck : MonoBehaviour {
 						CombinationValue = value.FindLastIndex (a => a == 3);
 						CombinationType = "Full House";
 				} else if (flush >= 1) {
+						int maxCard = 0;
+						for (int i = 0; i < suit.Count; ++i) {
+								if (suit [i] >= 5) {
+										if (cards.FindLastIndex (a => a.Suit == i) >= maxCard) {
+												maxCard = cards.FindLastIndex (a => a.Suit == i);
+										}
+								}
+						}
 						CombinationRank = 4;
+						CombinationValue = maxCard;
 						CombinationType = "Flush";
-				} else if (straight) {
+				}else if (straight) {
 						CombinationRank = 5;
 						CombinationType = "Straight";
 				} else if (three_kind >= 1) {
@@ -250,23 +271,18 @@ public class Deck : MonoBehaviour {
 
 	public void generateFullCardDeck()
 	{
-				for (int i=1; i<=4; ++i) {
-						for (int j=1; j<=10; ++j) {
+		for (int i=1; i<=4; ++i) {
+						for (int j=1; j<=13; ++j) {
 								new_card (j, i);
 						}
 				}
-				for (int i = 1; i <= 4; ++ i) {
-						new_card (11, i);
-						new_card (12, i);
-						new_card (13, i);
-				}
-		}
+	}
 
 	public void shuffle()
 	{
 		for (int i=0; i<cards.Count; i++)
 		{
-			int swap_target = Random.Range (i,cards.Count);
+			int swap_target = Random.Range (0,cards.Count);
 			Card temp = cards[i];
 			cards[i] = cards[swap_target];
 			cards[swap_target] = temp;
