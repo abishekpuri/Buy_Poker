@@ -329,6 +329,7 @@ public class GameMaster : MonoBehaviour {
 										playerList [i].setCash (100);
 								}
 								gameEnd = false;
+								auctionCardsLeft = 7;
 								Start ();
 						}
 
