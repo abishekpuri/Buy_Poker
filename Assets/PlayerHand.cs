@@ -114,7 +114,6 @@ public class PlayerHand : Deck {
 			rankVal /= 10;
 			rankVal += 0.50f;
 			BidValue = (int)(cash *  rankVal);
-			Debug.Log (BidValue);
 		} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
 						BidValue = (int)(0.3 * cash);
 		} else {
@@ -125,8 +124,8 @@ public class PlayerHand : Deck {
 								BidValue = (int)(bottomCap * cash);
 						}
 		}
-		if (BidValue >= 100) {
-						BidValue = 99;
+		if (BidValue >= 90) {
+						BidValue = 90;
 				}
 		CARDS.Remove (auctionCard);
 	}

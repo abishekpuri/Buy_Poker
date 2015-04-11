@@ -67,6 +67,9 @@ public class Deck : MonoBehaviour {
 						if (value [i] > 0) {
 								CombinationValue = (counter == 0 ? i : CombinationValue);
 								counter++;
+						if(deckID == 1) {
+					Debug.Log (counter);
+				}
 						} else {
 								counter = 0;
 						}
