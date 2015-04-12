@@ -33,11 +33,11 @@ public class PlayerHand : Deck {
 	}
 	public void Winner() 
 	{
-		Points += (5 + (int)(10 * Multiplier));
+		Points += (5 + (int)(Multiplier));
 		PlayerPrefs.SetInt ("Points", Points);
-		Multiplier += 0.1f;
-		if (Multiplier > 2) {
-			Multiplier = 2;
+		Multiplier += 1;
+		if (Multiplier > 5) {
+			Multiplier = 5;
 		}
 		PlayerPrefs.SetFloat ("Multiplier", Multiplier);
 	}
