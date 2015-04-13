@@ -132,19 +132,35 @@ public class Deck : MonoBehaviour {
 		return cards [cards.Count - 1];
 	}
 
-	public void transferTopCardTo(Deck another, bool cardOpen)
+	public void transferCardTo(Deck another, bool cardOpen, int rank=0, int suit=0)
 	{
 		if (cards.Count>0)
 		{
-			if (cardOpen)
-				cards[cards.Count-1].GetComponent<Card>().showFace ();
-			//Debug.Log ("Card count = " + cards.Count);
-			//Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
-			another.addExistingCard (cards[cards.Count-1]);
-			cards.Remove (cards [cards.Count - 1]);
+			// transfer top card
+			if (cards.Find (x => x.Rank==rank && x.Suit==suit)==null)
+			{
+				if (cardOpen)
+					cards[cards.Count-1].GetComponent<Card>().showFace ();
+				//Debug.Log ("Card count = " + cards.Count);
+				//Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
+				another.addExistingCard (cards[cards.Count-1]);
+				cards.Remove (cards [cards.Count - 1]);
+			}
+			// transfer specific card
+			else
+			{
+				if (cardOpen)
+					cards.Find (x => x.Rank==rank && x.Suit==suit).GetComponent<Card>().showFace ();
+				//Debug.Log ("Card count = " + cards.Count);
+				//Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
+				another.addExistingCard (cards.Find (x => x.Rank==rank && x.Suit==suit));
+				cards.Remove (cards.Find (x => x.Rank==rank && x.Suit==suit));
+
+			}
 			setupLayout(currentLayoutType);
 		}
 	}
+
 
 	public void setupLayout(int type)	// sets position of every and each cards inside the deck.
 	{

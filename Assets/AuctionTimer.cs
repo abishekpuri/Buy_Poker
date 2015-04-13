@@ -21,6 +21,7 @@ public class AuctionTimer : MonoBehaviour {
 	private bool buttonClicked;		
 	private int transferID;
 
+	private Transform particleEffectPrefab;
 	private double timerStopTime;	//when buttonClicked=true, timer stops to 
 	const double BUTTON_DELAY = 1;		// delay before destroying itself.
 
@@ -30,31 +31,35 @@ public class AuctionTimer : MonoBehaviour {
 		speedMultiplier = 10;
 		auctionInProcess = true;
 		buttonClicked = false;
+		particleEffectPrefab = Resources.Load <Transform>("prefab/Particle System");
 	}
 	
 	// Update is Implicitly called once per frame
 	void Update () {
-						if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) {
-								buttonClicked = true;
-								auctionInProcess = false;
-								timerStopTime = Time.time;
-								transferID = GameMaster.getHighestBidderID ();
-						}
+			// If auction is successful
+			if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) {
+					buttonClicked = true;
+					auctionInProcess = false;
+					timerStopTime = Time.time;
+					transferID = GameMaster.getHighestBidderID ();
+					Transform temp = (Transform)Instantiate (particleEffectPrefab, transform.localPosition, transform.rotation);
+					Destroy (temp.gameObject, 1f);
+			}
 
 
-						if (timeRemaining >= 10 && auctionInProcess) {
-								timeRemaining -= Time.deltaTime * speedMultiplier;
+			if (timeRemaining >= 10 && auctionInProcess) {
+					timeRemaining -= Time.deltaTime * speedMultiplier;
 
-						} else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	//After delay time, it transfers card from auction deck to player hand.
-								//Debug.Log ("Deliver!!!");
-								GameMaster.requestCardTransfer (100, transferID, true);
-								((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
-								buttonClicked = false;
-								Destroy (this, 0.2f);
-								GameMaster.terminateCurrentAuction ();
-						} else if (timeRemaining < 10) {	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
-								Destroy (this, 0.2f);
-								GameMaster.terminateCurrentAuction ();
+			} else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	//After delay time, it transfers card from auction deck to player hand.
+					//Debug.Log ("Deliver!!!");
+					GameMaster.requestCardTransfer (100, transferID, true);
+					((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
+					buttonClicked = false;
+					Destroy (this);
+					GameMaster.terminateCurrentAuction ();
+			} else if (timeRemaining < 10) {	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
+					Destroy (this, 0.2f);
+					GameMaster.terminateCurrentAuction ();
 		}
 	}
 

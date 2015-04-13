@@ -103,9 +103,9 @@ public class GameMaster : MonoBehaviour {
 	{
 		auctionInProgress = false;
 	}
-	public static void requestCardTransfer(int sourceID, int destinationID, bool searchByPlayerID=false, bool openCard=false)
+	public static void requestCardTransfer(int sourceID, int destinationID, bool openCard=false, int rank=0, int suit=0)
 	{
-		searchDeckByID (sourceID).GetComponent<Deck>().transferTopCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard);
+		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit);
 	}
 	public static int getHighestBidderID()
 	{
@@ -247,7 +247,7 @@ public class GameMaster : MonoBehaviour {
 				}
 		// take winners' cards up to the table
 		for (int i=0; i<20; i++)
-			requestCardTransfer (winnerID,102,false, true);
+			requestCardTransfer (winnerID,102, true);
 
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
@@ -266,7 +266,7 @@ public class GameMaster : MonoBehaviour {
 			{
 				if (deckList[j].DeckID>0 && deckList[j].DeckID<100)
 				{
-					searchDeckByID(0).transferTopCardTo (deckList[j], deckList[j].DeckID==1);
+					searchDeckByID(0).transferCardTo (deckList[j], deckList[j].DeckID==1);
 					deckList[j].evaluateDeck();
 					yield return new WaitForSeconds(0.2f);
 				
@@ -279,7 +279,7 @@ public class GameMaster : MonoBehaviour {
 
 	private IEnumerator auction()
 	{
-		requestCardTransfer (0,100,false, true);
+		requestCardTransfer (0,100,true);
 		yield return new WaitForSeconds (1f);
 		auctionInProgress = true;
 		searchDeckByID (100).gameObject.AddComponent ("AuctionTimer");
@@ -296,7 +296,7 @@ public class GameMaster : MonoBehaviour {
 		while (auctionInProgress){yield return new WaitForSeconds (1f);}	// while auction is in progress
 
 		// throws auction card into dump if no one pays for auction.
-		requestCardTransfer (100,101,false, false);
+		requestCardTransfer (100,101,false);
 		yield return new WaitForSeconds (1f);
 		for (int j=0; j<playerList.Count; j++)
 		{

@@ -199,7 +199,7 @@ public class PlayerHand : Deck {
 			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-9, 0, transform.localPosition.z));
 			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, 70,70), "Extra" +"\n"+"Card",buttonStyle)){
 				buyPrize(40);
-				GameMaster.requestCardTransfer (0, 1, false, true);
+				GameMaster.requestCardTransfer (0, 1, true);
 			}
 		}
 		if (showGUI){
