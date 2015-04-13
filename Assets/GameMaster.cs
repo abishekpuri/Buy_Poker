@@ -201,9 +201,9 @@ public class GameMaster : MonoBehaviour {
 		wins = PlayerPrefs.GetInt ("wins");
 		total_games = PlayerPrefs.GetInt ("total_games");
 		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
-		registerNewPlayerHand (1, new Vector3(0,-3,0), new Vector3(0,0,0f),6,true);
-		registerNewPlayerHand (2, new Vector3(-5f,-3,0), new Vector3(0,0,0),6,true);
-		registerNewPlayerHand (3, new Vector3(5f,-3,0), new Vector3(0,0,0),6,true);
+		registerNewPlayerHand (1, new Vector3(0,-2,0), new Vector3(0,0,0f),6,true);
+		registerNewPlayerHand (2, new Vector3(-5f,-2,0), new Vector3(0,0,0),6,true);
+		registerNewPlayerHand (3, new Vector3(5f,-2,0), new Vector3(0,0,0),6,true);
 
 		searchDeckByID (0).generateFullCardDeck ();
 		yield return new WaitForFixedUpdate();		// WAIT until all sprites in deck 0 are loaded. Otherwise, closeDeck() might not work.
@@ -317,10 +317,11 @@ public class GameMaster : MonoBehaviour {
 		GUIStyle style = new GUIStyle(GUI.skin.box);
 		style.normal.textColor = Color.green;
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
+		Vector3 pointBoxScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-9, 4, 0));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
-		GUI.Box (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 180, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"),style);
-		GUI.Box (new Rect (screenPos.x - 310, Camera.main.pixelHeight - screenPos.y - 150, 200, 20), "Cards Left : " + auctionCardsLeft,style);
+		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"),style);
+		GUI.Box (new Rect (screenPos.x-100, Camera.main.pixelHeight - screenPos.y, 200, 20), "Cards Left : " + auctionCardsLeft,style);
 		if (gameEnd) {
 						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
 						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {

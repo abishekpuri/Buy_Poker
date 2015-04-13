@@ -62,13 +62,21 @@ public class AuctionTimer : MonoBehaviour {
 	// apparently, GUI is refreshed every frame.
 	void OnGUI()
 	{
+		GUI.backgroundColor = new Color(1,1,1,1);
+		GUIStyle buttonStyle = new GUIStyle (GUI.skin.button);
+		buttonStyle.normal.textColor = Color.cyan;
+		buttonStyle.fontSize = 20;
+		buttonStyle.hover.textColor = Color.cyan;
+		buttonStyle.active.textColor = Color.red;
+		buttonStyle.fontStyle = FontStyle.Bold;
+
 		// Converts localPosition of the transform to position vector in screenSpace, then to GUI space. I found some unidentified bug, and it needs rectification.
 		Vector3 pos = transform.localPosition;//(Vector2)Camera.WorldToScreenPoint(pos)
-		Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(pos.x, pos.y-1, pos.z));
 		if (timeRemaining>=10)
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
-			if (GUI.Button (new Rect(screenPos.x, Camera.main.pixelHeight-screenPos.y-100, 70, 35), "Bid for "+(int)timeRemaining) && !buttonClicked)
+			if (GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, 120, 72), "BUY! "+(int)timeRemaining, buttonStyle) && !buttonClicked)
 			{
 				//Debug.Log ("Pressed!!!");
 				//buttonClicked = true;
@@ -78,7 +86,7 @@ public class AuctionTimer : MonoBehaviour {
 			}
 		}
 		else{
-			GUI.Button (new Rect(screenPos.x, Camera.main.pixelHeight-screenPos.y, 70, 35), "Bid over");
+			GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, 120, 72), "Bid over", buttonStyle);
 		}
 	}
 }
