@@ -14,10 +14,13 @@ using System.Collections.Generic;
 public class Deck : MonoBehaviour {
 
 	public int reserveDeckID;
-	private List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
+	public List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
 	public int deckID;
+	public List<Card> winningHand = new List<Card> ();
 	public string CombinationType = "Evaluating Hand .."; //consider making private later.
 	public int CombinationValue; // used to break ties if CombinationType same
+	public int FlushValue;
+	public int SecondaryCombinationValue; // used if the top value is the same ie if three of a kind same then compare the pair
 	public int CombinationRank; // Number that tracks hand value, better than enumerating hand types
 	private bool initializeFlag = true;			// Once ID is set, it cannot be changed again. I added variable just for the sake of protection, but I might be complicating things.
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
@@ -30,6 +33,9 @@ public class Deck : MonoBehaviour {
 	public List<Card> CARDS {
 				get{ return cards;}
 		}
+	~Deck() {
+		destroyAll ();
+	}
 	public void evaluateDeck()
 	{
 				int counter = 0;
@@ -67,9 +73,9 @@ public class Deck : MonoBehaviour {
 						if (value [i] > 0) {
 								CombinationValue = (counter == 0 ? i : CombinationValue);
 								counter++;
-						if(deckID == 1) {
-					Debug.Log (counter);
-				}
+								if (deckID == 1) {
+										Debug.Log (counter);
+								}
 						} else {
 								counter = 0;
 						}
@@ -84,6 +90,8 @@ public class Deck : MonoBehaviour {
 				int flush = suit.FindAll (a => a >= 5).Count;
 				if ((flush != 0) && straight) {
 						CombinationRank = 1;
+			//WARNING : THIS WILL NOT WORK IF PLAYER HAS TWO FLUSHES
+						FlushValue = suit.FindLastIndex(a=> a>=5);
 						CombinationType = "Straight Flush";
 				} else if (four_kind >= 1) {
 						CombinationRank = 2;
@@ -92,6 +100,7 @@ public class Deck : MonoBehaviour {
 				} else if (three_kind > 1 || (three_kind == 1 && pairs >= 1)) {
 						CombinationRank = 3;
 						CombinationValue = value.FindLastIndex (a => a == 3);
+						SecondaryCombinationValue = value.FindLastIndex (a => a == 2);
 						CombinationType = "Full House";
 				} else if (flush >= 1) {
 						int maxCard = 0;
@@ -99,13 +108,14 @@ public class Deck : MonoBehaviour {
 								if (suit [i] >= 5) {
 										if (cards.FindLastIndex (a => a.Suit == i) >= maxCard) {
 												maxCard = cards.FindLastIndex (a => a.Suit == i);
+												FlushValue = i;
 										}
 								}
 						}
 						CombinationRank = 4;
 						CombinationValue = maxCard;
 						CombinationType = "Flush";
-				}else if (straight) {
+				} else if (straight) {
 						CombinationRank = 5;
 						CombinationType = "Straight";
 				} else if (three_kind >= 1) {
@@ -115,6 +125,10 @@ public class Deck : MonoBehaviour {
 				} else if (pairs >= 2) {
 						CombinationRank = 7;
 						CombinationValue = value.FindLastIndex (a => a == 2);
+						//This is to find the second value, so we temporarily make the first one 0 
+						value [CombinationValue] = 0;
+						SecondaryCombinationValue = value.FindLastIndex (a => a == 2);
+						value [CombinationValue] = 2;
 						CombinationType = "Two Pair";
 				} else if (pairs == 1) {
 						CombinationRank = 8;
@@ -125,36 +139,42 @@ public class Deck : MonoBehaviour {
 						CombinationValue = value.FindLastIndex (a => a == 1);
 						CombinationType = "High Card";
 				}
-	}
+		}
 
 	public Card peekTopCard()
 	{
 		return cards [cards.Count - 1];
 	}
 
-	public void transferCardTo(Deck another, bool cardOpen, int rank=0, int suit=0)
+	public void transferCardTo(Deck another, bool cardOpen, int rank=0, int suit=0,bool winninghand = false)
 	{
+		List<Card> list = new List<Card> ();
+		if (winninghand) {
+						list = winningHand;
+				} else {
+						list = cards;
+				}
 		if (cards.Count>0)
 		{
 			// transfer top card
-			if (cards.Find (x => x.Rank==rank && x.Suit==suit)==null)
+			if (list.Find (x => x.Rank==rank && x.Suit==suit)==null)
 			{
 				if (cardOpen)
-					cards[cards.Count-1].GetComponent<Card>().showFace ();
-				//Debug.Log ("Card count = " + cards.Count);
-				//Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
-				another.addExistingCard (cards[cards.Count-1]);
-				cards.Remove (cards [cards.Count - 1]);
+					list[list.Count-1].GetComponent<Card>().showFace ();
+				//Debug.Log ("Card count = " + list.Count);
+				//Debug.Log ("card to be transferred : Rank = " + list[list.Count-1].GetComponent <Card>().Rank);
+				another.addExistingCard (list[list.Count-1]);
+				list.Remove (list [list.Count - 1]);
 			}
 			// transfer specific card
 			else
 			{
 				if (cardOpen)
-					cards.Find (x => x.Rank==rank && x.Suit==suit).GetComponent<Card>().showFace ();
-				//Debug.Log ("Card count = " + cards.Count);
-				//Debug.Log ("card to be transferred : Rank = " + cards[cards.Count-1].GetComponent <Card>().Rank);
-				another.addExistingCard (cards.Find (x => x.Rank==rank && x.Suit==suit));
-				cards.Remove (cards.Find (x => x.Rank==rank && x.Suit==suit));
+					list.Find (x => x.Rank==rank && x.Suit==suit).GetComponent<Card>().showFace ();
+				//Debug.Log ("Card count = " + list.Count);
+				//Debug.Log ("card to be transferred : Rank = " + list[list.Count-1].GetComponent <Card>().Rank);
+				another.addExistingCard (list.Find (x => x.Rank==rank && x.Suit==suit));
+				list.Remove (list.Find (x => x.Rank==rank && x.Suit==suit));
 
 			}
 			setupLayout(currentLayoutType);
@@ -217,11 +237,14 @@ public class Deck : MonoBehaviour {
 
 	public void destroyAll()
 	{
-		while (cards.Count>0)
-		{
-			Destroy (cards[0].gameObject);
-			cards.Remove (cards[0]);
-		}
+		while (cards.Count>0) {
+						Destroy (cards [0].gameObject);
+						cards.Remove (cards [0]);
+				}
+		while (winningHand.Count>0) {
+						Destroy (winningHand [0].gameObject);
+						cards.Remove (cards [0]);
+				}
 		//Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}
 

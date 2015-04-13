@@ -103,9 +103,9 @@ public class GameMaster : MonoBehaviour {
 	{
 		auctionInProgress = false;
 	}
-	public static void requestCardTransfer(int sourceID, int destinationID, bool openCard=false, int rank=0, int suit=0)
+	public static void requestCardTransfer(int sourceID, int destinationID, bool openCard=false, int rank=0, int suit=0,bool winningHand = false)
 	{
-		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit);
+		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit,winningHand);
 	}
 	public static int getHighestBidderID()
 	{
@@ -237,6 +237,7 @@ public class GameMaster : MonoBehaviour {
 
 		// returns winner hand
 		PlayerHand winner = getWinner (playerList);
+		winner.setWinningHand ();
 		winnerID = winner.DeckID;
 		if (winnerID == 1) {
 						playerList [0].Winner ();
@@ -247,7 +248,8 @@ public class GameMaster : MonoBehaviour {
 				}
 		// take winners' cards up to the table
 		for (int i=0; i<20; i++)
-			requestCardTransfer (winnerID,102, true);
+			//if you add true after the last 0, then it will show winning hand, but some bugs
+			requestCardTransfer (winnerID,102, true,0,0);
 
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;

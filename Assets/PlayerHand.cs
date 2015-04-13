@@ -22,6 +22,9 @@ public class PlayerHand : Deck {
 		get{ return cash;}
 		//set{playerID = value;}
 	}
+	~PlayerHand() {
+
+	}
 	public void setCash(float value) {
 				cash = value;
 		}
@@ -58,6 +61,33 @@ public class PlayerHand : Deck {
 				} 
 		}
 
+	public void setWinningHand() 
+	{
+		string[] single = {"High Card","One Pair","Three of a Kind","Four of a Kind"};
+		string[] doublee = {"Two Pair","Full House"};
+		List<String> singleRank = new List<String>();
+		List<String> doubleRank = new List<String>();
+		doubleRank.AddRange(doublee);
+		singleRank.AddRange(single);
+		if (singleRank.FindLastIndex (a => a == CombinationType) != -1) {
+						winningHand = cards.FindAll (a => a.Rank == CombinationValue);
+				} else if (doubleRank.FindLastIndex (a => a == CombinationType) != -1) {
+						winningHand = cards.FindAll (a => a.Rank == CombinationValue);
+						List<Card> secondPart = cards.FindAll (a => a.Rank == SecondaryCombinationValue);
+						winningHand.AddRange (secondPart);
+				} else if (CombinationType == "Flush") {
+						winningHand.AddRange (cards.FindAll (a => a.Suit == FlushValue));
+				} else {
+						for (int i = CombinationValue; i < CombinationValue+5; ++i) {
+								if (CombinationType == "Straight") {
+										winningHand.Add (cards.Find (a => a.Rank == i));
+								} else {
+										winningHand.Add (cards.Find (a => (a.Rank == i && a.Suit == FlushValue)));
+								}
+						}
+				}
+		//cards = winningHand;
+	}
 
 	public void setBidValue(int val)
 	{
