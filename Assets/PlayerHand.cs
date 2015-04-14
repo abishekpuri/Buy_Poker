@@ -186,9 +186,9 @@ public class PlayerHand : Deck {
 						winningHand.AddRange (secondPart);
 				} else if (CombinationType == "Flush") {
 						List<Card> flushCards = cards.FindAll (a => a.Suit == FlushValue);
-						int count = 4;
-						while (count >= 0) {
-								winningHand.Add (flushCards[count]);
+						int count = 5;
+						while (count > 0) {
+								winningHand.Add (flushCards [flushCards.Count]);
 								count --;
 						}
 				} else {
