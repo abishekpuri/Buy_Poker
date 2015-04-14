@@ -167,20 +167,30 @@ public class PlayerHand : Deck {
 	}
 	private void setWinningHand() 
 	{
-		string[] single = {"High Card","One Pair","Three of a Kind","Four of a Kind"};
-		string[] doublee = {"Two Pair","Full House"};
-		List<String> singleRank = new List<String>();
-		List<String> doubleRank = new List<String>();
-		doubleRank.AddRange(doublee);
-		singleRank.AddRange(single);
-		if (singleRank.FindLastIndex (a => a == CombinationType) != -1) {
+				string[] single = {"High Card","One Pair","Three of a Kind","Four of a Kind"};
+				string[] doublee = {"Two Pair","Full House"};
+				bool Ace = false;
+				List<String> singleRank = new List<String> ();
+				List<String> doubleRank = new List<String> ();
+				doubleRank.AddRange (doublee);
+				singleRank.AddRange (single);
+				if (CombinationValue == 14) {
+						Ace = true;
+						CombinationValue = 1;
+				}
+				if (singleRank.FindLastIndex (a => a == CombinationType) != -1) {
 						winningHand = cards.FindAll (a => a.Rank == CombinationValue);
 				} else if (doubleRank.FindLastIndex (a => a == CombinationType) != -1) {
 						winningHand = cards.FindAll (a => a.Rank == CombinationValue);
 						List<Card> secondPart = cards.FindAll (a => a.Rank == SecondaryCombinationValue);
 						winningHand.AddRange (secondPart);
 				} else if (CombinationType == "Flush") {
-						winningHand.AddRange (cards.FindAll (a => a.Suit == FlushValue));
+						List<Card> flushCards = cards.FindAll (a => a.Suit == FlushValue);
+						int count = 5;
+						while (count > 0) {
+								winningHand.Add (flushCards [flushCards.Count]);
+								count --;
+						}
 				} else {
 						for (int i = CombinationValue; i < CombinationValue+5; ++i) {
 								if (CombinationType == "Straight") {
@@ -190,19 +200,20 @@ public class PlayerHand : Deck {
 								}
 						}
 				}
-		//cards = winningHand;
-		if (!AIControlled){		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
-			for (int i=0; i<cards.Count; ++i)
-			{
-				cards[i].stopBlinkAnim ();
-			}
-			for (int i=0; i<winningHand.Count; ++i)
-			{
-				winningHand[i].startBlinkAnim ();
-			}
+				//cards = winningHand;
+				if (Ace) {
+						CombinationValue = 14;
+				}
+				if (!AIControlled) {		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
+						for (int i=0; i<cards.Count; ++i) {
+								cards [i].stopBlinkAnim ();
+						}
+						for (int i=0; i<winningHand.Count; ++i) {
+								winningHand [i].startBlinkAnim ();
+						}
+				}
+				Debug.Log ("Winning hand count = " + winningHand.Count);
 		}
-		Debug.Log ("Winning hand count = "+winningHand.Count);
-	}
 
 	public void setBidValue(int val)
 	{
