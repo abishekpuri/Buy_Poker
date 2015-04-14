@@ -131,13 +131,13 @@ public class Deck : MonoBehaviour {
 	public void destroyAll()
 	{
 		while (cards.Count>0) {
-						Destroy (cards [0].gameObject);
-						cards.Remove (cards [0]);
-				}
+			Destroy (cards [0].gameObject);
+			cards.Remove (cards [0]);
+		}
 		while (winningHand.Count>0) {
-						Destroy (winningHand [0].gameObject);
-						cards.Remove (cards [0]);
-				}
+			Destroy (winningHand [0].gameObject);
+			winningHand.Remove (winningHand [0]);
+		}
 		//Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}
 
