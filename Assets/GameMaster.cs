@@ -251,6 +251,7 @@ public class GameMaster : MonoBehaviour {
 		{
 			requestCardTransfer (winnerID, 102, true, searchDeckByID (winnerID).winningHand[i].Rank, searchDeckByID (winnerID).winningHand[i].Suit);
 		}
+		searchDeckByID (102).sort ();
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
 		}
@@ -322,7 +323,7 @@ public class GameMaster : MonoBehaviour {
 		GUIStyle style = new GUIStyle(GUI.skin.box);
 		style.normal.textColor = Color.green;
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
-		Vector3 pointBoxScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-9, 4, 0));
+		Vector3 pointBoxScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-8, 4, 0));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
 		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"),style);

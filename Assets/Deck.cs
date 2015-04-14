@@ -224,6 +224,14 @@ public class Deck : MonoBehaviour {
 		setScaleAndOrder ();
 		setupLayout (currentLayoutType);
 	}
+
+	public void sort()
+	{
+		cards.Sort ((x, y) => x.Rank);
+		setScaleAndOrder ();
+		setupLayout (currentLayoutType);
+	}
+
 	public void Awake()
 	{
 		if (reserveDeckID>200)
