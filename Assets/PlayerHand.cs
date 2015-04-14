@@ -8,6 +8,15 @@ public class PlayerHand : Deck {
 
 	public float cash;
 	private bool AIControlled;
+
+	// Playerhand specific deck values
+	public List<Card> winningHand = new List<Card> ();
+	public string CombinationType = "Evaluating Hand .."; //consider making private later.
+	public int CombinationValue; // used to break ties if CombinationType same
+	public int FlushValue;
+	public int SecondaryCombinationValue; // used if the top value is the same ie if three of a kind same then compare the pair
+	public int CombinationRank; // Number that tracks hand value, better than enumerating hand types
+
 	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
 	private int Points = PlayerPrefs.GetInt ("Points");
@@ -25,6 +34,16 @@ public class PlayerHand : Deck {
 	~PlayerHand() {
 
 	}
+
+	public virtual void destroyAll()
+	{
+		base.destroyAll ();
+		while (winningHand.Count>0) {
+			Destroy (winningHand [0].gameObject);
+			winningHand.Remove (winningHand [0]);
+		}
+	}
+
 	public void setCash(float value) {
 				cash = value;
 		}
@@ -98,7 +117,7 @@ public class PlayerHand : Deck {
 				CombinationValue = (counter == 0 ? i : CombinationValue);
 				counter++;
 				if (deckID == 1) {
-					Debug.Log (counter);
+					//Debug.Log (counter);
 				}
 			} else {
 				counter = 0;
@@ -167,52 +186,58 @@ public class PlayerHand : Deck {
 	}
 	private void setWinningHand() 
 	{
-				string[] single = {"High Card","One Pair","Three of a Kind","Four of a Kind"};
-				string[] doublee = {"Two Pair","Full House"};
-				bool Ace = false;
-				List<String> singleRank = new List<String> ();
-				List<String> doubleRank = new List<String> ();
-				doubleRank.AddRange (doublee);
-				singleRank.AddRange (single);
-				if (CombinationValue == 14) {
-						Ace = true;
-						CombinationValue = 1;
-				}
-				if (singleRank.FindLastIndex (a => a == CombinationType) != -1) {
-						winningHand = cards.FindAll (a => a.Rank == CombinationValue);
-				} else if (doubleRank.FindLastIndex (a => a == CombinationType) != -1) {
-						winningHand = cards.FindAll (a => a.Rank == CombinationValue);
-						List<Card> secondPart = cards.FindAll (a => a.Rank == SecondaryCombinationValue);
-						winningHand.AddRange (secondPart);
-				} else if (CombinationType == "Flush") {
-						List<Card> flushCards = cards.FindAll (a => a.Suit == FlushValue);
-						int count = 5;
-						while (count > 0) {
-								winningHand.Add (flushCards [flushCards.Count]);
-								count --;
-						}
-				} else {
-						for (int i = CombinationValue; i < CombinationValue+5; ++i) {
-								if (CombinationType == "Straight") {
-										winningHand.Add (cards.Find (a => a.Rank == i));
-								} else {
-										winningHand.Add (cards.Find (a => (a.Rank == i && a.Suit == FlushValue)));
-								}
-						}
-				}
-				//cards = winningHand;
-				if (Ace) {
-						CombinationValue = 14;
-				}
-				if (!AIControlled) {		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
-						for (int i=0; i<cards.Count; ++i) {
-								cards [i].stopBlinkAnim ();
-						}
-						for (int i=0; i<winningHand.Count; ++i) {
-								winningHand [i].startBlinkAnim ();
-						}
-				}
-				Debug.Log ("Winning hand count = " + winningHand.Count);
+		// remove all items in winning hand.
+			winningHand.Clear ();
+			string[] single = {"High Card","One Pair","Three of a Kind","Four of a Kind"};
+			string[] doublee = {"Two Pair","Full House"};
+			bool Ace = false;
+			List<String> singleRank = new List<String> ();
+			List<String> doubleRank = new List<String> ();
+			doubleRank.AddRange (doublee);
+			singleRank.AddRange (single);
+			if (CombinationValue == 14) {
+					Ace = true;
+					CombinationValue = 1;
+			}
+			if (singleRank.FindLastIndex (a => a == CombinationType) != -1) {
+					winningHand = cards.FindAll (a => a.Rank == CombinationValue);
+			} else if (doubleRank.FindLastIndex (a => a == CombinationType) != -1) {
+					winningHand = cards.FindAll (a => a.Rank == CombinationValue);
+					List<Card> secondPart = cards.FindAll (a => a.Rank == SecondaryCombinationValue);
+					winningHand.AddRange (secondPart);
+			} else if (CombinationType == "Flush") {
+					//Debug.Log ("Flush is problematic");
+					//Debug.Log ("FlushValue = "+FlushValue);
+					List<Card> flushCards = cards.FindAll (a => a.Suit == FlushValue);
+					//Debug.Log ("FlushCardsCount = "+flushCards.Count);
+					int count = 4;
+					while (count >= 0) {
+							winningHand.Add (flushCards[0]);
+							flushCards.Remove (flushCards[0]);
+							count --;
+					}
+			} else {
+					for (int i = CombinationValue; i < CombinationValue+5; ++i) {
+							if (CombinationType == "Straight") {
+									winningHand.Add (cards.Find (a => a.Rank == i));
+							} else {
+									winningHand.Add (cards.Find (a => (a.Rank == i && a.Suit == FlushValue)));
+							}
+					}
+			}
+			//cards = winningHand;
+			if (Ace) {
+					CombinationValue = 14;
+			}
+			if (!AIControlled) {		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
+					for (int i=0; i<cards.Count; ++i) {
+							cards [i].stopBlinkAnim ();
+					}
+					for (int i=0; i<winningHand.Count; ++i) {
+							winningHand [i].startBlinkAnim ();
+					}
+			}
+			Debug.Log ("ID "+DeckID+" winning hand count = " + winningHand.Count);
 		}
 
 	public void setBidValue(int val)
@@ -290,7 +315,7 @@ public class PlayerHand : Deck {
 	{
 		cash -= price;
 		BidValue = 0;
-		Debug.Log ("Player "+DeckID+ "'s current cash = "+cash + "!!");
+		//Debug.Log ("Player "+DeckID+ "'s current cash = "+cash + "!!");
 	}
 
 	public bool bidForAuction(int price)
