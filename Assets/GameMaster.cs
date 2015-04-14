@@ -103,9 +103,9 @@ public class GameMaster : MonoBehaviour {
 	{
 		auctionInProgress = false;
 	}
-	public static void requestCardTransfer(int sourceID, int destinationID, bool openCard=false, int rank=0, int suit=0)
+	public static void requestCardTransfer(int sourceID, int destinationID, bool openCard=false, int rank=0, int suit=0,bool winningHand = false)
 	{
-		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit);
+		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit,winningHand);
 	}
 	public static int getHighestBidderID()
 	{
@@ -237,7 +237,7 @@ public class GameMaster : MonoBehaviour {
 
 		// returns winner hand
 		PlayerHand winner = getWinner (playerList);
-		//winner.setWinningHand ();
+		winner.setWinningHand ();
 		winnerID = winner.DeckID;
 		if (winnerID == 1) {
 						playerList [0].Winner ();
@@ -247,10 +247,10 @@ public class GameMaster : MonoBehaviour {
 						playerList [0].Loser ();
 				}
 		// take winners' cards up to the table
-		for (int i=0; i<searchDeckByID (winnerID).winningHand.Count; i++)
-		{
-			requestCardTransfer (winnerID, 102, true, searchDeckByID (winnerID).winningHand[i].Rank, searchDeckByID (winnerID).winningHand[i].Suit);
-		}
+		for (int i=0; i<20; i++)
+			//if you add true after the last 0, then it will show winning hand, but some bugs
+			requestCardTransfer (winnerID,102, true,0,0);
+
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
 		}
@@ -264,12 +264,12 @@ public class GameMaster : MonoBehaviour {
 		Debug.Log("Card dealt to "+(deckList.Count-2)+" hands");
 		for (int i=0; i<numberOfCards; i++)
 		{
-			for (int j=0; j<playerList.Count; j++)
+			for (int j=0; j<deckList.Count; j++)
 			{
-				if (playerList[j].DeckID>0 && playerList[j].DeckID<100)
+				if (deckList[j].DeckID>0 && deckList[j].DeckID<100)
 				{
-					searchDeckByID(0).transferCardTo (playerList[j], playerList[j].DeckID==1);
-					//playerList[j].evaluateHand();
+					searchDeckByID(0).transferCardTo (deckList[j], deckList[j].DeckID==1);
+					deckList[j].evaluateDeck();
 					yield return new WaitForSeconds(0.2f);
 				
 				}
@@ -277,8 +277,6 @@ public class GameMaster : MonoBehaviour {
 			yield return new WaitForSeconds(0.2f);
 		}
 		yield return new WaitForSeconds (2f);
-		for (int i=0; i<playerList.Count; i++)
-			playerList [i].evaluateHand ();
 	}
 
 	private IEnumerator auction()
@@ -304,8 +302,7 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds (1f);
 		for (int j=0; j<playerList.Count; j++)
 		{
-			playerList[j].evaluateHand ();
-			//playerList[j].setWinningHand ();
+			playerList[j].evaluateDeck ();
 		}
 		//Debug.Log (deckList.Count);												
 

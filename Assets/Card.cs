@@ -6,11 +6,9 @@ public class Card : MonoBehaviour {
 	const float rotationSpeed=3f;
 	const float movementSpeed = 3f;
 
+
 	private int rank;	// 1 to 13, 1 is Ace
 	private int suit;	// 1 to 4, Clover, Heart, Spade and Diamond respectively.
-
-	private bool isOpen;			// whether card is open or not
-	private Animator anim;	// for setting transitions for any card animation
 
 	private bool initializeFlag = true;
 	private int sortingOrder;	// order in 2D graphics layer. Sprite with higher order is drawn on top.
@@ -38,24 +36,8 @@ public class Card : MonoBehaviour {
 		initializeFlag = false;
 	}
 
-	public void startBlinkAnim()
-	{
-		if (isOpen) {
-
-			anim.SetBool ("blinkEnabled", true);
-			//if (anim.animation!=null)
-			//	anim.animation.Rewind();
-		}
-	}
-
-	public void stopBlinkAnim()
-	{
-		anim.SetBool ("blinkEnabled", false);
-	}
-
 	public void showFace()
 	{
-		isOpen = true;
 		//renderer.enabled=true;
 		GetComponent<SpriteRenderer> ().sprite = getCardSprite ();
 		//GetComponent<SpriteRenderer> ().color = Color.white;
@@ -63,12 +45,10 @@ public class Card : MonoBehaviour {
 	
 	public void showBackground()
 	{
-		isOpen = false;
 		//renderer.enabled=true;
 		//GetComponent<SpriteRenderer>().color = Color.red;
 		//GetComponent<SpriteRenderer> ().sprite = cardSpriteList[13];
 		GetComponent<SpriteRenderer> ().sprite = Resources.Load <Sprite> ("images/playing-card-back");
-		//anim.SetBool ("blinkEnabled", false);
 	}
 
 	public void setSortingOrder(int value)
@@ -93,18 +73,17 @@ public class Card : MonoBehaviour {
 
 	// Use this for initialization. Function is called when the object is instantiated
 	void Start () {
+		if (GetComponent<SpriteRenderer> () == null)
+			this.gameObject.AddComponent ("SpriteRenderer");	//Adds component to the gameObject if sprite is null
+		GetComponent<SpriteRenderer> ().sprite = Resources.Load <Sprite> ("images/playing-card-back");//getCardSprite ();
+		movementEnabled = true;
 
 		//Debug.Log ("Card initialized");
 	}
 
 	// Awake is called before Start()
 	void Awake(){
-		if (GetComponent<SpriteRenderer> () == null)
-			this.gameObject.AddComponent ("SpriteRenderer");	//Adds component to the gameObject if sprite is null
-		GetComponent<SpriteRenderer> ().sprite = Resources.Load <Sprite> ("images/playing-card-back");//getCardSprite ();
-		anim = GetComponent<Animator>();
-		isOpen = false;
-		movementEnabled = true;
+
 	}
 
 	// Update is called once per frame. Every single cards move towards the target location every frame. This is a simplied PID control.

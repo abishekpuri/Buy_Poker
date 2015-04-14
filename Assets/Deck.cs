@@ -36,38 +36,145 @@ public class Deck : MonoBehaviour {
 	~Deck() {
 		destroyAll ();
 	}
-
+	public void evaluateDeck()
+	{
+				int counter = 0;
+				bool straight = false;
+				List<int> value = new List<int> ();
+				List<int> suit = new List<int> ();
+				for (int i = 0; i < 15; i++) {
+						if (i < 5) {
+								suit.Add (0);
+						}
+						value.Add (0);
+				}
+				for (int i = 0; i < cards.Count; i++) {
+						if (cards [i].Rank == 1) {
+								value [14] ++;
+						} else {
+								value [cards [i].Rank]++;
+						}
+						suit [cards [i].Suit]++;
+				}
+				//Check for A to 5 straight
+				if (value [14] > 0) {
+						for (int i = 2; i < 6; ++i) {
+								if (value [i] > 0) {
+										counter++;
+								}
+								if (counter == 4) {
+										CombinationValue = 1;
+										straight = true;
+								}
+						}
+				}
+				counter = 0;
+				for (int i = 0; i < value.Count; i++) {
+						if (value [i] > 0) {
+								CombinationValue = (counter == 0 ? i : CombinationValue);
+								counter++;
+								if (deckID == 1) {
+										Debug.Log (counter);
+								}
+						} else {
+								counter = 0;
+						}
+						if (counter == 5) {
+								straight = true;
+								break;
+						}
+				}
+				int pairs = value.FindAll (a => a == 2).Count;
+				int three_kind = value.FindAll (a => a == 3).Count;
+				int four_kind = value.FindAll (a => a == 4).Count;
+				int flush = suit.FindAll (a => a >= 5).Count;
+				if ((flush != 0) && straight) {
+						CombinationRank = 1;
+			//WARNING : THIS WILL NOT WORK IF PLAYER HAS TWO FLUSHES
+						FlushValue = suit.FindLastIndex(a=> a>=5);
+						CombinationType = "Straight Flush";
+				} else if (four_kind >= 1) {
+						CombinationRank = 2;
+						CombinationValue = value.FindLastIndex (a => a == 4); 
+						CombinationType = "Four of a Kind";
+				} else if (three_kind > 1 || (three_kind == 1 && pairs >= 1)) {
+						CombinationRank = 3;
+						CombinationValue = value.FindLastIndex (a => a == 3);
+						SecondaryCombinationValue = value.FindLastIndex (a => a == 2);
+						CombinationType = "Full House";
+				} else if (flush >= 1) {
+						int maxCard = 0;
+						for (int i = 0; i < suit.Count; ++i) {
+								if (suit [i] >= 5) {
+										if (cards.FindLastIndex (a => a.Suit == i) >= maxCard) {
+												maxCard = cards.FindLastIndex (a => a.Suit == i);
+												FlushValue = i;
+										}
+								}
+						}
+						CombinationRank = 4;
+						CombinationValue = maxCard;
+						CombinationType = "Flush";
+				} else if (straight) {
+						CombinationRank = 5;
+						CombinationType = "Straight";
+				} else if (three_kind >= 1) {
+						CombinationRank = 6;
+						CombinationValue = value.FindLastIndex (a => a == 3);
+						CombinationType = "Three of a Kind";
+				} else if (pairs >= 2) {
+						CombinationRank = 7;
+						CombinationValue = value.FindLastIndex (a => a == 2);
+						//This is to find the second value, so we temporarily make the first one 0 
+						value [CombinationValue] = 0;
+						SecondaryCombinationValue = value.FindLastIndex (a => a == 2);
+						value [CombinationValue] = 2;
+						CombinationType = "Two Pair";
+				} else if (pairs == 1) {
+						CombinationRank = 8;
+						CombinationValue = value.FindLastIndex (a => a == 2);
+						CombinationType = "One Pair";
+				} else {
+						CombinationRank = 9;
+						CombinationValue = value.FindLastIndex (a => a == 1);
+						CombinationType = "High Card";
+				}
+		}
 
 	public Card peekTopCard()
 	{
 		return cards [cards.Count - 1];
 	}
 
-	public void transferCardTo(Deck another, bool cardOpen, int rank=0, int suit=0)
+	public void transferCardTo(Deck another, bool cardOpen, int rank=0, int suit=0,bool winninghand = false)
 	{
+		List<Card> list = new List<Card> ();
+		if (winninghand) {
+						list = winningHand;
+				} else {
+						list = cards;
+				}
 		if (cards.Count>0)
 		{
 			// transfer top card
-			if (cards.Find (x => x.Rank==rank && x.Suit==suit)==null)
+			if (list.Find (x => x.Rank==rank && x.Suit==suit)==null)
 			{
 				if (cardOpen)
-					cards[cards.Count-1].GetComponent<Card>().showFace ();
-				cards[cards.Count-1].GetComponent<Card>().stopBlinkAnim ();
+					list[list.Count-1].GetComponent<Card>().showFace ();
 				//Debug.Log ("Card count = " + list.Count);
 				//Debug.Log ("card to be transferred : Rank = " + list[list.Count-1].GetComponent <Card>().Rank);
-				another.addExistingCard (cards[cards.Count-1]);
-				cards.Remove (cards [cards.Count - 1]);
+				another.addExistingCard (list[list.Count-1]);
+				list.Remove (list [list.Count - 1]);
 			}
 			// transfer specific card
 			else
 			{
 				if (cardOpen)
-					cards.Find (x => x.Rank==rank && x.Suit==suit).GetComponent<Card>().showFace ();
-				cards.Find (x => x.Rank==rank && x.Suit==suit).GetComponent<Card>().stopBlinkAnim();
+					list.Find (x => x.Rank==rank && x.Suit==suit).GetComponent<Card>().showFace ();
 				//Debug.Log ("Card count = " + list.Count);
 				//Debug.Log ("card to be transferred : Rank = " + list[list.Count-1].GetComponent <Card>().Rank);
-				another.addExistingCard (cards.Find (x => x.Rank==rank && x.Suit==suit));
-				cards.Remove (cards.Find (x => x.Rank==rank && x.Suit==suit));
+				another.addExistingCard (list.Find (x => x.Rank==rank && x.Suit==suit));
+				list.Remove (list.Find (x => x.Rank==rank && x.Suit==suit));
 
 			}
 			setupLayout(currentLayoutType);
@@ -224,8 +331,10 @@ public class Deck : MonoBehaviour {
 		setScaleAndOrder ();
 		setupLayout (currentLayoutType);
 	}
-	public void Awake()
-	{
+
+	// Use this for initialization
+	public void Start () {
+
 		if (reserveDeckID>200)
 			deckID = 0;
 		else if (reserveDeckID >= 100)
@@ -233,11 +342,6 @@ public class Deck : MonoBehaviour {
 		cards = new List<Card>();
 		referenceTransform = GetComponent<Transform> ();
 		GameMaster.reportDeckToGameMaster (this);
-
-	}
-	// Use this for initialization
-	void Start () {
-
 	}
 	
 	// Update is called once per frame
