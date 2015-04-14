@@ -21,7 +21,7 @@ public class PlayerHand : Deck {
 	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
 	private int Points = PlayerPrefs.GetInt ("Points");
-	private float Multiplier = (PlayerPrefs.HasKey ("Float")?PlayerPrefs.GetFloat ("Multiplier"):1);
+	private float Multiplier = (PlayerPrefs.HasKey ("Multiplier")?PlayerPrefs.GetFloat ("Multiplier"):1);
 	public List<float> WinningBidPercentage = new List<float>();
 	// below are non-ingame temporary variables. Feel free to force change the variables anywhere.
 	public bool showGUI = false;
