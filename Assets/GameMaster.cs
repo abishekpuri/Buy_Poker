@@ -247,9 +247,9 @@ public class GameMaster : MonoBehaviour {
 						playerList [0].Loser ();
 				}
 		// take winners' cards up to the table
-		for (int i=0; i<searchPlayerHandByID (winnerID).winningHand.Count; i++)
+		for (int i=0; i<searchDeckByID (winnerID).winningHand.Count; i++)
 		{
-			requestCardTransfer (winnerID, 102, true, searchPlayerHandByID (winnerID).winningHand[i].Rank, searchPlayerHandByID (winnerID).winningHand[i].Suit);
+			requestCardTransfer (winnerID, 102, true, searchDeckByID (winnerID).winningHand[i].Rank, searchDeckByID (winnerID).winningHand[i].Suit);
 		}
 		searchDeckByID (102).sort ();
 		for (int i=0; i<playerList.Count; i++) {
@@ -379,11 +379,6 @@ public class GameMaster : MonoBehaviour {
 		return deckList.Find (x => x.DeckID == searchID);
 	}
 
-	// special case for searchDeckByID()
-	public static PlayerHand searchPlayerHandByID(int searchID)
-	{
-		return (PlayerHand)deckList.Find (x => x.DeckID == searchID);
-	}
 	
 }
 

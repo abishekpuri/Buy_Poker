@@ -16,8 +16,12 @@ public class Deck : MonoBehaviour {
 	public int reserveDeckID;
 	public List<Card> cards;			// collection of gameObjects references (cards). List should be quite similar to Vector
 	public int deckID;
-	//public List<Card> winningHand = new List<Card> ();
-	//public string CombinationType = "Evaluating Hand .."; //consider making private later.
+	public List<Card> winningHand = new List<Card> ();
+	public string CombinationType = "Evaluating Hand .."; //consider making private later.
+	public int CombinationValue; // used to break ties if CombinationType same
+	public int FlushValue;
+	public int SecondaryCombinationValue; // used if the top value is the same ie if three of a kind same then compare the pair
+	public int CombinationRank; // Number that tracks hand value, better than enumerating hand types
 	private bool initializeFlag = true;			// Once ID is set, it cannot be changed again. I added variable just for the sake of protection, but I might be complicating things.
 	private Transform referenceTransform;	// this class includes reference position, scale and rotation of entire deck. Individual cards will be positioned based on this reference transform
 	private int currentLayoutType;	//current layout type
@@ -124,13 +128,16 @@ public class Deck : MonoBehaviour {
 	}
 
 
-	public virtual void destroyAll()
+	public void destroyAll()
 	{
 		while (cards.Count>0) {
 			Destroy (cards [0].gameObject);
 			cards.Remove (cards [0]);
 		}
-
+		while (winningHand.Count>0) {
+			Destroy (winningHand [0].gameObject);
+			winningHand.Remove (winningHand [0]);
+		}
 		//Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}
 
@@ -223,7 +230,6 @@ public class Deck : MonoBehaviour {
 		cards.Sort ((x, y) => x.Rank);
 		setScaleAndOrder ();
 		setupLayout (currentLayoutType);
-		//Debug.Log ("sort");
 	}
 
 	public void Awake()
