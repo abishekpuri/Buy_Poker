@@ -342,21 +342,21 @@ public class PlayerHand : Deck {
 		Vector3 StatBoxscreenPos = Camera.main.WorldToScreenPoint (new Vector3 (transform.localPosition.x, transform.localPosition.y-1, transform.localPosition.z));
 		Vector3 awardButtonScreenPos;
 		if (Points >= 10) {
-			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-9, 3, transform.localPosition.z));
+			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 3, transform.localPosition.z));
 			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, 70,70), "50 Cash",buttonStyle)) {
 					buyPrize (10);
 					cash += 50;
 			}
 		}
 		if(Points >= 20) {
-			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-9, 1.5f, transform.localPosition.z));
+			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 1.5f, transform.localPosition.z));
 			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, 70,70), "Stop"+"\n"+"Auction",buttonStyle)) {
 				buyPrize (20);
 				GameMaster.endAuctionEarly();
 			}
 		}
 		if (Points >= 40) {
-			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-9, 0, transform.localPosition.z));
+			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 0, transform.localPosition.z));
 			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, 70,70), "Extra" +"\n"+"Card",buttonStyle)){
 				buyPrize(40);
 				GameMaster.requestCardTransfer (0, 1, true);
