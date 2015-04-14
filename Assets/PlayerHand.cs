@@ -185,11 +185,15 @@ public class PlayerHand : Deck {
 						List<Card> secondPart = cards.FindAll (a => a.Rank == SecondaryCombinationValue);
 						winningHand.AddRange (secondPart);
 				} else if (CombinationType == "Flush") {
+						//Debug.Log ("Flush is problematic");
+						//Debug.Log ("FlushValue = "+FlushValue);
 						List<Card> flushCards = cards.FindAll (a => a.Suit == FlushValue);
-						int count = 5;
-						while (count > 0) {
-								winningHand.Add (flushCards [flushCards.Count]);
-								count --;
+						//Debug.Log ("FlushCardsCount = "+flushCards.Count);
+						int count = 4;
+						while (count >= 0) {
+						winningHand.Add (flushCards[0]);
+						flushCards.Remove (flushCards[0]);
+						count --;
 						}
 				} else {
 						for (int i = CombinationValue; i < CombinationValue+5; ++i) {
