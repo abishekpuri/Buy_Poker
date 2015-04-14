@@ -247,9 +247,10 @@ public class GameMaster : MonoBehaviour {
 						playerList [0].Loser ();
 				}
 		// take winners' cards up to the table
-		for (int i=0; i<20; i++)
-			//if you add true after the last 0, then it will show winning hand, but some bugs
-			requestCardTransfer (winnerID,102, true,0,0);
+		for (int i=0; i<20; i++) {
+						//if you add true after the last 0, then it will show winning hand, but some bugs
+						requestCardTransfer (winnerID, 102, true, 0, 0);
+				}
 
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
