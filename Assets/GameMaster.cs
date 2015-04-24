@@ -227,6 +227,7 @@ public class GameMaster : MonoBehaviour {
 	// Use this for initialization. Overrides ***Start() in MonoBehavior***
 	void Start () {
 		//ResetPrefs();
+		Debug.Log (SystemManager.dummyString);
 		StartCoroutine (coStart ());
 	}
 	public void ResetPrefs() {

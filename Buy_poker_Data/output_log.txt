@@ -12,73 +12,27 @@ Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assemb
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.039 seconds
+- Completed reload, in  0.040 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.dll (this message is harmless)
-Level 'settingScene' (-1) couldn't be loaded because it has not been added to the build settings.
-To add a level to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 275)
+UnloadTime: 7.157894 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Level 'settingScene' (-1) couldn't be loaded because it has not been added to the build settings.
-To add a level to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 275)
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 145.
+Total: 1.480844 ms (FindLiveObjects: 0.027096 ms CreateObjectMapping: 0.018064 ms MarkObjects: 0.302162 ms  DeleteObjects: 0.017242 ms)
 
-UnloadTime: 2.523224 ms
-Deck 100 reported to gameMaster
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+UnloadTime: 0.909362 ms
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Deck 101 reported to gameMaster
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 173.
+Total: 1.709930 ms (FindLiveObjects: 0.027506 ms CreateObjectMapping: 0.022990 ms MarkObjects: 0.396588 ms  DeleteObjects: 0.008210 ms)
 
-Deck 0 reported to gameMaster
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+UnloadTime: 0.704909 ms
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Card sprite resourses loaded once and for all
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-Deck 102 reported to gameMaster
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-Unloading 5 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 210.
-Total: 0.556702 ms (FindLiveObjects: 0.013137 ms CreateObjectMapping: 0.007389 ms MarkObjects: 0.144923 ms  DeleteObjects: 0.008210 ms)
-
-Deck 0 reported to gameMaster
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-NEW DECK => Deck ID = 1, Layout = 6
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-Deck 0 reported to gameMaster
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-NEW DECK => Deck ID = 2, Layout = 6
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-Deck 0 reported to gameMaster
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-NEW DECK => Deck ID = 3, Layout = 6
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-Card dealt to 5 hands
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 355.
+Total: 0.764439 ms (FindLiveObjects: 0.016011 ms CreateObjectMapping: 0.009032 ms MarkObjects: 0.284098 ms  DeleteObjects: 0.011495 ms)
 

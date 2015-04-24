@@ -54,6 +54,7 @@
      <Compile Include="Assets\Deck.cs" />
      <Compile Include="Assets\GameMaster.cs" />
      <Compile Include="Assets\PlayerHand.cs" />
+     <Compile Include="Assets\SystemManager.cs" />
      <Compile Include="Assets\Utils.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
