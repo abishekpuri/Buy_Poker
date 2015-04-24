@@ -356,37 +356,41 @@ public class PlayerHand : Deck {
 		GUIStyle buttonStyle = new GUIStyle (GUI.skin.box);
 		buttonStyle.normal.textColor = Color.cyan;
 		buttonStyle.hover.textColor = Color.cyan;
+		buttonStyle.fontSize = Utils.adjustUISize (12,true);
+		int buttonStyleAdjustedUISizeX = Utils.adjustUISize (70,true);
+		int buttonStyleAdjustedUISizeY = Utils.adjustUISize (70,false);
 
 		GUIStyle boxStyle = new GUIStyle (GUI.skin.box);
 		boxStyle.normal.textColor = Color.white;
-
+		boxStyle.fontSize = Utils.adjustUISize (12,true);
 		// Vector3 screenPosition => You can set Position of GUI in world space and then convert it into screenPos(GUI pos)
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z));
 		Vector3 StatBoxscreenPos = Camera.main.WorldToScreenPoint (new Vector3 (transform.localPosition.x, transform.localPosition.y-1, transform.localPosition.z));
 		Vector3 awardButtonScreenPos;
 		if (Points >= 10) {
 			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 3, transform.localPosition.z));
-			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, 70,70), "50 Cash",buttonStyle)) {
+			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX,buttonStyleAdjustedUISizeY), "50 Cash",buttonStyle)) {
 					buyPrize (10);
 					cash += 50;
 			}
 		}
 		if(Points >= 20) {
 			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 1.5f, transform.localPosition.z));
-			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, 70,70), "Stop"+"\n"+"Auction",buttonStyle)) {
+			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX,buttonStyleAdjustedUISizeY), "Stop"+"\n"+"Auction",buttonStyle)) {
 				buyPrize (20);
 				GameMaster.endAuctionEarly();
 			}
 		}
 		if (Points >= 40) {
 			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 0, transform.localPosition.z));
-			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, 70,70), "Extra" +"\n"+"Card",buttonStyle)){
+			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX,buttonStyleAdjustedUISizeY), "Extra" +"\n"+"Card",buttonStyle)){
 				buyPrize(40);
 				GameMaster.requestCardTransfer (0, 1, true);
 			}
 		}
 		if (showGUI){
-			GUI.Box (new Rect (StatBoxscreenPos.x-40, Camera.main.pixelHeight-StatBoxscreenPos.y, 100, (showCombination?60:45)), "Cash = " + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":CombinationType), boxStyle);
+			Debug.Log (Camera.main.pixelWidth);
+			GUI.Box (new Rect (StatBoxscreenPos.x-40, Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (65,false):Utils.adjustUISize (45,false))), "Cash = " + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":CombinationType), boxStyle);
 		}
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.

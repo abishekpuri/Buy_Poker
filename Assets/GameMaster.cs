@@ -183,6 +183,45 @@ public class GameMaster : MonoBehaviour {
 		if (gm == null) {
 			gm = GameObject.FindGameObjectWithTag ("GameMaster").GetComponent<GameMaster>();
 		}
+		// set the desired aspect ratio (the values in this example are
+		// hard-coded for 16:9, but you could make them into public
+		// variables instead so you can set them at design time)
+		/*float targetaspect = 16.0f / 9.0f;
+		
+		// determine the game window's current aspect ratio
+		float windowaspect = (float)Camera.main.pixelWidth / (float)Camera.main.pixelHeight;
+		
+		// current viewport height should be scaled by this amount
+		float scaleheight = windowaspect / targetaspect;
+		
+		// obtain camera component so we can modify its viewport
+		Camera camera = GetComponent<Camera>();
+
+		// if scaled height is less than current height, add letterbox
+		if (scaleheight < 1.0f)
+		{  
+			Rect rect = camera.rect;
+			
+			rect.width = 1.0f;
+			rect.height = scaleheight;
+			rect.x = 0;
+			rect.y = (1.0f - scaleheight) / 2.0f;
+			
+			camera.rect = rect;
+		}
+		else // add pillarbox
+		{
+			float scalewidth = 1.0f / scaleheight;
+			
+			Rect rect = camera.rect;
+			
+			rect.width = scalewidth;
+			rect.height = 1.0f;
+			rect.x = (1.0f - scalewidth) / 2.0f;
+			rect.y = 0;
+			
+			camera.rect = rect;
+		}*/
 	}
 	
 	// Use this for initialization. Overrides ***Start() in MonoBehavior***
@@ -322,12 +361,13 @@ public class GameMaster : MonoBehaviour {
 	{
 		GUIStyle style = new GUIStyle(GUI.skin.box);
 		style.normal.textColor = Color.green;
+		style.fontSize = Utils.adjustUISize (12,true);
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
 		Vector3 pointBoxScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-8, 4, 0));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
-		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, 200, 20), "Points : " + PlayerPrefs.GetInt ("Points"),style);
-		GUI.Box (new Rect (screenPos.x-100, Camera.main.pixelHeight - screenPos.y, 200, 20), "Cards Left : " + auctionCardsLeft,style);
+		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Points : " + PlayerPrefs.GetInt ("Points"),style);
+		GUI.Box (new Rect (screenPos.x-100, Camera.main.pixelHeight - screenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Cards Left : " + auctionCardsLeft,style);
 		if (gameEnd) {
 						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
 						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {

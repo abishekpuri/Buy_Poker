@@ -70,7 +70,7 @@ public class AuctionTimer : MonoBehaviour {
 		GUI.backgroundColor = new Color(1,1,1,1);
 		GUIStyle buttonStyle = new GUIStyle (GUI.skin.button);
 		buttonStyle.normal.textColor = Color.cyan;
-		buttonStyle.fontSize = 20;
+		buttonStyle.fontSize = Utils.adjustUISize (20,true);
 		buttonStyle.hover.textColor = Color.cyan;
 		buttonStyle.active.textColor = Color.red;
 		buttonStyle.fontStyle = FontStyle.Bold;
@@ -81,7 +81,7 @@ public class AuctionTimer : MonoBehaviour {
 		if (timeRemaining>=10)
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
-			if (GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, 120, 72), "BUY! "+(int)timeRemaining, buttonStyle) && !buttonClicked)
+			if (GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (120,true), Utils.adjustUISize (72,false)), "BUY! "+(int)timeRemaining, buttonStyle) && !buttonClicked)
 			{
 				//Debug.Log ("Pressed!!!");
 				//buttonClicked = true;
@@ -91,7 +91,7 @@ public class AuctionTimer : MonoBehaviour {
 			}
 		}
 		else{
-			GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, 120, 72), "Bid over", buttonStyle);
+			GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (120,true), Utils.adjustUISize (72,false)), "Bid over", buttonStyle);
 		}
 	}
 }
