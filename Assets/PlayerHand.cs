@@ -16,7 +16,7 @@ public class PlayerHand : Deck {
 	public int FlushValue;
 	public int SecondaryCombinationValue; // used if the top value is the same ie if three of a kind same then compare the pair
 	public int CombinationRank; // Number that tracks hand value, better than enumerating hand types
-
+	public List<List<Card> > OpponentCards;
 
 	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
@@ -259,6 +259,7 @@ public class PlayerHand : Deck {
 	{
 		/*To prevent players from catching on to AI's lower point for useless cards, we will track all bets made below 50% of 
 		 * total cash, and remember the percentge, adjusting ours accordingly*/
+
 		float avgBetPercentage = 0;
 		float bottomCap = PlayerPrefs.GetFloat("bottomCap");
 		for (int i = 0; i < WinningBidPercentage.Count; ++i) {
@@ -277,11 +278,16 @@ public class PlayerHand : Deck {
 								PlayerPrefs.SetFloat ("bottomCap", bottomCap);
 						}
 				}
-				/*Strategy 1 : If the card will allow me to increase the ranking of my hand, pay 70% of current cash. 
+		/*Strategy 1 : Calculate the Value of the current card using a weighted vector system that increases semi exponentially to
+		 * factor in the difficulty in moving up a level in the later stages. We then find the power value using this vector system
+		 * and normalize it using total power. This gives us a raw value of the card we can then adjust according to aggresion,
+		 * bluffing and so on.*/
+		this.evaluateHand ();
+
+				/*Strategy 2 : If the card will allow me to increase the ranking of my hand, pay 70% of current cash. 
 		If it will increase the value of my hand but keep the ranking same  ie go from pair 4's to pair 9's
 		 then pay 50% of current cash. Otherwise, only bid 10% of current cash.*/
 				System.Random rndm = new System.Random ();
-				this.evaluateHand ();
 				int current_rank = CombinationRank;
 				int current_score = CombinationValue;
 				bool bluff = (rndm.Next (1, 10) <= 5 ? true : false);

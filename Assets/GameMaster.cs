@@ -38,7 +38,7 @@ public class GameMaster : MonoBehaviour {
 	public bool gameEnd = false;
 	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
 	public int wins;
-	public int auctionCardsLeft = 7;
+	public int auctionCardsLeft;
 	public int total_games;
 	/*************************************This part is purely bound to Buttons in gameScene*******************************/
 	public int debugDestinationIDField;
@@ -228,6 +228,7 @@ public class GameMaster : MonoBehaviour {
 	void Start () {
 		//ResetPrefs();
 		Debug.Log (SystemManager.dummyString);
+		auctionCardsLeft = SystemManager.numCardsAuction;
 		StartCoroutine (coStart ());
 	}
 	public void ResetPrefs() {
@@ -241,23 +242,23 @@ public class GameMaster : MonoBehaviour {
 		wins = PlayerPrefs.GetInt ("wins");
 		total_games = PlayerPrefs.GetInt ("total_games");
 		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
-		registerNewPlayerHand (1, new Vector3(0,-2,0), new Vector3(0,0,0f),6,true);
-		registerNewPlayerHand (2, new Vector3(-5f,-2,0), new Vector3(0,0,0),6,true);
-		registerNewPlayerHand (3, new Vector3(5f,-2,0), new Vector3(0,0,0),6,true);
-
+		for (int i = 1; i <= SystemManager.numPlayers; ++i) {
+			registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE/2+(i-0.5f)*(SystemManager.SPREADRANGE/SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
+		}
 		searchDeckByID (0).generateFullCardDeck ();
 		yield return new WaitForFixedUpdate();		// WAIT until all sprites in deck 0 are loaded. Otherwise, closeDeck() might not work.
 
-		// enable AI control
-		((PlayerHand)searchDeckByID (2)).setAIControl ();
-		((PlayerHand)searchDeckByID (3)).setAIControl ();
+		//enable AI control
+		for (int i = 2; i <= SystemManager.numPlayers; ++i) {
+			((PlayerHand)searchDeckByID (i)).setAIControl ();
+		}
 
 
 		searchDeckByID (0).closeDeck ();
 		searchDeckByID (0).shuffle ();
 
 
-		yield return StartCoroutine (dealCards (5));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
+		yield return StartCoroutine (dealCards (SystemManager.numCardsDealt));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
 
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showGUI=true;
@@ -372,15 +373,7 @@ public class GameMaster : MonoBehaviour {
 		if (gameEnd) {
 						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
 						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {
-								for (int i = 0; i < deckList.Count; i++) {
-										deckList [i].destroyAll ();
-								}
-								for (int i = 0; i < playerList.Count; ++i) {
-										playerList [i].setCash (200);
-								}
-								gameEnd = false;
-								auctionCardsLeft = 7;
-								Start ();
+				startGame ();
 						}
 
 				}
@@ -391,7 +384,20 @@ public class GameMaster : MonoBehaviour {
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
 		//GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
 	}
-	
+
+	public void startGame() 
+	{
+		for (int i = 0; i < deckList.Count; i++) {
+			deckList [i].destroyAll ();
+		}
+		for (int i = 0; i < playerList.Count; ++i) {
+			playerList [i].setCash (200);
+		}
+		gameEnd = false;
+
+		Start ();
+	}
+
 	public void registerNewPlayerHand(int id, Vector3 pos, Vector3 rotation, int orientation,bool Player=false)
 	{
 		
