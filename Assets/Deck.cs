@@ -166,7 +166,7 @@ public class Deck : MonoBehaviour {
 	/*
 	 * Default case: collapse (Main deck)
 	 * Case 1: spread by overlapping with each other. To the right.
-	 * Case 2: same, spreads from middle
+	 * Case 2: same, spreads from middle. But almost collapsing.
 	 * Case 3: spreads out without overlap. To right.
 	 * Case 4: spreads out without overlap. Spreads from middle.
 	 * Case 5: rotates in a z axis.
@@ -189,7 +189,7 @@ public class Deck : MonoBehaviour {
 			pos[0] = new Vector3 (indexReference*0.3f,0,0.001f);
 			break;
 		case 2:
-			pos[0] = new Vector3 (indexReference*0.3f - (0.3f*(cards.Count-1))*0.5f,0,0.001f);
+			pos[0] = new Vector3 (indexReference*0.03f - (0.03f*(cards.Count-1))*0.5f,0,0.001f);
 			break;
 		case 3:
 			pos[0] = new Vector3 (indexReference*1.2f,0,0.001f);

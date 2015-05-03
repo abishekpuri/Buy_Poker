@@ -47,6 +47,10 @@ public class PlayerHand : Deck {
 		get{ return cash;}
 		//set{playerID = value;}
 	}
+	public int RoundPoints
+	{
+		get{ return roundPoints;}
+	}
 	~PlayerHand() {
 
 	}
@@ -93,9 +97,9 @@ public class PlayerHand : Deck {
 	}
 	public void buyPrize(int prizeVal) 
 	{
-				if (Points >= prizeVal) {
-						Points -= prizeVal;
-						PlayerPrefs.SetInt ("Points", Points);
+				if (roundPoints >= prizeVal) {
+						roundPoints -= prizeVal;
+						//PlayerPrefs.SetInt ("Points", roundPoints);
 						//10 prize is getting a free new card
 				} 
 		}
@@ -381,39 +385,42 @@ public class PlayerHand : Deck {
 
 	void OnGUI()	//Overrided
 	{
-		GUIStyle buttonStyle = new GUIStyle (GUI.skin.box);
+
+		GUIStyle buttonStyle = new GUIStyle (GUI.skin.button);
 		buttonStyle.normal.textColor = Color.cyan;
 		buttonStyle.hover.textColor = Color.cyan;
-		buttonStyle.fontSize = Utils.adjustUISize (12,true);
+		buttonStyle.fontSize = Utils.adjustUISize (14,true);
 		int buttonStyleAdjustedUISizeX = Utils.adjustUISize (70,true);
 		int buttonStyleAdjustedUISizeY = Utils.adjustUISize (70,false);
 
 		GUIStyle boxStyle = new GUIStyle (GUI.skin.box);
 		boxStyle.normal.textColor = Color.white;
-		boxStyle.fontSize = Utils.adjustUISize (12,true);
+		boxStyle.fontSize = Utils.adjustUISize (14,true);
 		// Vector3 screenPosition => You can set Position of GUI in world space and then convert it into screenPos(GUI pos)
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z));
 		Vector3 StatBoxscreenPos = Camera.main.WorldToScreenPoint (new Vector3 (transform.localPosition.x, transform.localPosition.y-1, transform.localPosition.z));
 		Vector3 awardButtonScreenPos;
-		if (Points >= 10) {
-			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 3, transform.localPosition.z));
-			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX,buttonStyleAdjustedUISizeY), "50 Cash",buttonStyle)) {
-					buyPrize (10);
+		if (DeckID == 1) {
+			if (roundPoints >= 5) {
+				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 3, transform.localPosition.z));
+				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "50 Cash", buttonStyle)) {
+					buyPrize (5);
 					cash += 50;
+				}
 			}
-		}
-		if(Points >= 20) {
-			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 1.5f, transform.localPosition.z));
-			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX,buttonStyleAdjustedUISizeY), "Stop"+"\n"+"Auction",buttonStyle)) {
-				buyPrize (20);
-				GameMaster.endAuctionEarly();
+			if (roundPoints >= 10) {
+				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 1.5f, transform.localPosition.z));
+				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Stop" + "\n" + "Auction", buttonStyle)) {
+					buyPrize (10);
+					GameMaster.endAuctionEarly ();
+				}
 			}
-		}
-		if (Points >= 40) {
-			awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (-8, 0, transform.localPosition.z));
-			if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX,buttonStyleAdjustedUISizeY), "Extra" +"\n"+"Card",buttonStyle)){
-				buyPrize(40);
-				GameMaster.requestCardTransfer (0, 1, true);
+			if (roundPoints >= 15) {
+				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 0, transform.localPosition.z));
+				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Extra" + "\n" + "Card", buttonStyle)) {
+					buyPrize (15);
+					GameMaster.requestCardTransfer (0, 1, true);
+				}
 			}
 		}
 		if (showGUI){

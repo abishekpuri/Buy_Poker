@@ -36,6 +36,7 @@ public class GameMaster : MonoBehaviour {
 	public static bool earlyAuctionEnd = false;
 	public static int winnerID;
 	public static bool roundEnd = false;
+	public static bool gameEnd = false;
 	public int wins;
 	public int auctionCardsLeft;
 	public int roundsLeft;
@@ -100,7 +101,20 @@ public class GameMaster : MonoBehaviour {
 		}
 		return currentMaxBid;
 	}
-
+	public static int getGameWinnerID()
+	{
+		int currentMaxRoundPoints = 0;
+		int currentPlayerID = 0;
+		for (int i=0; i<playerList.Count; i++)
+		{
+			if (playerList[i].RoundPoints>=currentMaxRoundPoints)
+			{
+				currentMaxRoundPoints=playerList[i].RoundPoints;
+				currentPlayerID=playerList[i].DeckID;
+			}
+		}
+		return currentPlayerID;
+	}
 
 	/*************************************Functions above are explicitly called by external calasses*******************************/
 
@@ -132,27 +146,9 @@ public class GameMaster : MonoBehaviour {
 	void Start () {
 		//ResetPrefs();
 		Debug.Log (SystemManager.dummyString);	// test static variables.
+
+		// set number of rounds
 		roundsLeft = SystemManager.numRounds;
-		startRound ();
-	}
-
-	public void startRound() 
-	{
-		roundsLeft--;
-		roundEnd = false;
-
-		// destroy all cards in the game.
-		for (int i = 0; i < deckList.Count; i++) {
-			deckList [i].destroyAll ();
-		}
-
-		// set the number of auction cards
-		auctionCardsLeft = SystemManager.numCardsAuction;
-
-		// reset player cash.
-		/*for (int i = 0; i < playerList.Count; ++i) {
-			playerList [i].setCash (200);
-		}*/
 
 		// Generate new card deck and shuffle them.
 		searchDeckByID (0).generateFullCardDeck ();
@@ -163,17 +159,65 @@ public class GameMaster : MonoBehaviour {
 		for (int i = 1; i <= SystemManager.numPlayers; ++i) {
 			registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE/2+(i-0.5f)*(SystemManager.SPREADRANGE/SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
 		}
-		
+
 		//enable AI control
 		for (int i = 2; i <= SystemManager.numPlayers; ++i) {
 			((PlayerHand)searchDeckByID (i)).setAIControl ();
 		}
 
-		StartCoroutine (coStartRound ());
+		StartCoroutine(startRound ());
+	}
+
+	public IEnumerator startRound() 
+	{
+		roundsLeft--;
+		roundEnd = false;
+
+		// recall all cards one by one.
+		for (int i=0; i<deckList.Count; i++)
+		{
+			Debug.Log (deckList[i].CARDS.Count);
+			for (int j=0; j<deckList[i].CARDS.Count+5; j++)
+			{
+				if (deckList[i].DeckID!=0)
+				{
+					deckList[i].transferCardTo (searchDeckByID (0), false);
+						//playerList[j].evaluateHand();
+					yield return new WaitForSeconds(0.05f);
+				}
+			}
+			searchDeckByID (0).closeDeck ();
+		}
+
+		// some cheap shuffling animation
+		searchDeckByID (0).setupLayout (2);
+		yield return new WaitForSeconds(0.3f);
+		searchDeckByID (0).setupLayout (0);
+		searchDeckByID (0).shuffle ();
+		yield return new WaitForSeconds(0.3f);
+		searchDeckByID (0).setupLayout (2);
+		searchDeckByID (0).shuffle ();
+		yield return new WaitForSeconds(0.3f);
+		searchDeckByID (0).setupLayout (0);
+		// destroy all cards in the game.
+		/*for (int i = 0; i < deckList.Count; i++) {
+			deckList [i].destroyAll ();
+		}*/
+
+		// set the number of auction cards
+		auctionCardsLeft = SystemManager.numCardsAuction;
+
+		// reset player cash.
+		/*for (int i = 0; i < playerList.Count; ++i) {
+			playerList [i].setCash (200);
+		}*/
+
+		StartCoroutine(coStartRound ());
 	}
 	/************************************* script for each round is written here...*******************************/
 	public IEnumerator coStartRound()	//Must be called through StartCoroutine()
 	{
+
 		//yield return new WaitForFixedUpdate();
 		//wins = PlayerPrefs.GetInt ("wins");
 		//total_games = PlayerPrefs.GetInt ("total_games");
@@ -197,7 +241,7 @@ public class GameMaster : MonoBehaviour {
 
 
 		// ============End of round.======================
-		searchDeckByID (102).setupLayout (3);
+		searchDeckByID (102).setupLayout (4);
 		// returns winner hand
 		PlayerHand winner = getWinner (playerList);
 		//winner.setWinningHand ();
@@ -228,7 +272,9 @@ public class GameMaster : MonoBehaviour {
 
 	public void endGame()
 	{
-		Debug.Log ("GAME ENDS");
+		int ID = getGameWinnerID ();
+		Debug.Log ("GAME ENDS, Winner = "+ID);
+		gameEnd = true;
 	}
 
 
@@ -294,20 +340,25 @@ public class GameMaster : MonoBehaviour {
 	{
 		GUIStyle style = new GUIStyle(GUI.skin.box);
 		style.normal.textColor = Color.green;
-		style.fontSize = Utils.adjustUISize (12,true);
+		style.fontSize = Utils.adjustUISize (14,true);
+		GUIStyle styleBtn = new GUIStyle(GUI.skin.button);
+		styleBtn.normal.textColor = Color.green;
+		styleBtn.fontSize = Utils.adjustUISize (14,true);
+		GUIStyle styleInfo = new GUIStyle(GUI.skin.box);
+		styleInfo.fontSize = Utils.adjustUISize (14,true);
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.localPosition);
-		Vector3 pointBoxScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-8, 4, 0));
+		Vector3 pointBoxScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-7, 4, 0));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
-		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Points : " + PlayerPrefs.GetInt ("Points"),style);
-		GUI.Box (new Rect (screenPos.x-100, Camera.main.pixelHeight - screenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Cards Left : " + auctionCardsLeft,style);
-		if (roundEnd) {
-						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "Player " + winnerID + " wins the round!!!");
-						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Next round")) {
-				startRound ();
-						}
+		//GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Points : " + PlayerPrefs.GetInt ("Points"),style);
+		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (50,false)), "Rounds "+(SystemManager.numRounds-roundsLeft)+" / "+SystemManager.numRounds+"\nCards Left : " + auctionCardsLeft,styleInfo);
+		if (roundEnd && !gameEnd) {
+			GUI.Box (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 160, 200, 40), "Player " + winnerID + " wins the round!!!",style);
+			if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 40), "Next round",styleBtn)) {
+				StartCoroutine(startRound ());
+			}
 
-				}
+		}
 
 		/*if (GUI.Button (new Rect (screenPos.x-390, Camera.main.pixelHeight - screenPos.y + 150, 80, 20), "Reset")) {
 						ResetPrefs ();
