@@ -81,7 +81,7 @@ public class AuctionTimer : MonoBehaviour {
 		if (timeRemaining>=10)
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
-			if (GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (120,true), Utils.adjustUISize (72,false)), "BUY! "+(int)timeRemaining, buttonStyle) && !buttonClicked)
+			if (GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (120,true), Utils.adjustUISize (72,false)), "BUY! $"+(int)timeRemaining, buttonStyle) && !buttonClicked)
 			{
 				//Debug.Log ("Pressed!!!");
 				//buttonClicked = true;

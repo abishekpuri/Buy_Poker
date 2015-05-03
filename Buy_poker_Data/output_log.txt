@@ -12,27 +12,9 @@ Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assemb
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.040 seconds
+- Completed reload, in  0.138 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.dll (this message is harmless)
-UnloadTime: 7.157894 ms
-Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 145.
-Total: 1.480844 ms (FindLiveObjects: 0.027096 ms CreateObjectMapping: 0.018064 ms MarkObjects: 0.302162 ms  DeleteObjects: 0.017242 ms)
-
-UnloadTime: 0.909362 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 173.
-Total: 1.709930 ms (FindLiveObjects: 0.027506 ms CreateObjectMapping: 0.022990 ms MarkObjects: 0.396588 ms  DeleteObjects: 0.008210 ms)
-
-UnloadTime: 0.704909 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 355.
-Total: 0.764439 ms (FindLiveObjects: 0.016011 ms CreateObjectMapping: 0.009032 ms MarkObjects: 0.284098 ms  DeleteObjects: 0.011495 ms)
-
