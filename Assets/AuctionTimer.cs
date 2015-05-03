@@ -5,18 +5,18 @@ using System.Collections;
  * AuctionTimer has two parts. As soon as this object is instantiated, it starts counting.
  * Also, Button UI is also bound to this object.
  * 
- * This Class contains hardCoded part:
- * 1. Button pressing action does not detects the player
- * 2. Button pressing action cannot be done automatically
+ * This Class contains hardCoded part, and needs to be solved:
+ * 1. Button pressing action does not distinguish the player id
+ * 2. Button pressing action cannot be done automatically, by AI
  * 
  * 
- * After done counting, it destroys itself.
+ * If the counter is interrupted by player or if it counts to 10, it destroys itself.
  * 
  * */
 public class AuctionTimer : MonoBehaviour {
 
 	private float timeRemaining;	// time remaining
-	private float speedMultiplier;
+	private float speedMultiplier;	// countdown speed.
 	private bool auctionInProcess;
 	private bool buttonClicked;		
 	private int transferID;
@@ -28,7 +28,7 @@ public class AuctionTimer : MonoBehaviour {
 	// Use this for initialization. Default time and speed settings
 	void Start () {
 		timeRemaining = 100;
-		speedMultiplier = 10;
+		speedMultiplier = 10;	// 10 per second.
 		auctionInProcess = true;
 		buttonClicked = false;
 		particleEffectPrefab = Resources.Load <Transform>("prefab/Particle System");
@@ -36,7 +36,7 @@ public class AuctionTimer : MonoBehaviour {
 	
 	// Update is Implicitly called once per frame
 	void Update () {
-			// If auction is successful
+			// If auction is successful, transfer the card to respective playerHand.
 			if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) {
 					buttonClicked = true;
 					auctionInProcess = false;
@@ -46,7 +46,7 @@ public class AuctionTimer : MonoBehaviour {
 					Destroy (temp.gameObject, 1f);
 			}
 
-
+			// Every frame, count down the timer.
 			if (timeRemaining >= 10 && auctionInProcess) {
 					timeRemaining -= Time.deltaTime * speedMultiplier;
 
@@ -81,6 +81,7 @@ public class AuctionTimer : MonoBehaviour {
 		if (timeRemaining>=10)
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
+			// button clicking action only registers bidValue for player.
 			if (GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (120,true), Utils.adjustUISize (72,false)), "BUY! $"+(int)timeRemaining, buttonStyle) && !buttonClicked)
 			{
 				//Debug.Log ("Pressed!!!");

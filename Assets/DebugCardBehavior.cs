@@ -26,7 +26,8 @@ public class DebugCardBehavior : MonoBehaviour {
 	
 	}
 
-	void OnMouseDown()	// this function is called whenever you click. YOU NEED "collider" component on gameObject to make this work.
+	// Enable this when you feel like debugging.
+	/*void OnMouseDown()	// this function is called whenever you click. YOU NEED "collider" component on gameObject to make this work.
 	{
 		//Debug.Log ("mouse up");
 		state++;
@@ -39,6 +40,6 @@ public class DebugCardBehavior : MonoBehaviour {
 			theCardToBeChallenged.showFace ();
 			break;
 		}
-	}
+	}*/
 
 }

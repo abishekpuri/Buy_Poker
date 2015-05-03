@@ -4,7 +4,7 @@ using System.Collections;
 public class Utils : MonoBehaviour {
 
 
-	// returns integer size value adjusted for screen space.
+	// returns integer size value adjusted for screen size.
 	public static int adjustUISize(int UISpaceboxSize, bool isAxisX)
 	{
 		return (int)(isAxisX?((float)UISpaceboxSize*(float)Camera.main.pixelWidth/1085f) : ((float)UISpaceboxSize*(float)Camera.main.pixelHeight/577f));

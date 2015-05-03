@@ -5,9 +5,9 @@ using System.Collections.Generic;
 /*
  * 
  * GameMaster contains static variables and functions which can be directly called from other classes.
- * It is usually the best place to code pre-scripted events.
+ * It is usually the best place to code for pre-scripted events.
  * 
- * 
+ * Actual gameplay script is written in this file.
  * 
  *  */
 
@@ -35,65 +35,20 @@ public class GameMaster : MonoBehaviour {
 	private static bool auctionInProgress = false;
 	public static bool earlyAuctionEnd = false;
 	public static int winnerID;
-	public bool gameEnd = false;
-	public int debugSourceIDField; 			//Every single function and variables with name "debug" is bound to GUI buttons in gameScene.
+	public static bool roundEnd = false;
 	public int wins;
 	public int auctionCardsLeft;
+	public int roundsLeft;
 	public int total_games;
-	/*************************************This part is purely bound to Buttons in gameScene*******************************/
-	public int debugDestinationIDField;
-	public int debugDeckIDField;
-	public int debugOrientationField;
-	public int debugXField;
-	public int debugYField;
-	public int debugZField;
-	
-	public void setDebugDeckIDField(string value)
-	{
-		debugDeckIDField = int.Parse(value);
-	}
-	public void setDebugOrientationField(string value)
-	{
-		debugOrientationField = int.Parse(value);
-	}
-	public void setDebugXField(string value)
-	{
-		debugXField = int.Parse(value);
-	}
-	public void setDebugYField(string value)
-	{
-		debugYField = int.Parse(value);
-	}
-	
-	public void setDebugZField(string value)
-	{
-		debugZField = int.Parse(value);
-	}
-	public void setDebugSourceIDField(string value)
-	{
-		debugSourceIDField = int.Parse (value);
-	}
-	public void setDebugDestinationIDField(string value)
-	{
-		debugDestinationIDField = int.Parse (value);
-	}
-	public void debugTransferCards()
-	{
-		requestCardTransfer (debugSourceIDField, debugDestinationIDField);
-	}
-	public void debugGenerateNewDeck()
-	{
-		registerNewPlayerHand (debugDeckIDField, new Vector3(debugXField, debugYField, debugZField), new Vector3(0,0,0), debugOrientationField);
-	}
+
+
+
 	public static void endAuctionEarly() {
 		earlyAuctionEnd = true;
 	}
-	/*************************************This part is purely bound to Buttons in gameScene*******************************/
 
 
-
-
-	/*************************************Functions below are explicitly called by external calasses*******************************/
+	/*************************************Functions below are explicitly called by external classes*******************************/
 	public static void reportDeckToGameMaster(Deck currentDeck,bool Player=false)	// Every Decks in the scene report themselves to gameMaster
 	{
 		deckList.Add (currentDeck);
@@ -107,6 +62,7 @@ public class GameMaster : MonoBehaviour {
 	{
 		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit);
 	}
+
 	public static int getHighestBidderID()
 	{
 		int currentMaxBid = 0;
@@ -129,7 +85,7 @@ public class GameMaster : MonoBehaviour {
 				}
 		return currentPlayerID;
 	}
-	// bad design + laziness
+	// bad function design + laziness. Duplicate algorithm.
 	public static int getHighestBidValue()
 	{
 		int currentMaxBid = 0;
@@ -145,6 +101,9 @@ public class GameMaster : MonoBehaviour {
 		return currentMaxBid;
 	}
 
+
+	/*************************************Functions above are explicitly called by external calasses*******************************/
+
 	public static PlayerHand getWinner(List<PlayerHand> players) {
 		List<string> Types= new List<string>();
 		Types.Add ("High Card");
@@ -158,136 +117,101 @@ public class GameMaster : MonoBehaviour {
 		Types.Add ("Straight Flush");
 		PlayerHand winner = players [0];
 		for (int i = 1; i < players.Count; i++) {
-						if (Types.FindIndex (a => a == players [i].CombinationType) > Types.FindIndex (a => a == winner.CombinationType)) {
-								winner = players [i];
-						} else if (Types.FindIndex (a => a == players [i].CombinationType) == Types.FindIndex (a => a == winner.CombinationType)) {
-								if (players [i].CombinationValue > winner.CombinationValue) {
-										winner = players [i];
-								}
-						}
+			if (Types.FindIndex (a => a == players [i].CombinationType) > Types.FindIndex (a => a == winner.CombinationType)) {
+				winner = players [i];
+			} else if (Types.FindIndex (a => a == players [i].CombinationType) == Types.FindIndex (a => a == winner.CombinationType)) {
+				if (players [i].CombinationValue > winner.CombinationValue) {
+					winner = players [i];
 				}
+			}
+		}
 		return winner;
-		}
-	/*************************************Functions above are explicitly called by external calasses*******************************/
-
-
-
-
-
-	
-	//Awake is called before start. All static resources in game are loaded here. ***Overrides Awake() in MonoBehavior***
-	void Awake() {
-		Card.cardSpriteList = Resources.LoadAll <Sprite> ("images/cards_smooth");
-		Debug.Log ("Card sprite resourses loaded once and for all");
-		//deckList = new List<Deck>();
-		if (gm == null) {
-			gm = GameObject.FindGameObjectWithTag ("GameMaster").GetComponent<GameMaster>();
-		}
-		// set the desired aspect ratio (the values in this example are
-		// hard-coded for 16:9, but you could make them into public
-		// variables instead so you can set them at design time)
-		/*float targetaspect = 16.0f / 9.0f;
-		
-		// determine the game window's current aspect ratio
-		float windowaspect = (float)Camera.main.pixelWidth / (float)Camera.main.pixelHeight;
-		
-		// current viewport height should be scaled by this amount
-		float scaleheight = windowaspect / targetaspect;
-		
-		// obtain camera component so we can modify its viewport
-		Camera camera = GetComponent<Camera>();
-
-		// if scaled height is less than current height, add letterbox
-		if (scaleheight < 1.0f)
-		{  
-			Rect rect = camera.rect;
-			
-			rect.width = 1.0f;
-			rect.height = scaleheight;
-			rect.x = 0;
-			rect.y = (1.0f - scaleheight) / 2.0f;
-			
-			camera.rect = rect;
-		}
-		else // add pillarbox
-		{
-			float scalewidth = 1.0f / scaleheight;
-			
-			Rect rect = camera.rect;
-			
-			rect.width = scalewidth;
-			rect.height = 1.0f;
-			rect.x = (1.0f - scalewidth) / 2.0f;
-			rect.y = 0;
-			
-			camera.rect = rect;
-		}*/
 	}
-	
+
 	// Use this for initialization. Overrides ***Start() in MonoBehavior***
 	void Start () {
 		//ResetPrefs();
-		Debug.Log (SystemManager.dummyString);
-		auctionCardsLeft = SystemManager.numCardsAuction;
-		StartCoroutine (coStart ());
+		Debug.Log (SystemManager.dummyString);	// test static variables.
+		roundsLeft = SystemManager.numRounds;
+		startRound ();
 	}
-	public void ResetPrefs() {
-				PlayerPrefs.SetInt ("wins", 0);
-				PlayerPrefs.SetInt ("total_games", 0);
-				PlayerPrefs.SetFloat ("bottomCap", 0.1f);
-		}
-	public IEnumerator coStart()	//Must be called through StartCoroutine()
+
+	public void startRound() 
 	{
-		yield return new WaitForFixedUpdate();
-		wins = PlayerPrefs.GetInt ("wins");
-		total_games = PlayerPrefs.GetInt ("total_games");
+		roundsLeft--;
+		roundEnd = false;
+
+		// destroy all cards in the game.
+		for (int i = 0; i < deckList.Count; i++) {
+			deckList [i].destroyAll ();
+		}
+
+		// set the number of auction cards
+		auctionCardsLeft = SystemManager.numCardsAuction;
+
+		// reset player cash.
+		/*for (int i = 0; i < playerList.Count; ++i) {
+			playerList [i].setCash (200);
+		}*/
+
+		// Generate new card deck and shuffle them.
+		searchDeckByID (0).generateFullCardDeck ();
+		searchDeckByID (0).closeDeck ();
+		searchDeckByID (0).shuffle ();
+
 		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
 		for (int i = 1; i <= SystemManager.numPlayers; ++i) {
 			registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE/2+(i-0.5f)*(SystemManager.SPREADRANGE/SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
 		}
-		searchDeckByID (0).generateFullCardDeck ();
-		yield return new WaitForFixedUpdate();		// WAIT until all sprites in deck 0 are loaded. Otherwise, closeDeck() might not work.
-
+		
 		//enable AI control
 		for (int i = 2; i <= SystemManager.numPlayers; ++i) {
 			((PlayerHand)searchDeckByID (i)).setAIControl ();
 		}
 
+		StartCoroutine (coStartRound ());
+	}
+	/************************************* script for each round is written here...*******************************/
+	public IEnumerator coStartRound()	//Must be called through StartCoroutine()
+	{
+		//yield return new WaitForFixedUpdate();
+		//wins = PlayerPrefs.GetInt ("wins");
+		//total_games = PlayerPrefs.GetInt ("total_games");
 
-		searchDeckByID (0).closeDeck ();
-		searchDeckByID (0).shuffle ();
-
-
+		// ==========Deal cards and start the game.================
 		yield return StartCoroutine (dealCards (SystemManager.numCardsDealt));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
-
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showGUI=true;
 		}
-
 		yield return new WaitForSeconds(0.5f);
 
-		// Starts auction.
-		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
-						yield return StartCoroutine (auction ());
-						auctionCardsLeft --;
-				}
-		if (earlyAuctionEnd) {
-						earlyAuctionEnd = false;
-				}
-		searchDeckByID (102).setupLayout (3);
 
+		// =============Starts auction.======================
+		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
+			yield return StartCoroutine (auction ());
+			auctionCardsLeft --;
+		}
+		if (earlyAuctionEnd) {
+			earlyAuctionEnd = false;
+		}
+
+
+		// ============End of round.======================
+		searchDeckByID (102).setupLayout (3);
 		// returns winner hand
 		PlayerHand winner = getWinner (playerList);
 		//winner.setWinningHand ();
 		winnerID = winner.DeckID;
+		searchHandByID (winnerID).Winner ();
 		if (winnerID == 1) {
-						playerList [0].Winner ();
-						PlayerPrefs.SetInt ("wins", wins + 1);
-						PlayerPrefs.Save ();
-				} else {
-						playerList [0].Loser ();
-				}
-		// take winners' cards up to the table
+			playerList [0].playerWinner ();
+			//PlayerPrefs.SetInt ("wins", wins + 1);
+			PlayerPrefs.Save ();
+		} else {
+			playerList [0].playerLoser ();
+		}
+
+		// =============take winners' cards up to the display=============
 		for (int i=0; i<searchHandByID (winnerID).winningHand.Count; i++)
 		{
 			requestCardTransfer (winnerID, 102, true, searchHandByID (winnerID).winningHand[i].Rank, searchHandByID (winnerID).winningHand[i].Suit);
@@ -296,9 +220,17 @@ public class GameMaster : MonoBehaviour {
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
 		}
-		PlayerPrefs.SetInt ("total_games", total_games + 1);
-		gameEnd = true;
+		//PlayerPrefs.SetInt ("total_games", total_games + 1);
+		roundEnd = true;
+		if (roundsLeft <= 0)
+			endGame ();
 	}
+
+	public void endGame()
+	{
+		Debug.Log ("GAME ENDS");
+	}
+
 
 	private IEnumerator dealCards(int numberOfCards)	//must be called through StartCoroutine(dealCards(int));
 	{
@@ -313,7 +245,6 @@ public class GameMaster : MonoBehaviour {
 					searchDeckByID(0).transferCardTo (playerList[j], playerList[j].DeckID==1);
 					//playerList[j].evaluateHand();
 					yield return new WaitForSeconds(0.2f);
-				
 				}
 			}
 			yield return new WaitForSeconds(0.2f);
@@ -370,10 +301,10 @@ public class GameMaster : MonoBehaviour {
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
 		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Points : " + PlayerPrefs.GetInt ("Points"),style);
 		GUI.Box (new Rect (screenPos.x-100, Camera.main.pixelHeight - screenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Cards Left : " + auctionCardsLeft,style);
-		if (gameEnd) {
-						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "The Winner is DECK ID : " + winnerID);
-						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Play Again")) {
-				startGame ();
+		if (roundEnd) {
+						GUI.Label (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 20), "Player " + winnerID + " wins the round!!!");
+						if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 100, 200, 20), "Next round")) {
+				startRound ();
 						}
 
 				}
@@ -383,19 +314,6 @@ public class GameMaster : MonoBehaviour {
 				}*/
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
 		//GUI.Label (new Rect (520,427,100,25),(searchDeckByID (1)).CombinationType);
-	}
-
-	public void startGame() 
-	{
-		for (int i = 0; i < deckList.Count; i++) {
-			deckList [i].destroyAll ();
-		}
-		for (int i = 0; i < playerList.Count; ++i) {
-			playerList [i].setCash (200);
-		}
-		gameEnd = false;
-
-		Start ();
 	}
 
 	public void registerNewPlayerHand(int id, Vector3 pos, Vector3 rotation, int orientation,bool Player=false)
@@ -420,6 +338,15 @@ public class GameMaster : MonoBehaviour {
 		}
 	}
 
+	//Awake is called before start. All static resources in game are loaded here. ***Overrides Awake() in MonoBehavior***
+	void Awake() {
+		Card.cardSpriteList = Resources.LoadAll <Sprite> ("images/cards_smooth");
+		Debug.Log ("Card sprite resourses loaded once and for all");
+		//deckList = new List<Deck>();
+		if (gm == null) {
+			gm = GameObject.FindGameObjectWithTag ("GameMaster").GetComponent<GameMaster>();
+		}
+	}
 	
 	public static Deck searchDeckByID(int searchID)
 	{
@@ -431,6 +358,12 @@ public class GameMaster : MonoBehaviour {
 	{
 		return (PlayerHand)deckList.Find (x=>x.DeckID==searchID);
 	}
-	
+
+
+	public void ResetPrefs() {
+		PlayerPrefs.SetInt ("wins", 0);
+		PlayerPrefs.SetInt ("total_games", 0);
+		PlayerPrefs.SetFloat ("bottomCap", 0.1f);
+	}
 }
 

@@ -6,19 +6,24 @@ public class Card : MonoBehaviour {
 	const float rotationSpeed=3f;
 	const float movementSpeed = 3f;
 
-	private int rank;	// 1 to 13, 1 is Ace
-	private int suit;	// 1 to 4, Clover, Heart, Spade and Diamond respectively.
+	// rank and suit of the card. Each Rank and suit maps to diffferent sprite resources.
+	private int rank;					// 1 to 13, 1 is Ace
+	private int suit;					// 1 to 4, Clover, Heart, Spade and Diamond respectively.
 
-	private bool isOpen;			// whether card is open or not
-	private Animator anim;	// for setting transitions for any card animation
+	// card sprite and generic-animation related.
+	private bool isOpen;				// whether card is open or closed
+	private Animator anim;				// for setting transitions for any card animation
+	private int sortingOrder;			// order in 2D graphics layer. Sprite with higher order is drawn on top.
 
-	private bool initializeFlag = true;
-	private int sortingOrder;	// order in 2D graphics layer. Sprite with higher order is drawn on top.
+	// Position and movement control. Card can also be treated as 3D particle.
 	private Vector3 targetLocalPos;		// target position of the card, in local coordinate system. Animation script is Moved from Deck class to Card class.
-	private Vector3 targetLocalRotation;		// target rotation of the card, in local coordinate system. Euler rotation.
-	private bool movementEnabled;		//if enabled, card moves towards to the targetPosition
+	private Vector3 targetLocalRotation;// target rotation of the card, in local coordinate system. Euler rotation.
+	private bool movementEnabled;		//if enabled, card smoothly moves towards to the targetPosition
 
+	// System variable, mainly for protection
+	private bool initializeFlag = true;	// once the values are initialized, flag is set to false and rejects any re-initialization.
 
+	//===================================== Getter and Setter functions =====================================
 	public int Rank{	//c# simplified getter and setter technique.
 		get{return rank;}
 		//set{rank = value;}
@@ -38,13 +43,21 @@ public class Card : MonoBehaviour {
 		initializeFlag = false;
 	}
 
+
+
+	//===================================== Sprite rendering and animation control =====================================
+	private Sprite getCardSprite()	//returns card sprite, mapped by rank and suit
+	{
+		return (suit<5 && suit>0 && rank<14 && rank>0)? (cardSpriteList[(rank-1)+((suit-1)*13)]) : (null);
+	}
+
 	public void startBlinkAnim()
 	{
 		if (isOpen) {
 
 			anim.SetBool ("blinkEnabled", true);
 			//if (anim.animation!=null)
-			//	anim.animation.Rewind();
+			//	anim.animation.Rewind();// no idea how to reset animation
 		}
 	}
 
@@ -77,6 +90,9 @@ public class Card : MonoBehaviour {
 		GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
 	}
 
+
+
+	//===================================== Movement control and position tracking =====================================
 	public void setTargetPos(Vector3[] pos)
 	{
 		movementEnabled = true;
@@ -84,19 +100,8 @@ public class Card : MonoBehaviour {
 		targetLocalRotation = pos [1];
 	}
 
-	private Sprite getCardSprite()	//returns card sprite based on rank and suit
-	{
-		return (suit<5 && suit>0 && rank<14 && rank>0)? (cardSpriteList[(rank-1)+((suit-1)*13)]) : (null);
-	}
 
-
-
-	// Use this for initialization. Function is called when the object is instantiated
-	void Start () {
-
-		//Debug.Log ("Card initialized");
-	}
-
+	//===================================== Override Monobehavior. Update() and Start() =====================================
 	// Awake is called before Start()
 	void Awake(){
 		if (GetComponent<SpriteRenderer> () == null)
@@ -107,8 +112,13 @@ public class Card : MonoBehaviour {
 		movementEnabled = true;
 	}
 
+	// Use this for initialization. Function is called when the object is instantiated
+	void Start () {
+		
+		//Debug.Log ("Card initialized");
+	}
 	// Update is called once per frame. Every single cards move towards the target location every frame. This is a simplied PID control.
-	// Minor bug found. LocalPosition of cards does not follow its Parent's coordinate system.
+	// Minor bug found. Local coordinate system of cards does not follow its Parent's rotation
 	void Update () {
 		if (movementEnabled)
 		{

@@ -3,29 +3,44 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-
+/**
+ * 
+ * PlayerHand class, extends Deck.
+ * Contains player specific members and behaviors.
+ * 
+ * Also contains Hand evaluation and AI scripts.
+ * 
+ * 
+ * */
 public class PlayerHand : Deck {
 
+	// Player specific member fields.
 	public float cash;
 	private bool AIControlled;
+	private int Points = PlayerPrefs.GetInt ("Points");
+	private int roundPoints;
+	// Bidvalue. AI reserves the certain bid value at start of auction, and player retrieves the bid value by pressing auctionTimer button.
+	private int BidValue;
 
-	// Variables and list for Hand value
+
+	// list for Hand value for hand evaluation.
 	public List<Card> winningHand = new List<Card> ();
 	public string CombinationType = "Evaluating Hand .."; //consider making private later.
 	public int CombinationValue; // used to break ties if CombinationType same
 	public int FlushValue;
 	public int SecondaryCombinationValue; // used if the top value is the same ie if three of a kind same then compare the pair
 	public int CombinationRank; // Number that tracks hand value, better than enumerating hand types
-	public List<List<Card> > OpponentCards;
 
-	// Bidvalue. AI reserves the certain bid value, and player retrieves the bid value by pressing auctionTimer button.
-	private int BidValue;
-	private int Points = PlayerPrefs.GetInt ("Points");
+	
+	// AI related variables.
 	private float Multiplier = (PlayerPrefs.HasKey ("Multiplier")?PlayerPrefs.GetFloat ("Multiplier"):1);
+	public List<List<Card> > OpponentCards;
 	public List<float> WinningBidPercentage = new List<float>();
-	// below are non-ingame temporary variables. Feel free to force change the variables anywhere.
+
+	// below are non-ingame temporary variables. Feel free to change the variables anywhere.
 	public bool showGUI = false;
 	public bool showCombination = true;
+
 
 	public float Cash
 	{
@@ -53,20 +68,25 @@ public class PlayerHand : Deck {
 		Points = 0;
 		showCombination = false;
 	}
-	public void Winner() 
+	public void playerWinner()
 	{
-		Points += (5 + (int)(Multiplier));
 		PlayerPrefs.SetInt ("Points", Points);
 		Multiplier += 1;
 		if (Multiplier > 5) {
 			Multiplier = 5;
 		}
 		PlayerPrefs.SetFloat ("Multiplier", Multiplier);
+
 	}
-	public void Loser() 
+	public void playerLoser() 
 	{
 		PlayerPrefs.SetInt ("Multiplier", 1);
 	}
+	public void Winner() 
+	{
+		roundPoints += (14 - CombinationRank);
+	}
+
 	public bool isAIControlled()
 	{
 		return AIControlled;
@@ -331,7 +351,7 @@ public class PlayerHand : Deck {
 		}
 		else
 		{
-			// if auction fails, AI keeps attempting to bid.
+			// if auction fails, AI continues attempting to bid for lower price.
 			if (AIControlled)
 				BidValue=price;
 			else
@@ -350,11 +370,13 @@ public class PlayerHand : Deck {
 		cash = 200;
 		AIControlled = false;
 		BidValue = 0;
+		roundPoints = 0;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		cash += Time.deltaTime;
+		if (!GameMaster.roundEnd)
+			cash += Time.deltaTime;
 	}
 
 	void OnGUI()	//Overrided
@@ -395,8 +417,7 @@ public class PlayerHand : Deck {
 			}
 		}
 		if (showGUI){
-			Debug.Log (Camera.main.pixelWidth);
-			GUI.Box (new Rect (StatBoxscreenPos.x-40, Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (65,false):Utils.adjustUISize (45,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":CombinationType), boxStyle);
+			GUI.Box (new Rect (StatBoxscreenPos.x-40, Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (80,false):Utils.adjustUISize (60,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":(CombinationType+"\n"))+"Points = "+roundPoints, boxStyle);
 		}
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
