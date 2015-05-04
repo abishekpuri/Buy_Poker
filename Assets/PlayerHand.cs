@@ -371,7 +371,7 @@ public class PlayerHand : Deck {
 
 	void Awake(){
 		base.Awake ();	// access base class
-		cash = 200;
+		cash = SystemManager.startCash;
 		AIControlled = false;
 		BidValue = 0;
 		roundPoints = 0;
@@ -379,8 +379,8 @@ public class PlayerHand : Deck {
 
 	// Update is called once per frame
 	void Update () {
-		if (!GameMaster.roundEnd)
-			cash += Time.deltaTime;
+		if (GameMaster.gameBegins && !GameMaster.roundEnd)
+			cash += ((Time.deltaTime)*SystemManager.cashIncome)/60f;
 	}
 
 	void OnGUI()	//Overrided

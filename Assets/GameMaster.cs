@@ -35,7 +35,8 @@ public class GameMaster : MonoBehaviour {
 	private static bool auctionInProgress = false;
 	public static bool earlyAuctionEnd = false;
 	public static int winnerID;
-	public static bool roundEnd = false;
+	public static bool gameBegins = false;
+	public static bool roundEnd = true;
 	public static bool gameEnd = false;
 	public static bool displayGameResult = false;
 	public int wins;
@@ -149,7 +150,8 @@ public class GameMaster : MonoBehaviour {
 		//ResetPrefs();
 		Debug.Log (SystemManager.dummyString);	// test static variables.
 		// reset static variables
-		roundEnd = false;
+		gameBegins = false;
+		roundEnd = true;
 		gameEnd = false;
 		displayGameResult = false;
 
@@ -200,7 +202,6 @@ public class GameMaster : MonoBehaviour {
 			return true;
 		}
 		roundsLeft--;
-		roundEnd = false;
 
 		// hide combination value
 		for (int i=0; i<playerList.Count; i++) {
@@ -264,6 +265,8 @@ public class GameMaster : MonoBehaviour {
 		}
 		yield return new WaitForSeconds(0.5f);
 
+		gameBegins = true;
+		roundEnd = false;
 
 		// =============Starts auction.======================
 		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
@@ -408,7 +411,7 @@ public class GameMaster : MonoBehaviour {
 		//GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Points : " + PlayerPrefs.GetInt ("Points"),style);
 		if (!gameEnd) {
 			GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200, true), Utils.adjustUISize (50, false)), "Rounds " + (SystemManager.numRounds - roundsLeft) + " / " + SystemManager.numRounds + "\nCards Left : " + auctionCardsLeft, styleInfo);
-			if (roundEnd) {
+			if (gameBegins && roundEnd) {
 				GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (100, true), Camera.main.pixelHeight - screenPos.y - 160, Utils.adjustUISize (200, true), Utils.adjustUISize (40, false)), "Player " + winnerID + " wins the round!!!", style);
 				if (GUI.Button (new Rect (screenPos.x - Utils.adjustUISize (100, true), Camera.main.pixelHeight - screenPos.y - 120, Utils.adjustUISize (200, true), Utils.adjustUISize (40, false)), "Next round", styleBtn)) {
 					StartCoroutine (startRound ());

@@ -19,14 +19,18 @@ public class SystemManager : MonoBehaviour {
 
 	public static string dummyString = "nothing yet";
 	public static int numPlayers = 3;
-	public static int numCardsDealt = 3;
-	public static int numCardsAuction = 1;
-	public static int numRounds = 1;
-	//public static int numRounds = 5;
+	public static int numCardsDealt = 2;
+	public static int numCardsAuction = 7;
+	public static int numRounds = 3;
+	public static int startCash = 100;	//
+	public static int cashIncome = 60;	// per munite
 
 	public int tempNumPlayers;
 	public int tempNumCards;
 	public int tempNumAuction;
+	public int tempNumRounds;
+	public int tempStartCash;
+	public int tempCashIncome;
 
 	public void changeString()
 	{
@@ -52,6 +56,24 @@ public class SystemManager : MonoBehaviour {
 			tempNumAuction=int.Parse (val);
 	}
 
+	public void changeNumRounds(string val)
+	{
+		if (int.Parse (val) < 31 && int.Parse (val) > 0)
+			tempNumRounds = int.Parse (val);
+	}
+
+	public void changeStartCash(string val)
+	{
+		if (int.Parse (val) > 0)
+			tempStartCash = int.Parse (val);
+	}
+
+	public void changeCashIncome(string val)
+	{
+		if (int.Parse (val) > 0)
+			tempCashIncome = int.Parse (val);
+	}
+
 	public void confirmNumPlayers()
 	{
 		if (tempNumPlayers!=0)
@@ -67,13 +89,31 @@ public class SystemManager : MonoBehaviour {
 		if (tempNumAuction!=0)
 			numCardsAuction = tempNumAuction;
 	}
+	public void confirmNumRounds()
+	{
+		if (tempNumRounds!=0)
+			numRounds = tempNumRounds;
+	}
 
+	public void confirmStartCash()
+	{
+		startCash = tempStartCash;
+
+	}
+
+	public void confirmCashIncome()
+	{
+		cashIncome = tempCashIncome;
+
+	}
 
 	// Use this for initialization
 	void Start () {
-		int tempNumPlayers = numPlayers;
-		int tempNumCards = numCardsDealt;
-		int tempNumAuction = numCardsAuction;
+		tempNumPlayers = numPlayers;
+		tempNumCards = numCardsDealt;
+		tempNumAuction = numCardsAuction;
+		tempStartCash = startCash;
+		tempCashIncome = cashIncome;
 		Debug.Log ("setting scene");
 	}
 	
@@ -82,5 +122,14 @@ public class SystemManager : MonoBehaviour {
 	
 	}
 
+	void OnGUI()
+	{
+		GUIStyle boxStyle = new GUIStyle (GUI.skin.box);
+		boxStyle.normal.textColor = Color.white;
+		boxStyle.fontSize = Utils.adjustUISize (18,true);
+		// Vector3 screenPosition => You can set Position of GUI in world space and then convert it into screenPos(GUI pos)
+		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(5, 3.2f, 0));
 
+		GUI.Box (new Rect (screenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (100,true), Utils.adjustUISize (400,false)), numPlayers+"\n\n\n"+numCardsDealt+"\n\n\n"+numCardsAuction+"\n\n\n"+numRounds+"\n\n\n"+startCash+"\n\n\n"+cashIncome,boxStyle);
+	}
 }
