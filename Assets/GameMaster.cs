@@ -197,6 +197,7 @@ public class GameMaster : MonoBehaviour {
 
 	public IEnumerator startRound() 
 	{
+		roundEnd = false;
 		if (roundsLeft <= 0) {
 			StartCoroutine(endGame ());
 			return true;
@@ -225,7 +226,7 @@ public class GameMaster : MonoBehaviour {
 			searchDeckByID (0).closeDeck ();
 		}
 
-		// some cheap shuffling animation
+		// shuffling animation.
 		searchDeckByID (0).setupLayout (2);
 		yield return new WaitForSeconds(0.3f);
 		searchDeckByID (0).setupLayout (0);
@@ -235,6 +236,7 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(0.3f);
 		searchDeckByID (0).shuffle ();
 		searchDeckByID (0).setupLayout (0);
+
 		// destroy all cards in the game.
 		/*for (int i = 0; i < deckList.Count; i++) {
 			deckList [i].destroyAll ();
@@ -266,7 +268,6 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		gameBegins = true;
-		roundEnd = false;
 
 		// =============Starts auction.======================
 		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
