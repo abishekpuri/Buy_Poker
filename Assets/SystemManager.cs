@@ -16,15 +16,16 @@ using System.Collections;
 public class SystemManager : MonoBehaviour {
 
 	public static float SPREADRANGE=13f;
-	public static bool settingPage=true;
+	public bool settingPage;
+	public bool storePage;
 
 	public static string dummyString = "nothing yet";
 	public static int numPlayers = 3;
 	public static int numCardsDealt = 2;
-	public static int numCardsAuction = 7;
-	public static int numRounds = 3;
+	public static int numCardsAuction = 1;
+	public static int numRounds = 1;
 	public static int startCash = 100;	//
-	public static int cashIncome = 60;	// per munite
+	public static int cashIncome = 60;	// per minute
 
 	public int tempNumPlayers;
 	public int tempNumCards;
@@ -124,15 +125,20 @@ public class SystemManager : MonoBehaviour {
 
 	void OnGUI()
 	{
+		GUIStyle boxStyle = new GUIStyle (GUI.skin.box);
+		boxStyle.normal.textColor = Color.white;
+		boxStyle.fontSize = Utils.adjustUISize (18,true);
+		// Vector3 screenPosition => You can set Position of GUI in world space and then convert it into screenPos(GUI pos)
+		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(5, 3.2f, 0));
+
 		if (settingPage)
 		{
-			GUIStyle boxStyle = new GUIStyle (GUI.skin.box);
-			boxStyle.normal.textColor = Color.white;
-			boxStyle.fontSize = Utils.adjustUISize (18,true);
-			// Vector3 screenPosition => You can set Position of GUI in world space and then convert it into screenPos(GUI pos)
-			Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(5, 3.2f, 0));
 
 			GUI.Box (new Rect (screenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (100,true), Utils.adjustUISize (400,false)), numPlayers+"\n\n\n"+numCardsDealt+"\n\n\n"+numCardsAuction+"\n\n\n"+numRounds+"\n\n\n"+startCash+"\n\n\n"+cashIncome,boxStyle);
+		}
+		if (storePage) 
+		{
+			GUI.Box (new Rect (screenPos.x-Utils.adjustUISize (500, true), Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (400,true), Utils.adjustUISize (50,false)),"Number of Points : "+ PlayerPrefs.GetInt ("Points"),boxStyle);
 		}
 	}
 }

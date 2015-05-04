@@ -66,7 +66,7 @@ public class GameMaster : MonoBehaviour {
 	{
 		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit);
 	}
-
+	
 	public static int getHighestBidderID()
 	{
 		int currentMaxBid = 0;
@@ -89,7 +89,7 @@ public class GameMaster : MonoBehaviour {
 				}
 		return currentPlayerID;
 	}
-	// bad function design + laziness. Duplicate algorithm.
+	
 	public static int getHighestBidValue()
 	{
 		int currentMaxBid = 0;
@@ -121,7 +121,9 @@ public class GameMaster : MonoBehaviour {
 
 	/*************************************Functions above are explicitly called by external calasses*******************************/
 
+	//NOTE : Delete the commented section if you agree with my change
 	public static PlayerHand getWinner(List<PlayerHand> players) {
+		/*
 		List<string> Types= new List<string>();
 		Types.Add ("High Card");
 		Types.Add ("One Pair");
@@ -132,14 +134,21 @@ public class GameMaster : MonoBehaviour {
 		Types.Add ("Full House");
 		Types.Add ("Four of a Kind");
 		Types.Add ("Straight Flush");
+		*/
 		PlayerHand winner = players [0];
 		for (int i = 1; i < players.Count; i++) {
-			if (Types.FindIndex (a => a == players [i].CombinationType) > Types.FindIndex (a => a == winner.CombinationType)) {
+			/*if (Types.FindIndex (a => a == players [i].CombinationType) > Types.FindIndex (a => a == winner.CombinationType)) {
 				winner = players [i];
 			} else if (Types.FindIndex (a => a == players [i].CombinationType) == Types.FindIndex (a => a == winner.CombinationType)) {
 				if (players [i].CombinationValue > winner.CombinationValue) {
 					winner = players [i];
 				}
+			}*/
+			if(players[i].CombinationRank < winner.CombinationRank) {
+				winner = players [i];
+			}
+			else if (players[i].CombinationRank == winner.CombinationRank && players[i].CombinationValue > winner.CombinationValue) {
+				winner = players [i];
 			}
 		}
 		return winner;
@@ -161,47 +170,47 @@ public class GameMaster : MonoBehaviour {
 
 	public IEnumerator coStart()
 	{
-		yield return new WaitForFixedUpdate ();
-		// destroy all cards in the game.
-		for (int i = 0; i < deckList.Count; i++) {
-			deckList [i].destroyAll ();
-			if (0<deckList[i].DeckID && deckList[i].DeckID < 100)
-			{
-				deckList.Remove (deckList[i]);
-			}
-		}
+				yield return new WaitForFixedUpdate ();
+				// destroy all cards in the game.
+				for (int i = 0; i < deckList.Count; i++) {
+						deckList [i].destroyAll ();
+						if (0 < deckList [i].DeckID && deckList [i].DeckID < 100) {
+								deckList.Remove (deckList [i]);
+						}
+				}
 
 
 
-		// set number of rounds
-		roundsLeft = SystemManager.numRounds;
+				// set number of rounds
+				roundsLeft = SystemManager.numRounds;
 		
-		// Generate new card deck and shuffle them.
-		searchDeckByID (0).generateFullCardDeck ();
-		searchDeckByID (0).closeDeck ();
-		searchDeckByID (0).shuffle ();
+				// Generate new card deck and shuffle them.
+				searchDeckByID (0).generateFullCardDeck ();
+				searchDeckByID (0).closeDeck ();
+				searchDeckByID (0).shuffle ();
 
 
-		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
-		for (int i = 1; i <= SystemManager.numPlayers; ++i) {
-			registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE/2+(i-0.5f)*(SystemManager.SPREADRANGE/SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
-		}
-		yield return new WaitForFixedUpdate ();
-		//enable AI control
-		for (int i = 2; i <= SystemManager.numPlayers; ++i) {
-			((PlayerHand)searchDeckByID (i)).setAIControl ();
-		}
+				// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
+				for (int i = 1; i <= SystemManager.numPlayers; ++i) {
+						registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE / 2 + (i - 0.5f) * (SystemManager.SPREADRANGE / SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
+				}
+				yield return new WaitForFixedUpdate ();
+				//enable AI control
+				for (int i = 2; i <= SystemManager.numPlayers; ++i) {
+						((PlayerHand)searchDeckByID (i)).setAIControl ();
+				}
 		
-		StartCoroutine (startRound ());
+				StartCoroutine (startRound ());
 	}
 
+	//NOTE : It says I must add yield to the return because of some iterator problem, so I have.
 	public IEnumerator startRound() 
 	{
 		roundEnd = false;
 		if (roundsLeft <= 0) {
-			StartCoroutine(endGame ());
-			return true;
-		}
+						StartCoroutine (endGame ());
+						yield return true;
+				}
 		roundsLeft--;
 
 		// hide combination value
@@ -287,7 +296,7 @@ public class GameMaster : MonoBehaviour {
 		winnerID = winner.DeckID;
 		searchHandByID (winnerID).Winner ();
 		if (winnerID == 1) {
-			playerList [0].playerWinner ();
+			//playerList [0].playerWinner ();
 			//PlayerPrefs.SetInt ("wins", wins + 1);
 			PlayerPrefs.Save ();
 		} else {
@@ -317,6 +326,10 @@ public class GameMaster : MonoBehaviour {
 		roundEnd = false;
 		gameEnd = true;
 		gameWinnerID = getGameWinnerID ();
+
+		if (gameWinnerID == 1) {
+						searchHandByID (1).playerWinner (SystemManager.numPlayers);
+				}
 		Transform tempParticleSystem = (Transform)Instantiate (Resources.Load <Transform>("prefab/Particle System fadeout"), new Vector3(0,0,0), transform.rotation);
 		tempParticleSystem.renderer.sortingLayerName="Particles";
 

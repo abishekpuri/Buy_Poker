@@ -17,12 +17,11 @@ public class PlayerHand : Deck {
 	// Player specific member fields.
 	public float cash;
 	private bool AIControlled;
-	private int Points = PlayerPrefs.GetInt ("Points");
 	private int roundPoints;
 	// Bidvalue. AI reserves the certain bid value at start of auction, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
 
-
+	//Permanent Upgrades Checker
 	// list for Hand value for hand evaluation.
 	public List<Card> winningHand = new List<Card> ();
 	public string CombinationType = "Evaluating Hand .."; //consider making private later.
@@ -33,7 +32,7 @@ public class PlayerHand : Deck {
 
 	
 	// AI related variables.
-	private float Multiplier = (PlayerPrefs.HasKey ("Multiplier")?PlayerPrefs.GetFloat ("Multiplier"):1);
+	private int Multiplier = 1;
 	public List<List<Card> > OpponentCards;
 	public List<float> WinningBidPercentage = new List<float>();
 
@@ -54,6 +53,15 @@ public class PlayerHand : Deck {
 	~PlayerHand() {
 
 	}
+	public virtual void purchaseUpgrade(int Upgrade)
+	{
+				if (PlayerPrefs.GetInt ("Points") >= (Upgrade * 3) && PlayerPrefs.GetInt ("Upgrade"+Upgrade)==0) {
+						PlayerPrefs.SetInt ("Upgrade" + Upgrade, 1);
+						int Points = PlayerPrefs.GetInt ("Points");
+						PlayerPrefs.SetInt ("Points", Points - Upgrade * 3);
+						PlayerPrefs.Save ();
+				}
+	}
 	public virtual void destroyAll()
 	{
 		base.destroyAll ();
@@ -69,18 +77,17 @@ public class PlayerHand : Deck {
 	public void setAIControl()
 	{
 		AIControlled = true;
-		Points = 0;
 		showCombination = false;
 	}
-	public void playerWinner()
+	public void playerWinner(int numPlayers)
 	{
+		//Debug.Log (deckID + ": " + Points);
+		Multiplier = (numPlayers - 1) * 2;
+		int Points = PlayerPrefs.GetInt ("Points");
+		Points += Multiplier;
 		PlayerPrefs.SetInt ("Points", Points);
-		Multiplier += 1;
-		if (Multiplier > 5) {
-			Multiplier = 5;
-		}
-		PlayerPrefs.SetFloat ("Multiplier", Multiplier);
-
+		PlayerPrefs.Save ();
+		//Debug.Log (deckID + ": " + Points);
 	}
 	public void playerLoser() 
 	{
@@ -208,6 +215,7 @@ public class PlayerHand : Deck {
 		}
 		setWinningHand ();
 	}
+	//Warning : setWinningHand not working for flush/straight, for flush it is showing all cards
 	private void setWinningHand() 
 	{
 		string[] single = {"High Card","One Pair","Three of a Kind","Four of a Kind"};
@@ -259,7 +267,7 @@ public class PlayerHand : Deck {
 						winningHand [i].startBlinkAnim ();
 				}
 		}
-		Debug.Log ("Winning hand count = " + winningHand.Count);
+		//Debug.Log ("Winning hand count = " + winningHand.Count);
 	}
 
 	public void setBidValue(int val)
@@ -424,7 +432,7 @@ public class PlayerHand : Deck {
 			}
 		}
 		if (showGUI){
-			GUI.Box (new Rect (StatBoxscreenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (80,false):Utils.adjustUISize (60,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":(CombinationType+"\n"))+"Points = "+roundPoints, boxStyle);
+			GUI.Box (new Rect (StatBoxscreenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (80,false):Utils.adjustUISize (60,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(((AIControlled&&!showCombination)||PlayerPrefs.GetInt ("Upgrade1")==0)?"":(CombinationType+"\n"))+"Points = "+roundPoints, boxStyle);
 		}
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.
