@@ -20,8 +20,8 @@ public class SystemManager : MonoBehaviour {
 	public static string dummyString = "nothing yet";
 	public static int numPlayers = 3;
 	public static int numCardsDealt = 3;
-	public static int numCardsAuction = 3;
-	public static int numRounds = 3;
+	public static int numCardsAuction = 1;
+	public static int numRounds = 1;
 	//public static int numRounds = 5;
 
 	public int tempNumPlayers;

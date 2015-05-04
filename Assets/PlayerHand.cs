@@ -88,7 +88,7 @@ public class PlayerHand : Deck {
 	}
 	public void Winner() 
 	{
-		roundPoints += (14 - CombinationRank);
+		roundPoints += (10 - CombinationRank)*2+3;
 	}
 
 	public bool isAIControlled()
@@ -366,7 +366,7 @@ public class PlayerHand : Deck {
 
 	// Use this for initialization
 	void Start () {
-
+		base.Start ();
 	}
 
 	void Awake(){
@@ -400,7 +400,7 @@ public class PlayerHand : Deck {
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z));
 		Vector3 StatBoxscreenPos = Camera.main.WorldToScreenPoint (new Vector3 (transform.localPosition.x, transform.localPosition.y-1, transform.localPosition.z));
 		Vector3 awardButtonScreenPos;
-		if (DeckID == 1) {
+		if (DeckID == 1 && showGUI) {
 			if (roundPoints >= 5) {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 3, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "50 Cash", buttonStyle)) {
@@ -424,7 +424,7 @@ public class PlayerHand : Deck {
 			}
 		}
 		if (showGUI){
-			GUI.Box (new Rect (StatBoxscreenPos.x-40, Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (80,false):Utils.adjustUISize (60,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":(CombinationType+"\n"))+"Points = "+roundPoints, boxStyle);
+			GUI.Box (new Rect (StatBoxscreenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (80,false):Utils.adjustUISize (60,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(AIControlled&&!showCombination?"":(CombinationType+"\n"))+"Points = "+roundPoints, boxStyle);
 		}
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.

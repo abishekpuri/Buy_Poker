@@ -62,10 +62,15 @@ public class Deck : MonoBehaviour {
 	public virtual void destroyAll()
 	{
 		while (cards.Count>0) {
-			Destroy (cards [0].gameObject);
-			cards.Remove (cards [0]);
+			if (cards[0]!=null)
+			{
+				Destroy (cards [0].gameObject);
+				cards.Remove (cards [0]);
+			}
+			else
+				break;
 		}
-
+		cards = new List<Card> ();
 		//Debug.Log ("After destroying everything, "+cards.Count + " cards Left ");
 	}
 
@@ -235,12 +240,11 @@ public class Deck : MonoBehaviour {
 			deckID = reserveDeckID;
 		cards = new List<Card>();
 		referenceTransform = GetComponent<Transform> ();
-		GameMaster.reportDeckToGameMaster (this);
 
 	}
 	// Use this for initialization
-	void Start () {
-
+	public void Start () {
+		GameMaster.reportDeckToGameMaster (this);
 	}
 	
 	// Update is called once per frame

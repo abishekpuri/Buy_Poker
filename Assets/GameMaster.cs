@@ -30,17 +30,19 @@ public class GameMaster : MonoBehaviour {
 	public static int UserID = 1;
 
 	public static GameMaster gm;		// Enables gameMaster instance to be referenced from other classes, so that non-static functions can be called. It is currently never used.
-	public static List<Deck> deckList = new List<Deck>();	//GameMaster keeps track of all decks in game.
-	public static List<PlayerHand> playerList = new List<PlayerHand>();		//GameMaster keeps track of all players in game
+	public static List<Deck> deckList;// = new List<Deck>();	//GameMaster keeps track of all decks in game.
+	public static List<PlayerHand> playerList;// = new List<PlayerHand>();		//GameMaster keeps track of all players in game
 	private static bool auctionInProgress = false;
 	public static bool earlyAuctionEnd = false;
 	public static int winnerID;
 	public static bool roundEnd = false;
 	public static bool gameEnd = false;
+	public static bool displayGameResult = false;
 	public int wins;
 	public int auctionCardsLeft;
 	public int roundsLeft;
 	public int total_games;
+	public int gameWinnerID;
 
 
 
@@ -53,7 +55,7 @@ public class GameMaster : MonoBehaviour {
 	public static void reportDeckToGameMaster(Deck currentDeck,bool Player=false)	// Every Decks in the scene report themselves to gameMaster
 	{
 		deckList.Add (currentDeck);
-		Debug.Log ("Deck " + currentDeck.DeckID + " reported to gameMaster");
+		Debug.Log ("Deck " + currentDeck.DeckID + " reported to gameMaster, deckListSize="+deckList.Count);
 	}
 	public static void terminateCurrentAuction()
 	{
@@ -146,43 +148,76 @@ public class GameMaster : MonoBehaviour {
 	void Start () {
 		//ResetPrefs();
 		Debug.Log (SystemManager.dummyString);	// test static variables.
+		// reset static variables
+		roundEnd = false;
+		gameEnd = false;
+		displayGameResult = false;
+
+		StartCoroutine (coStart ());
+
+	}
+
+	public IEnumerator coStart()
+	{
+		yield return new WaitForFixedUpdate ();
+		// destroy all cards in the game.
+		for (int i = 0; i < deckList.Count; i++) {
+			deckList [i].destroyAll ();
+			if (0<deckList[i].DeckID && deckList[i].DeckID < 100)
+			{
+				deckList.Remove (deckList[i]);
+			}
+		}
+
+
 
 		// set number of rounds
 		roundsLeft = SystemManager.numRounds;
-
+		
 		// Generate new card deck and shuffle them.
 		searchDeckByID (0).generateFullCardDeck ();
 		searchDeckByID (0).closeDeck ();
 		searchDeckByID (0).shuffle ();
 
+
 		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
 		for (int i = 1; i <= SystemManager.numPlayers; ++i) {
 			registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE/2+(i-0.5f)*(SystemManager.SPREADRANGE/SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
 		}
-
+		yield return new WaitForFixedUpdate ();
 		//enable AI control
 		for (int i = 2; i <= SystemManager.numPlayers; ++i) {
 			((PlayerHand)searchDeckByID (i)).setAIControl ();
 		}
-
-		StartCoroutine(startRound ());
+		
+		StartCoroutine (startRound ());
 	}
 
 	public IEnumerator startRound() 
 	{
+		if (roundsLeft <= 0) {
+			StartCoroutine(endGame ());
+			return true;
+		}
 		roundsLeft--;
 		roundEnd = false;
+
+		// hide combination value
+		for (int i=0; i<playerList.Count; i++) {
+			if (playerList[i].DeckID!=1)
+				playerList[i].showCombination=false;
+		}
 
 		// recall all cards one by one.
 		for (int i=0; i<deckList.Count; i++)
 		{
-			Debug.Log (deckList[i].CARDS.Count);
 			for (int j=0; j<deckList[i].CARDS.Count+5; j++)
 			{
 				if (deckList[i].DeckID!=0)
 				{
 					deckList[i].transferCardTo (searchDeckByID (0), false);
 						//playerList[j].evaluateHand();
+					searchDeckByID (0).closeDeck ();
 					yield return new WaitForSeconds(0.05f);
 				}
 			}
@@ -196,8 +231,8 @@ public class GameMaster : MonoBehaviour {
 		searchDeckByID (0).shuffle ();
 		yield return new WaitForSeconds(0.3f);
 		searchDeckByID (0).setupLayout (2);
-		searchDeckByID (0).shuffle ();
 		yield return new WaitForSeconds(0.3f);
+		searchDeckByID (0).shuffle ();
 		searchDeckByID (0).setupLayout (0);
 		// destroy all cards in the game.
 		/*for (int i = 0; i < deckList.Count; i++) {
@@ -266,15 +301,35 @@ public class GameMaster : MonoBehaviour {
 		}
 		//PlayerPrefs.SetInt ("total_games", total_games + 1);
 		roundEnd = true;
-		if (roundsLeft <= 0)
-			endGame ();
+
 	}
 
-	public void endGame()
+	public IEnumerator endGame()
 	{
-		int ID = getGameWinnerID ();
-		Debug.Log ("GAME ENDS, Winner = "+ID);
+		// hide player GUI
+		for (int i=0; i<playerList.Count; i++) {
+			playerList[i].showGUI=false;
+		}
+		roundEnd = false;
 		gameEnd = true;
+		gameWinnerID = getGameWinnerID ();
+		Transform tempParticleSystem = (Transform)Instantiate (Resources.Load <Transform>("prefab/Particle System fadeout"), new Vector3(0,0,0), transform.rotation);
+		tempParticleSystem.renderer.sortingLayerName="Particles";
+
+		yield return new WaitForSeconds (1f);
+		// destroy all cards in the game.
+		for (int i = 0; i < deckList.Count; i++) {
+			deckList [i].destroyAll ();
+		}
+		yield return new WaitForSeconds (1.5f);
+		searchDeckByID (102).setupLayout (0);
+		searchDeckByID (102).generateFullCardDeck ();
+		searchDeckByID (102).shuffle ();
+		searchDeckByID (102).setupLayout (6);
+		yield return new WaitForSeconds (0.5f);
+
+
+		displayGameResult = true;
 	}
 
 
@@ -351,15 +406,27 @@ public class GameMaster : MonoBehaviour {
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
 		//GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Points : " + PlayerPrefs.GetInt ("Points"),style);
-		GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (50,false)), "Rounds "+(SystemManager.numRounds-roundsLeft)+" / "+SystemManager.numRounds+"\nCards Left : " + auctionCardsLeft,styleInfo);
-		if (roundEnd && !gameEnd) {
-			GUI.Box (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 160, 200, 40), "Player " + winnerID + " wins the round!!!",style);
-			if (GUI.Button (new Rect (screenPos.x - 70, Camera.main.pixelHeight - screenPos.y - 120, 200, 40), "Next round",styleBtn)) {
-				StartCoroutine(startRound ());
+		if (!gameEnd) {
+			GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200, true), Utils.adjustUISize (50, false)), "Rounds " + (SystemManager.numRounds - roundsLeft) + " / " + SystemManager.numRounds + "\nCards Left : " + auctionCardsLeft, styleInfo);
+			if (roundEnd) {
+				GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (100, true), Camera.main.pixelHeight - screenPos.y - 160, Utils.adjustUISize (200, true), Utils.adjustUISize (40, false)), "Player " + winnerID + " wins the round!!!", style);
+				if (GUI.Button (new Rect (screenPos.x - Utils.adjustUISize (100, true), Camera.main.pixelHeight - screenPos.y - 120, Utils.adjustUISize (200, true), Utils.adjustUISize (40, false)), "Next round", styleBtn)) {
+					StartCoroutine (startRound ());
+				}
+
 			}
-
 		}
-
+		if (displayGameResult)
+		{
+			Vector3 resultScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-0.5f, 3, 0));
+			style.fontSize = Utils.adjustUISize (18,true);
+			GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y- Utils.adjustUISize (50, false), Utils.adjustUISize (250, true), Utils.adjustUISize (60, false)), (gameWinnerID==1)?("You won!!"):("You lost!!"), style);
+			style.fontSize = Utils.adjustUISize (14,true);
+			GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y+ Utils.adjustUISize (20, false), Utils.adjustUISize (250, true), Utils.adjustUISize (50, false)), "WINNER : Player " + gameWinnerID + "!!", style);
+			if (GUI.Button (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y +Utils.adjustUISize (200, false), Utils.adjustUISize (250, true), Utils.adjustUISize (50, false)), "Back to menu", styleBtn)) {
+				Application.LoadLevel ("menuScene");
+			}
+		}
 		/*if (GUI.Button (new Rect (screenPos.x-390, Camera.main.pixelHeight - screenPos.y + 150, 80, 20), "Reset")) {
 						ResetPrefs ();
 				}*/
@@ -393,7 +460,8 @@ public class GameMaster : MonoBehaviour {
 	void Awake() {
 		Card.cardSpriteList = Resources.LoadAll <Sprite> ("images/cards_smooth");
 		Debug.Log ("Card sprite resourses loaded once and for all");
-		//deckList = new List<Deck>();
+		deckList = new List<Deck> ();
+		playerList = new List<PlayerHand>();
 		if (gm == null) {
 			gm = GameObject.FindGameObjectWithTag ("GameMaster").GetComponent<GameMaster>();
 		}

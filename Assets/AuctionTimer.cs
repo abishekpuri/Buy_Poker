@@ -22,6 +22,7 @@ public class AuctionTimer : MonoBehaviour {
 	private int transferID;
 
 	private Transform particleEffectPrefab;
+	private Texture2D buttonTexture;
 	private double timerStopTime;	//when buttonClicked=true, timer stops to 
 	const double BUTTON_DELAY = 1;		// delay before destroying itself.
 
@@ -32,6 +33,7 @@ public class AuctionTimer : MonoBehaviour {
 		auctionInProcess = true;
 		buttonClicked = false;
 		particleEffectPrefab = Resources.Load <Transform>("prefab/Particle System");
+		buttonTexture = Resources.Load <Texture2D>("images/btnTexture");
 	}
 	
 	// Update is Implicitly called once per frame
@@ -69,11 +71,14 @@ public class AuctionTimer : MonoBehaviour {
 	{
 		GUI.backgroundColor = new Color(1,1,1,1);
 		GUIStyle buttonStyle = new GUIStyle (GUI.skin.button);
-		buttonStyle.normal.textColor = Color.cyan;
+		buttonStyle.normal.textColor = new Color (1f, 0.81568632f, 0.3156862754f, 1f);
 		buttonStyle.fontSize = Utils.adjustUISize (20,true);
-		buttonStyle.hover.textColor = Color.cyan;
-		buttonStyle.active.textColor = Color.red;
+		buttonStyle.hover.textColor = Color.yellow;
+		buttonStyle.active.textColor = Color.cyan;
 		buttonStyle.fontStyle = FontStyle.Bold;
+		buttonStyle.normal.background = buttonTexture;
+		buttonStyle.hover.background = buttonTexture;
+		buttonStyle.active.background = buttonTexture;
 
 		// Converts localPosition of the transform to position vector in screenSpace, then to GUI space. I found some unidentified bug, and it needs rectification.
 		Vector3 pos = transform.localPosition;//(Vector2)Camera.WorldToScreenPoint(pos)
@@ -82,7 +87,7 @@ public class AuctionTimer : MonoBehaviour {
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
 			// button clicking action only registers bidValue for player.
-			if (GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (120,true), Utils.adjustUISize (72,false)), "BUY! $"+(int)timeRemaining, buttonStyle) && !buttonClicked)
+			if (GUI.Button (new Rect(screenPos.x-75, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (150,true), Utils.adjustUISize (90,false)), new GUIContent("BUY! $"+(int)timeRemaining), buttonStyle) && !buttonClicked)
 			{
 				//Debug.Log ("Pressed!!!");
 				//buttonClicked = true;
@@ -92,7 +97,7 @@ public class AuctionTimer : MonoBehaviour {
 			}
 		}
 		else{
-			GUI.Button (new Rect(screenPos.x-60, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (120,true), Utils.adjustUISize (72,false)), "Bid over", buttonStyle);
+			GUI.Button (new Rect(screenPos.x-75, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (150,true), Utils.adjustUISize (90,false)), "Bid over", buttonStyle);
 		}
 	}
 }
