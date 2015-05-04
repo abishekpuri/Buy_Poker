@@ -17,7 +17,7 @@ using System.Collections.Generic;
  * deck ID 0 is preserved for main card deck.
  * deck ID 100 is preserved for auction.
  * deck ID 101 is preserved for dump
- * deck ID 102 is preserved for display table
+ * deck ID 102
  * 
  * 
  * 
