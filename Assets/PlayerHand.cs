@@ -259,7 +259,7 @@ public class PlayerHand : Deck {
 		if (Ace) {
 				CombinationValue = 14;
 		}
-		if (!AIControlled) {		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
+		if (!AIControlled && PlayerPrefs.GetInt ("Upgrade1")==1) {		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
 				for (int i=0; i<cards.Count; ++i) {
 						cards [i].stopBlinkAnim ();
 				}
@@ -432,7 +432,8 @@ public class PlayerHand : Deck {
 			}
 		}
 		if (showGUI){
-			GUI.Box (new Rect (StatBoxscreenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (80,false):Utils.adjustUISize (60,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n" +(((AIControlled&&!showCombination)||PlayerPrefs.GetInt ("Upgrade1")==0)?"":(CombinationType+"\n"))+"Points = "+roundPoints, boxStyle);
+			GUI.Box (new Rect (StatBoxscreenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-StatBoxscreenPos.y, Utils.adjustUISize (100,true), (showCombination?Utils.adjustUISize (80,false):Utils.adjustUISize (60,false))), "Cash = $" + (int)cash + "\n" + (AIControlled?"AI":"Player") + " ID = "+DeckID + "\n"
+			         +(((AIControlled&&!showCombination)||PlayerPrefs.GetInt ("Upgrade1")==0)?"":(CombinationType+"\n"))+"Points = "+roundPoints, boxStyle);
 		}
 		//GUI.Label(new Rect(10,10,200,20),"Here is a block of text\nlalalala\nanother line\nI could do this all day!");
 		//Use this function to draw GUI stuff. Google might help. This fucntion is bound to GameMaster object.

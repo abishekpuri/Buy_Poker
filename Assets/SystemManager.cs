@@ -113,6 +113,20 @@ public class SystemManager : MonoBehaviour {
 
 	}
 
+	public void confirmAll()
+	{
+		if (tempNumPlayers!=0)
+			numPlayers = tempNumPlayers;
+		if (tempNumCards!=0)
+			numCardsDealt = tempNumCards;
+		if (tempNumAuction!=0)
+			numCardsAuction = tempNumAuction;
+		if (tempNumRounds!=0)
+			numRounds = tempNumRounds;
+		startCash = tempStartCash;
+		cashIncome = tempCashIncome;
+	}
+
 	// Use this for initialization
 	void Start () {
 		tempNumPlayers = numPlayers;
