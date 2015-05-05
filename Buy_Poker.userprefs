@@ -1,11 +1,21 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/PlayerHand.cs">
     <Files>
       <File FileName="Assets/GameMaster.cs" Line="1" Column="1" />
       <File FileName="Assets/PlayerHand.cs" Line="64" Column="1" />
       <File FileName="Assets/AuctionTimer.cs" Line="1" Column="1" />
       <File FileName="Assets/SystemManager.cs" Line="141" Column="218" />
+=======
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PlayerHand.cs">
+    <Files>
+      <File FileName="Assets\Card.cs" Line="63" Column="2" />
+      <File FileName="Assets\GameMaster.cs" Line="233" Column="6" />
+      <File FileName="Assets\PlayerHand.cs" Line="336" Column="11" />
+      <File FileName="Assets\AuctionTimer.cs" Line="1" Column="1" />
+      <File FileName="Assets\SystemManager.cs" Line="1" Column="1" />
+>>>>>>> c1835a23bd176ff3c3761a6ac416acde166b781e
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
