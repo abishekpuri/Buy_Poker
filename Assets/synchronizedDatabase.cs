@@ -4,8 +4,9 @@ using System.Collections;
 /**
  * 
  * chat script for unity
- * 
- * 
+ * Class re-design is seriousely required.
+ * - it is better re-named
+ * - had to messed up with class hierarchy so that multiplayer game on top of chat can be implemented. 
  * 
  * */
 

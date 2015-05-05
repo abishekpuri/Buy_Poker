@@ -3,7 +3,7 @@ using System.Collections;
 
 public class networkManager : MonoBehaviour {
 
-	public string GAMENAME="chat";
+	public string GAMENAME="chat";	// GAMENAME changes to "duel" in a multiplayer game, so that chat room and game room don't collide
 	public static float REFRESH_HOST_TIMEOUT = 3f;
 	public static float SEARCH_TIMEOUT=30f;
 	float search_wait_time=0;
@@ -173,18 +173,22 @@ public class networkManager : MonoBehaviour {
 
 	void OnGUI()
 	{
+		GUIStyle boxStyle = new GUIStyle (GUI.skin.button);
+		boxStyle.normal.textColor = Color.green;
+		boxStyle.fontSize = Utils.adjustUISize (16,true);
+
 		GameMaster.multiplayerMode = true;
 		if (!Network.isClient && (!Network.isServer || Network.connections.Length<1)) {
 			GameMaster.networkRequired=true;
 			if (!searching)
 			{
-				if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Start Search")) {
+				if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Start Search",boxStyle)) {
 					Debug.Log ("Start searching for opponent");
 					statusMsg="accessing server..";
 					StartCoroutine(startNetworkingSearch ());
 				}
 			}
-			else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Cancel Search"+"\n\n"+statusMsg))
+			else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Cancel Search"+"\n\n"+statusMsg,boxStyle))
 			{
 				Debug.Log ("Search cancel");
 				searching=false;
@@ -192,15 +196,16 @@ public class networkManager : MonoBehaviour {
 				Network.Disconnect ();
 			}
 		}
-		else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Disconnect!"))
+		/*else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Disconnect!"))
 		{
 			Debug.Log ("Disconnected");
 			MasterServer.UnregisterHost();
 			Network.Disconnect ();
 			Destroy (networkObject);
-		}
+		}*/
 		else
 		{
+			GUI.Box (new Rect (btnX, btnY, btnW, btnH), "Connected!",boxStyle);
 			GameMaster.networkRequired=false;
 		}
 		/*

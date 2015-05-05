@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * 
+ * I had to sacrifice a good class design to make multiplayer game and chat room work at the same time.
+ * 
+ * 
+ * */
+
+
 public class networkBidObject : MonoBehaviour {
 
 	public int[] bidValueByID;
-
+	
 	[RPC] virtual public void registerBidValue(Vector3 values)
 	{
 		bidValueByID [(int)values.x] = (int)values.y;

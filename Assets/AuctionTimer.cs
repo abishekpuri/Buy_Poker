@@ -87,6 +87,7 @@ public class AuctionTimer : MonoBehaviour {
 		{
 			//If button is clicked, stops timer and waits for BUTTON_DELAY seconds to destroy itself..
 			// button clicking action only registers bidValue for player.
+			// in case of multiplayer, The function gets re-mapped to network object (networkBidObject)
 			if (GUI.Button (new Rect(screenPos.x-75, Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (150,true), Utils.adjustUISize (90,false)), new GUIContent("BUY! $"+(int)timeRemaining), buttonStyle) && !buttonClicked)
 			{
 				//Debug.Log ("Pressed!!!");

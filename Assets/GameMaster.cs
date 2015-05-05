@@ -68,7 +68,8 @@ public class GameMaster : MonoBehaviour {
 	{
 		searchDeckByID (sourceID).GetComponent<Deck>().transferCardTo(searchDeckByID (destinationID).GetComponent<Deck>(), openCard, rank, suit);
 	}
-	
+
+	// in case of multiplayer, The function gets re-mapped to network object (networkBidObject)
 	public static int getHighestBidderID()
 	{
 		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
@@ -94,7 +95,8 @@ public class GameMaster : MonoBehaviour {
 				}
 		return currentPlayerID;
 	}
-	
+
+	// in case of multiplayer, The function gets re-mapped to network object (networkBidObject)
 	public static int getHighestBidValue()
 	{
 		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
@@ -438,7 +440,7 @@ public class GameMaster : MonoBehaviour {
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-200, 200, 20), "Number of Wins: " + PlayerPrefs.GetInt("wins"));
 		//GUI.Label (new Rect (screenPos.x + 150, Camera.main.pixelHeight - screenPos.y-180, 200, 20), "Total Games: " + PlayerPrefs.GetInt("total_games"));
 		//GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200,true), Utils.adjustUISize (20,false)), "Points : " + PlayerPrefs.GetInt ("Points"),style);
-		if (!gameEnd) {
+		if (!gameEnd && !networkRequired) {
 			GUI.Box (new Rect (pointBoxScreenPos.x, Camera.main.pixelHeight - pointBoxScreenPos.y, Utils.adjustUISize (200, true), Utils.adjustUISize (50, false)), "Rounds " + (SystemManager.numRounds - roundsLeft) + " / " + SystemManager.numRounds + "\nCards Left : " + auctionCardsLeft, styleInfo);
 			if (gameBegins && roundEnd) {
 				GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (100, true), Camera.main.pixelHeight - screenPos.y - 160, Utils.adjustUISize (200, true), Utils.adjustUISize (40, false)), "Player " + winnerID + " wins the round!!!", style);
