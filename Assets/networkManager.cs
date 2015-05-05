@@ -3,7 +3,7 @@ using System.Collections;
 
 public class networkManager : MonoBehaviour {
 
-	public static string GAMENAME="networking_example";
+	public string GAMENAME="chat";
 	public static float REFRESH_HOST_TIMEOUT = 3f;
 	public static float SEARCH_TIMEOUT=30f;
 	float search_wait_time=0;
@@ -23,10 +23,13 @@ public class networkManager : MonoBehaviour {
 	bool refreshing;
 	HostData[] hostData;
 
-	private Transform networkObject;
+	public static networkBidObject networkObject;
+	private Transform netObj;
 
 	// Use this for initialization
 	void Start () {
+		GameMaster.networkRequired=true;
+		GameMaster.multiplayerMode = true;
 		search_wait_time = 7f;
 		btnX=Screen.width*0.05f;
 		btnY=Screen.height*0.05f;
@@ -130,7 +133,10 @@ public class networkManager : MonoBehaviour {
 		Debug.Log ("connected to host!");
 		statusMsg="connected to host!";
 		searching = false;
-		networkObject=(Transform)(Instantiate (samplePref, new Vector3(8,3,0), Quaternion.identity));
+		netObj = (Transform)Instantiate (samplePref, new Vector3(8,3,0), Quaternion.identity);
+		networkObject=netObj.GetComponent<networkBidObject>();
+		networkObject.debug ();
+		GameMaster.UserID = 1;
 	}
 
 	void OnPlayerConnected()
@@ -138,20 +144,23 @@ public class networkManager : MonoBehaviour {
 		Debug.Log ("connected to player!");
 		statusMsg="connected to player!";
 		searching = false;
-		networkObject=(Transform)(Instantiate (samplePref, new Vector3(8,3,0), Quaternion.identity));
+		netObj = (Transform)Instantiate (samplePref, new Vector3(8,3,0), Quaternion.identity);
+		networkObject=netObj.GetComponent<networkBidObject>();
+		networkObject.debug ();
+		GameMaster.UserID = 2;
 	}
 
 	void OnDisconnectedFromServer()
 	{
 		Debug.Log ("disconnected from host!");
-		Destroy (networkObject.gameObject);
+		Destroy (netObj.gameObject);
 
 	}
 
 	void OnPlayerDisconnected()
 	{
 		Debug.Log ("player disconnected!");
-		Destroy (networkObject.gameObject);
+		Destroy (netObj.gameObject);
 	}
 
 	void OnMasterServerEvent(MasterServerEvent mse){
@@ -164,7 +173,9 @@ public class networkManager : MonoBehaviour {
 
 	void OnGUI()
 	{
+		GameMaster.multiplayerMode = true;
 		if (!Network.isClient && (!Network.isServer || Network.connections.Length<1)) {
+			GameMaster.networkRequired=true;
 			if (!searching)
 			{
 				if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Start Search")) {
@@ -187,7 +198,12 @@ public class networkManager : MonoBehaviour {
 			MasterServer.UnregisterHost();
 			Network.Disconnect ();
 			Destroy (networkObject);
-		}/*
+		}
+		else
+		{
+			GameMaster.networkRequired=false;
+		}
+		/*
 		for (int i=0; i<hostData.Length; i++) {
 			GUI.Box (new Rect (btnX+Screen.height*0.4f, btnY*1.2f+btnH*i, btnW*3f, btnH), hostData[i].gameName);
 			

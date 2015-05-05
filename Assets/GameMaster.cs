@@ -39,6 +39,8 @@ public class GameMaster : MonoBehaviour {
 	public static bool roundEnd = true;
 	public static bool gameEnd = false;
 	public static bool displayGameResult = false;
+	public static bool networkRequired = false;// to sync up with opponent until the game starts.
+	public static bool multiplayerMode = false;
 	public int wins;
 	public int auctionCardsLeft;
 	public int roundsLeft;
@@ -69,6 +71,9 @@ public class GameMaster : MonoBehaviour {
 	
 	public static int getHighestBidderID()
 	{
+		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
+			return networkManager.networkObject.getHighestBidderIDOverNetwork();
+		}
 		int currentMaxBid = 0;
 		int currentPlayerID = 0;
 		int currentPlayerPos = 0;
@@ -92,6 +97,9 @@ public class GameMaster : MonoBehaviour {
 	
 	public static int getHighestBidValue()
 	{
+		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
+			return networkManager.networkObject.getHighestBidValueOverNetwork();
+		}
 		int currentMaxBid = 0;
 		//int currentPlayerID = 0;
 		for (int i=0; i<playerList.Count; i++)
@@ -158,49 +166,62 @@ public class GameMaster : MonoBehaviour {
 	void Start () {
 		//ResetPrefs();
 		Debug.Log (SystemManager.dummyString);	// test static variables.
+		networkRequired = false;
+		multiplayerMode = false;
 		// reset static variables
 		gameBegins = false;
 		roundEnd = true;
 		gameEnd = false;
 		displayGameResult = false;
-
+		auctionCardsLeft = SystemManager.numCardsAuction;
 		StartCoroutine (coStart ());
 
 	}
 
 	public IEnumerator coStart()
 	{
-				yield return new WaitForFixedUpdate ();
-				// destroy all cards in the game.
-				for (int i = 0; i < deckList.Count; i++) {
-						deckList [i].destroyAll ();
-						if (0 < deckList [i].DeckID && deckList [i].DeckID < 100) {
-								deckList.Remove (deckList [i]);
-						}
+		yield return new WaitForFixedUpdate ();
+		yield return new WaitForSeconds(0.5f);
+		// if network is required, do not start the game.
+		while (networkRequired) {
+			yield return new WaitForSeconds(0.05f);
+		}
+
+
+		// destroy all cards in the game.
+		for (int i = 0; i < deckList.Count; i++) {
+				deckList [i].destroyAll ();
+				if (0 < deckList [i].DeckID && deckList [i].DeckID < 100) {
+						deckList.Remove (deckList [i]);
 				}
+		}
 
 
 
-				// set number of rounds
-				roundsLeft = SystemManager.numRounds;
-		
-				// Generate new card deck and shuffle them.
-				searchDeckByID (0).generateFullCardDeck ();
-				searchDeckByID (0).closeDeck ();
-				searchDeckByID (0).shuffle ();
+		// set number of rounds
+		roundsLeft = SystemManager.numRounds;
+
+		// Generate new card deck and shuffle them.
+		searchDeckByID (0).generateFullCardDeck ();
+		searchDeckByID (0).closeDeck ();
+		searchDeckByID (0).shuffle ();
 
 
-				// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
-				for (int i = 1; i <= SystemManager.numPlayers; ++i) {
-						registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE / 2 + (i - 0.5f) * (SystemManager.SPREADRANGE / SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
-				}
-				yield return new WaitForFixedUpdate ();
-				//enable AI control
-				for (int i = 2; i <= SystemManager.numPlayers; ++i) {
-						((PlayerHand)searchDeckByID (i)).setAIControl ();
-				}
-		
-				StartCoroutine (startRound ());
+		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
+		for (int i = 1; i <= SystemManager.numPlayers; ++i) {
+				registerNewPlayerHand (i, new Vector3 (-SystemManager.SPREADRANGE / 2 + (i - 0.5f) * (SystemManager.SPREADRANGE / SystemManager.numPlayers), -2, 0), new Vector3 (0, 0, 0f), 6, true);
+		}
+		yield return new WaitForFixedUpdate ();
+		//enable AI control
+		if (!multiplayerMode)
+		{
+			for (int i = 1; i <= SystemManager.numPlayers; ++i) {
+				if (UserID!=i)
+					((PlayerHand)searchDeckByID (i)).setAIControl ();
+			}
+		}
+
+		StartCoroutine (startRound ());
 	}
 
 	//NOTE : It says I must add yield to the return because of some iterator problem, so I have.

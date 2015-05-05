@@ -10,7 +10,7 @@ using System.Collections;
  * */
 
 
-public class synchronizedDatabase : MonoBehaviour {
+public class synchronizedDatabase : networkBidObject {
 
 	float relativeX;
 	float relativeY;
@@ -21,15 +21,15 @@ public class synchronizedDatabase : MonoBehaviour {
 
 	string tempstr;
 
-	[RPC] public void registerMsg(string msg)
+	[RPC] public void registerBidValue(string msg)
 	{
 		Debug.Log ("Remote procedure call registerMsg()");
 		msgs [msgCount++] = msg;
 	}
 
-	public void broadcastMsg(string msg)
+	public void broadcastBidValue(string msg)
 	{
-		networkView.RPC ("registerMsg",RPCMode.AllBuffered, "IP "+Network.natFacilitatorIP+" : "+msg);
+		networkView.RPC ("registerBidValue",RPCMode.AllBuffered, "IP "+Network.natFacilitatorIP+" : "+msg);
 	}
 
 
@@ -59,7 +59,7 @@ public class synchronizedDatabase : MonoBehaviour {
 		tempstr = GUI.TextField (new Rect(relativeX, relativeY+relativeH*1.1f, relativeW, relativeH*0.2f),tempstr);
 		if (GUI.Button (new Rect(relativeX, relativeY+relativeH*1.4f, relativeW*0.5f, relativeH*0.1f),"register message"))
 		{
-			broadcastMsg (tempstr);
+			broadcastBidValue (tempstr);
 		}
 	}
 }

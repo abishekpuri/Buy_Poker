@@ -1,11 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameMaster.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\networkBidObject.cs">
     <Files>
-      <File FileName="Assets/GameMaster.cs" Line="160" Column="1" />
-      <File FileName="Assets/PlayerHand.cs" Line="97" Column="23" />
-      <File FileName="Assets/Utils.cs" Line="1" Column="1" />
-      <File FileName="Assets/SystemManager.cs" Line="38" Column="3" />
+      <File FileName="Assets\SystemManager.cs" Line="31" Column="26" />
+      <File FileName="Assets\PlayerHand.cs" Line="412" Column="36" />
+      <File FileName="Assets\GameMaster.cs" Line="101" Column="52" />
+      <File FileName="Assets\AuctionTimer.cs" Line="96" Column="6" />
+      <File FileName="Assets\synchronizedDatabase.cs" Line="20" Column="16" />
+      <File FileName="Assets\networkManager.cs" Line="138" Column="26" />
+      <File FileName="Assets\networkBidObject.cs" Line="18" Column="21" />
+      <File FileName="Assets\Deck.cs" Line="59" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

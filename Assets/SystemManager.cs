@@ -44,6 +44,16 @@ public class SystemManager : MonoBehaviour {
 		cashIncome = 60;
 	}
 
+	public void setForMultiplayer()
+	{
+		numPlayers = 2;
+		numCardsDealt = 2;
+		numCardsAuction = 5;
+		numRounds = 10;
+		startCash = 100;
+		cashIncome = 60;
+	}
+
 	public void resetButton() 
 	{
 				PlayerPrefs.SetInt ("wins", 0);

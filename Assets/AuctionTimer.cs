@@ -92,6 +92,10 @@ public class AuctionTimer : MonoBehaviour {
 				//Debug.Log ("Pressed!!!");
 				//buttonClicked = true;
 				((PlayerHand)GameMaster.searchDeckByID (GameMaster.UserID)).setBidValue ((int)timeRemaining);
+				if (!(!Network.isClient && (!Network.isServer || Network.connections.Length<1)))
+				{
+					networkManager.networkObject.broadcastBidValue (new Vector2(GameMaster.UserID,(int)timeRemaining));
+				}
 				//auctionInProcess=false;
 				//timerStopTime = Time.time;
 			}
