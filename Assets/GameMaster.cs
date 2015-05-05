@@ -176,10 +176,10 @@ public class GameMaster : MonoBehaviour {
 						PlayerPrefs.SetInt ("Upgrade" + i, 0);
 				}
 		SystemManager.cashIncome = 60;
-		SystemManager.numCardsAuction = 7;
-		SystemManager.numCardsDealt = 5;
+		SystemManager.numCardsAuction = 5;
+		SystemManager.numCardsDealt = 3;
 		SystemManager.numPlayers = 3;
-		SystemManager.numRounds = 10;
+		SystemManager.numRounds = 5;
 		SystemManager.startCash = 200;
 		}
 	public IEnumerator coStart()

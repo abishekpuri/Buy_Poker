@@ -21,9 +21,9 @@ public class SystemManager : MonoBehaviour {
 
 	public static string dummyString = "nothing yet";
 	public static int numPlayers = 3;
-	public static int numCardsDealt = 5;
-	public static int numCardsAuction = 7;
-	public static int numRounds = 10;
+	public static int numCardsDealt = 3;
+	public static int numCardsAuction = 5;
+	public static int numRounds = 5;
 	public static int startCash = 200;	//
 	public static int cashIncome = 60;	// per minute
 	public static bool isCustom = false;
