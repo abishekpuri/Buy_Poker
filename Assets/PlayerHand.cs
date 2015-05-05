@@ -236,7 +236,6 @@ public class PlayerHand : Deck {
 				List<Card> secondPart = cards.FindAll (a => a.Rank == SecondaryCombinationValue);
 				winningHand.AddRange (secondPart);
 		} else if (CombinationType == "Flush") {
-				//Debug.Log ("Flush is problematic");
 				Debug.Log ("FlushValue = "+FlushValue);
 				List<Card> flushCards = cards.FindAll (a => a.Suit == FlushValue);
 				Debug.Log ("FlushCardsCount = "+flushCards.Count);

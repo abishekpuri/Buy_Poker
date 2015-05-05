@@ -168,20 +168,6 @@ public class GameMaster : MonoBehaviour {
 
 	}
 
-	public void reset() 
-	{
-				PlayerPrefs.SetInt ("wins", 0);
-				PlayerPrefs.SetInt ("Points", 0);
-				for (int i = 0; i < 5; ++i) {
-						PlayerPrefs.SetInt ("Upgrade" + i, 0);
-				}
-		SystemManager.cashIncome = 60;
-		SystemManager.numCardsAuction = 5;
-		SystemManager.numCardsDealt = 3;
-		SystemManager.numPlayers = 3;
-		SystemManager.numRounds = 5;
-		SystemManager.startCash = 200;
-		}
 	public IEnumerator coStart()
 	{
 				yield return new WaitForFixedUpdate ();
@@ -359,7 +345,7 @@ public class GameMaster : MonoBehaviour {
 		searchDeckByID (102).setupLayout (6);
 		yield return new WaitForSeconds (0.5f);
 		displayGameResult = true;
-		reset ();
+		SystemManager.reset ();
 	}
 
 

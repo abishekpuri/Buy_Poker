@@ -22,8 +22,8 @@ public class SystemManager : MonoBehaviour {
 	public static string dummyString = "nothing yet";
 	public static int numPlayers = 3;
 	public static int numCardsDealt = 3;
-	public static int numCardsAuction = 5;
-	public static int numRounds = 5;
+	public static int numCardsAuction = 2;
+	public static int numRounds = 3;
 	public static int startCash = 200;	//
 	public static int cashIncome = 60;	// per minute
 	public static bool isCustom = false;
@@ -34,6 +34,38 @@ public class SystemManager : MonoBehaviour {
 	public int tempStartCash;
 	public int tempCashIncome;
 
+	public static void reset() 
+	{
+		PlayerPrefs.SetInt ("wins", 0);
+		PlayerPrefs.SetInt ("Points", 0);
+		Debug.Log (PlayerPrefs.GetInt ("Points"));
+		for (int i = 0; i < 5; ++i) {
+			PlayerPrefs.SetInt ("Upgrade" + i, 0);
+		}
+		PlayerPrefs.Save ();
+		numPlayers = 3;
+		numCardsDealt = 3;
+		numCardsAuction = 2;
+		numRounds = 3;
+		startCash = 200;
+		cashIncome = 60;
+	}
+
+	public void resetButton() 
+	{
+				PlayerPrefs.SetInt ("wins", 0);
+				PlayerPrefs.SetInt ("Points", 0);
+				for (int i = 0; i < 5; ++i) {
+						PlayerPrefs.SetInt ("Upgrade" + i, 0);
+				}
+				PlayerPrefs.Save ();
+				numPlayers = 3;
+				numCardsDealt = 3;
+				numCardsAuction = 2;
+				numRounds = 3;
+				startCash = 200;
+				cashIncome = 60;
+		}
 	public void changeString()
 	{
 		dummyString = "TEST SUCCESSFUL";
