@@ -1,6 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * 
+ * chat script for unity
+ * 
+ * 
+ * 
+ * */
+
+
 public class synchronizedDatabase : MonoBehaviour {
 
 	float relativeX;
