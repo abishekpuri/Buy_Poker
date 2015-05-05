@@ -15,14 +15,12 @@ public class synchronizedDatabase : MonoBehaviour {
 	[RPC] public void registerMsg(string msg)
 	{
 		Debug.Log ("Remote procedure call registerMsg()");
-		msgs [msgCount++] = "IP "+Network.proxyIP+" : "+msg;
-
+		msgs [msgCount++] = msg;
 	}
 
 	public void broadcastMsg(string msg)
 	{
-
-		networkView.RPC ("registerMsg",RPCMode.AllBuffered, msg);
+		networkView.RPC ("registerMsg",RPCMode.AllBuffered, "IP "+Network.natFacilitatorIP+" : "+msg);
 	}
 
 
@@ -44,7 +42,7 @@ public class synchronizedDatabase : MonoBehaviour {
 	void OnGUI()
 	{
 		string resultString = "";
-		for (int i=0; i<msgCount; i++)
+		for (int i=msgCount-1; i>=0; i--)
 		{
 			resultString += msgs[i]+"\n\n";
 		}

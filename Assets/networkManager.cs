@@ -22,7 +22,7 @@ public class networkManager : MonoBehaviour {
 	bool refreshing;
 	HostData[] hostData;
 
-	private Transform networkSyncDatabase;
+	private Transform networkObject;
 
 	// Use this for initialization
 	void Start () {
@@ -62,7 +62,7 @@ public class networkManager : MonoBehaviour {
 
 		// first step : refresh the host list.
 		refreshHostList ();
-		statusMsg="searching for host";
+		statusMsg="searching for players";
 		while (refreshing) {
 			yield return new WaitForSeconds(0.1f);
 		}
@@ -82,7 +82,7 @@ public class networkManager : MonoBehaviour {
 		// third step : create and register new host.
 		if (!hostFound && searching)
 		{
-			statusMsg=hostData.Length+" games found...";
+			statusMsg="("+hostData.Length+") registering as host..";
 			Debug.Log ("Host not found! Creating a new host...");
 			Network.InitializeServer (2,25001,!Network.HavePublicAddress ());
 			MasterServer.RegisterHost (GAMENAME,"host ID "+hostData.Length);
@@ -112,14 +112,35 @@ public class networkManager : MonoBehaviour {
 		Debug.Log ("connected to host!");
 		statusMsg="connected to host!";
 		searching = false;
-		networkSyncDatabase=(Transform)(Network.Instantiate (samplePref, new Vector3(8,3,0), Quaternion.identity,0));
+		networkObject=(Transform)(Instantiate (samplePref, new Vector3(8,3,0), Quaternion.identity));
+	}
+
+	void OnPlayerConnected()
+	{
+		Debug.Log ("connected to player!");
+		statusMsg="connected to player!";
+		searching = false;
+		networkObject=(Transform)(Instantiate (samplePref, new Vector3(8,3,0), Quaternion.identity));
+	}
+
+	void OnDisconnectedFromServer()
+	{
+		Debug.Log ("disconnected from host!");
+		Destroy (networkObject.gameObject);
+
+	}
+
+	void OnPlayerDisconnected()
+	{
+		Debug.Log ("player disconnected!");
+		Destroy (networkObject.gameObject);
 	}
 
 	void OnMasterServerEvent(MasterServerEvent mse){
 		if (mse == MasterServerEvent.RegistrationSucceeded)
 		{
 			Debug.Log ("Registered Server");
-			statusMsg="registered new server";
+			statusMsg="waiting for clients";
 		}
 	}
 
@@ -147,7 +168,7 @@ public class networkManager : MonoBehaviour {
 			Debug.Log ("Disconnected");
 			MasterServer.UnregisterHost();
 			Network.Disconnect ();
-			Destroy (networkSyncDatabase);
+			Destroy (networkObject);
 		}/*
 		for (int i=0; i<hostData.Length; i++) {
 			GUI.Box (new Rect (btnX+Screen.height*0.4f, btnY*1.2f+btnH*i, btnW*3f, btnH), hostData[i].gameName);

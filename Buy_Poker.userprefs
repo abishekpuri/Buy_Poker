@@ -1,8 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\networkManager.cs">
     <Files>
-      <File FileName="Assets\networkManager.cs" Line="23" Column="22" />
+      <File FileName="Assets\networkManager.cs" Line="167" Column="4" />
+      <File FileName="Assets\synchronizedDatabase.cs" Line="19" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
