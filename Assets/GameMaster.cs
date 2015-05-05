@@ -168,6 +168,20 @@ public class GameMaster : MonoBehaviour {
 
 	}
 
+	public void reset() 
+	{
+				PlayerPrefs.SetInt ("wins", 0);
+				PlayerPrefs.SetInt ("Points", 0);
+				for (int i = 0; i < 5; ++i) {
+						PlayerPrefs.SetInt ("Upgrade" + i, 0);
+				}
+		SystemManager.cashIncome = 60;
+		SystemManager.numCardsAuction = 7;
+		SystemManager.numCardsDealt = 5;
+		SystemManager.numPlayers = 3;
+		SystemManager.numRounds = 10;
+		SystemManager.startCash = 200;
+		}
 	public IEnumerator coStart()
 	{
 				yield return new WaitForFixedUpdate ();
@@ -295,12 +309,12 @@ public class GameMaster : MonoBehaviour {
 		//winner.setWinningHand ();
 		winnerID = winner.DeckID;
 		searchHandByID (winnerID).Winner ();
-		if (winnerID == 1) {
-			//playerList [0].playerWinner ();
-			//PlayerPrefs.SetInt ("wins", wins + 1);
-			PlayerPrefs.Save ();
+						if (winnerID == 1) {
+								//playerList [0].playerWinner ();
+								//PlayerPrefs.SetInt ("wins", wins + 1);
+								PlayerPrefs.Save ();
 		} else {
-			playerList [0].playerLoser ();
+								playerList [0].playerLoser ();
 		}
 
 		// =============take winners' cards up to the display=============
@@ -327,7 +341,7 @@ public class GameMaster : MonoBehaviour {
 		gameEnd = true;
 		gameWinnerID = getGameWinnerID ();
 
-		if (gameWinnerID == 1) {
+		if (gameWinnerID == 1 && !SystemManager.isCustom) {
 						searchHandByID (1).playerWinner (SystemManager.numPlayers);
 				}
 		Transform tempParticleSystem = (Transform)Instantiate (Resources.Load <Transform>("prefab/Particle System fadeout"), new Vector3(0,0,0), transform.rotation);
@@ -344,9 +358,8 @@ public class GameMaster : MonoBehaviour {
 		searchDeckByID (102).shuffle ();
 		searchDeckByID (102).setupLayout (6);
 		yield return new WaitForSeconds (0.5f);
-
-
 		displayGameResult = true;
+		reset ();
 	}
 
 
