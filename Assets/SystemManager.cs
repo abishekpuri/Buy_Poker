@@ -129,15 +129,16 @@ public class SystemManager : MonoBehaviour {
 
 	void OnGUI()
 	{
+
 		GUIStyle boxStyle = new GUIStyle (GUI.skin.box);
 		boxStyle.normal.textColor = Color.white;
+		//boxStyle.normal.background = Resources.Load <Texture2D> ("images/woodTexture");
 		boxStyle.fontSize = Utils.adjustUISize (18,true);
 		// Vector3 screenPosition => You can set Position of GUI in world space and then convert it into screenPos(GUI pos)
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(5, 3.2f, 0));
 
 		if (settingPage)
 		{
-
 			GUI.Box (new Rect (screenPos.x-Utils.adjustUISize (50, true), Camera.main.pixelHeight-screenPos.y, Utils.adjustUISize (100,true), Utils.adjustUISize (400,false)), numPlayers+"\n\n\n"+numCardsDealt+"\n\n\n"+numCardsAuction+"\n\n\n"+numRounds+"\n\n\n"+startCash+"\n\n\n"+cashIncome,boxStyle);
 		}
 		if (storePage) 
