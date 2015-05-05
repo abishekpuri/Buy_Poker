@@ -295,14 +295,6 @@ public class GameMaster : MonoBehaviour {
 		//winner.setWinningHand ();
 		winnerID = winner.DeckID;
 		searchHandByID (winnerID).Winner ();
-						if (winnerID == 1) {
-								//playerList [0].playerWinner ();
-								//PlayerPrefs.SetInt ("wins", wins + 1);
-								PlayerPrefs.Save ();
-		} else {
-								playerList [0].playerLoser ();
-		}
-
 		// =============take winners' cards up to the display=============
 		for (int i=0; i<searchHandByID (winnerID).winningHand.Count; i++)
 		{
@@ -329,6 +321,9 @@ public class GameMaster : MonoBehaviour {
 
 		if (gameWinnerID == 1 && !SystemManager.isCustom) {
 						searchHandByID (1).playerWinner (SystemManager.numPlayers);
+				}
+		if (gameWinnerID != 1) {
+						searchHandByID (1).playerLoser ();
 				}
 		Transform tempParticleSystem = (Transform)Instantiate (Resources.Load <Transform>("prefab/Particle System fadeout"), new Vector3(0,0,0), transform.rotation);
 		tempParticleSystem.renderer.sortingLayerName="Particles";

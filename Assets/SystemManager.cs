@@ -36,13 +36,6 @@ public class SystemManager : MonoBehaviour {
 
 	public static void reset() 
 	{
-		PlayerPrefs.SetInt ("wins", 0);
-		PlayerPrefs.SetInt ("Points", 0);
-		Debug.Log (PlayerPrefs.GetInt ("Points"));
-		for (int i = 0; i < 5; ++i) {
-			PlayerPrefs.SetInt ("Upgrade" + i, 0);
-		}
-		PlayerPrefs.Save ();
 		numPlayers = 3;
 		numCardsDealt = 3;
 		numCardsAuction = 2;

@@ -87,11 +87,15 @@ public class PlayerHand : Deck {
 		Points += Multiplier;
 		PlayerPrefs.SetInt ("Points", Points);
 		PlayerPrefs.Save ();
-		//Debug.Log (deckID + ": " + Points);
+		Debug.Log (deckID + ": " + PlayerPrefs.GetInt ("Points"));
 	}
 	public void playerLoser() 
 	{
-		PlayerPrefs.SetInt ("Multiplier", 1);
+		int Points = PlayerPrefs.GetInt ("Points");
+		Points += 1;
+		PlayerPrefs.SetInt ("Points", Points);
+		PlayerPrefs.Save ();
+		Debug.Log (deckID + ": " + PlayerPrefs.GetInt ("Points"));
 	}
 	public void Winner() 
 	{
