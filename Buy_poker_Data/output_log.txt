@@ -16,13 +16,13 @@ Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assemb
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.042 seconds
+- Completed reload, in  0.044 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: G:\Workspace\COMP4451\Buy_Poker\Buy_poker_Data\Managed\System.dll (this message is harmless)
-UnloadTime: 10.314158 ms
+UnloadTime: 8.014688 ms
 HDR RenderTexture format is not supported on this platform. This camera will render without HDR buffers.
  
 (Filename:  Line: 2468)
@@ -34,7 +34,7 @@ Card sprite resourses loaded once and for all
 Unloading 6 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 229.
-Total: 2.405391 ms (FindLiveObjects: 0.048855 ms CreateObjectMapping: 0.036128 ms MarkObjects: 0.539868 ms  DeleteObjects: 0.024222 ms)
+Total: 2.179591 ms (FindLiveObjects: 0.059529 ms CreateObjectMapping: 0.032843 ms MarkObjects: 0.494708 ms  DeleteObjects: 0.025453 ms)
 
 Deck 100 reported to gameMaster, deckListSize=1
  
@@ -100,47 +100,7 @@ Deck 2 reported to gameMaster, deckListSize=6
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-Card dealt to 4 hands
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-1
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-1
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
 Registered Server
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-Player 2's current cash = 17.31813!!
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-1
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-1
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-Player 1's current cash = 18.04881!!
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-1
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-1
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-1
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 

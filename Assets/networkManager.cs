@@ -205,8 +205,10 @@ public class networkManager : MonoBehaviour {
 		}*/
 		else
 		{
-			GUI.Box (new Rect (btnX, btnY, btnW, btnH), "Connected!",boxStyle);
+			GUI.Box (new Rect (btnX, btnY, btnW, btnH), "Connected!\n\n"+statusMsg,boxStyle);
 			GameMaster.networkRequired=false;
+			if (GameMaster.networkWaitingForOtherPlayers)
+				statusMsg=" waiting for players..";
 		}
 		/*
 		for (int i=0; i<hostData.Length; i++) {
