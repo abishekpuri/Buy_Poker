@@ -56,10 +56,10 @@
      <Compile Include="Assets\PlayerHand.cs" />
      <Compile Include="Assets\SystemManager.cs" />
      <Compile Include="Assets\Utils.cs" />
+     <Compile Include="Assets\extendedNetworkObjectChat.cs" />
      <Compile Include="Assets\networkBidObject.cs" />
      <Compile Include="Assets\networkManager.cs" />
      <Compile Include="Assets\settingScene.cs" />
-     <Compile Include="Assets\synchronizedDatabase.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>

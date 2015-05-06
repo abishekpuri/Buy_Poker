@@ -30,7 +30,7 @@ public class networkManager : MonoBehaviour {
 	void Start () {
 		GameMaster.networkRequired=true;
 		GameMaster.multiplayerMode = true;
-		search_wait_time = 7f;
+		search_wait_time = 5f;
 		btnX=Screen.width*0.05f;
 		btnY=Screen.height*0.05f;
 		btnW=Screen.width*0.15f;
@@ -168,7 +168,7 @@ public class networkManager : MonoBehaviour {
 		if (mse == MasterServerEvent.RegistrationSucceeded)
 		{
 			Debug.Log ("Registered Server");
-			statusMsg="waiting for clients";
+			//statusMsg="waiting for clients";
 		}
 	}
 
@@ -176,6 +176,8 @@ public class networkManager : MonoBehaviour {
 	{
 		GUIStyle boxStyle = new GUIStyle (GUI.skin.button);
 		boxStyle.normal.textColor = Color.green;
+		boxStyle.hover.textColor = Color.cyan;
+		boxStyle.active.textColor = Color.cyan;
 		boxStyle.fontSize = Utils.adjustUISize (16,true);
 
 		GameMaster.multiplayerMode = true;
@@ -197,7 +199,7 @@ public class networkManager : MonoBehaviour {
 				Network.Disconnect ();
 			}
 		}
-		else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Disconnect!"))
+		else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH/2), "Connected!!\n\n"+statusMsg,boxStyle))
 		{
 			Debug.Log ("Disconnected");
 			MasterServer.UnregisterHost();
@@ -208,7 +210,17 @@ public class networkManager : MonoBehaviour {
 		{
 			//GUI.Box (new Rect (btnX, btnY, btnW, btnH), "Connected!",boxStyle);
 			GameMaster.networkRequired=false;
+			if (GameMaster.networkWaitingForPlayers) {
+				statusMsg="waitingForPlayers...";
+				if (networkObject.isPlayersReady ())
+				{
+					statusMsg="connection ok";
+					GameMaster.networkWaitingForPlayers=false;
+				}
+			}
 		}
+
+
 		/*
 		for (int i=0; i<hostData.Length; i++) {
 			GUI.Box (new Rect (btnX+Screen.height*0.4f, btnY*1.2f+btnH*i, btnW*3f, btnH), hostData[i].gameName);

@@ -56,10 +56,10 @@
      <Compile Include="Assets\PlayerHand.cs" />
      <Compile Include="Assets\SystemManager.cs" />
      <Compile Include="Assets\Utils.cs" />
+     <Compile Include="Assets\extendedNetworkObjectChat.cs" />
      <Compile Include="Assets\networkBidObject.cs" />
      <Compile Include="Assets\networkManager.cs" />
      <Compile Include="Assets\settingScene.cs" />
-     <Compile Include="Assets\synchronizedDatabase.cs" />
  <Reference Include="Assembly-UnityScript-firstpass">
  <HintPath>G:/Workspace/COMP4451/Buy_Poker/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>

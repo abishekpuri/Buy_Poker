@@ -11,7 +11,7 @@ using System.Collections;
  * */
 
 
-public class synchronizedDatabase : networkBidObject {
+public class extendedNetworkObjectChat : networkBidObject {
 
 	float relativeX;
 	float relativeY;

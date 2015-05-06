@@ -262,7 +262,7 @@ public class PlayerHand : Deck {
 		if (Ace) {
 				CombinationValue = 14;
 		}
-		if (!AIControlled && PlayerPrefs.GetInt ("Upgrade1")==1) {		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
+		if (DeckID==GameMaster.UserID && PlayerPrefs.GetInt ("Upgrade1")==1) {		// THIS IF STATEMENT IS ONLY A TEMPORARY SOLUTION
 				for (int i=0; i<cards.Count; ++i) {
 						cards [i].stopBlinkAnim ();
 				}

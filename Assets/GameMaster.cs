@@ -41,6 +41,7 @@ public class GameMaster : MonoBehaviour {
 	public static bool displayGameResult = false;
 	public static bool networkRequired = false;// to sync up with opponent until the game starts.
 	public static bool multiplayerMode = false;
+	public static bool networkWaitingForPlayers = false;
 	public int wins;
 	public int auctionCardsLeft;
 	public int roundsLeft;
@@ -175,6 +176,7 @@ public class GameMaster : MonoBehaviour {
 		roundEnd = true;
 		gameEnd = false;
 		displayGameResult = false;
+		networkWaitingForPlayers = false;
 		auctionCardsLeft = SystemManager.numCardsAuction;
 		StartCoroutine (coStart ());
 
@@ -229,7 +231,14 @@ public class GameMaster : MonoBehaviour {
 	//NOTE : It says I must add yield to the return because of some iterator problem, so I have.
 	public IEnumerator startRound() 
 	{
-		Debug.Log ("Your ID = " +UserID);
+		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
+			networkWaitingForPlayers=true;
+		}
+
+		while (networkWaitingForPlayers) {
+			yield return new WaitForSeconds(0.05f);
+		}
+		//Debug.Log ("Your ID = " +UserID);
 		roundEnd = false;
 		if (roundsLeft <= 0) {
 						StartCoroutine (endGame ());
@@ -446,6 +455,9 @@ public class GameMaster : MonoBehaviour {
 			if (gameBegins && roundEnd) {
 				GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (100, true), Camera.main.pixelHeight - screenPos.y - 160, Utils.adjustUISize (200, true), Utils.adjustUISize (40, false)), "Player " + winnerID + " wins the round!!!", style);
 				if (GUI.Button (new Rect (screenPos.x - Utils.adjustUISize (100, true), Camera.main.pixelHeight - screenPos.y - 120, Utils.adjustUISize (200, true), Utils.adjustUISize (40, false)), "Next round", styleBtn)) {
+					if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
+						networkManager.networkObject.playerIsReady(UserID);
+					}
 					StartCoroutine (startRound ());
 				}
 
