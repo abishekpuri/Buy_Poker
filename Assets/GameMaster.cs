@@ -229,6 +229,7 @@ public class GameMaster : MonoBehaviour {
 	//NOTE : It says I must add yield to the return because of some iterator problem, so I have.
 	public IEnumerator startRound() 
 	{
+		Debug.Log ("Your ID = " +UserID);
 		roundEnd = false;
 		if (roundsLeft <= 0) {
 						StartCoroutine (endGame ());
@@ -238,7 +239,7 @@ public class GameMaster : MonoBehaviour {
 
 		// hide combination value
 		for (int i=0; i<playerList.Count; i++) {
-			if (playerList[i].DeckID!=1)
+			if (playerList[i].DeckID!=UserID)
 				playerList[i].showCombination=false;
 		}
 
@@ -377,7 +378,7 @@ public class GameMaster : MonoBehaviour {
 			{
 				if (playerList[j].DeckID>0 && playerList[j].DeckID<100)
 				{
-					searchDeckByID(0).transferCardTo (playerList[j], playerList[j].DeckID==1);
+					searchDeckByID(0).transferCardTo (playerList[j], playerList[j].DeckID==UserID);
 					//playerList[j].evaluateHand();
 					yield return new WaitForSeconds(0.2f);
 				}

@@ -148,6 +148,7 @@ public class networkManager : MonoBehaviour {
 		networkObject=netObj.GetComponent<networkBidObject>();
 		networkObject.debug ();
 		GameMaster.UserID = 2;
+		networkObject.broadcastRandomValues();
 	}
 
 	void OnDisconnectedFromServer()
@@ -196,16 +197,16 @@ public class networkManager : MonoBehaviour {
 				Network.Disconnect ();
 			}
 		}
-		/*else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Disconnect!"))
+		else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH), "Disconnect!"))
 		{
 			Debug.Log ("Disconnected");
 			MasterServer.UnregisterHost();
 			Network.Disconnect ();
 			Destroy (networkObject);
-		}*/
+		}
 		else
 		{
-			GUI.Box (new Rect (btnX, btnY, btnW, btnH), "Connected!",boxStyle);
+			//GUI.Box (new Rect (btnX, btnY, btnW, btnH), "Connected!",boxStyle);
 			GameMaster.networkRequired=false;
 		}
 		/*

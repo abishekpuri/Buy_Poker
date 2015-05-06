@@ -12,7 +12,8 @@ using System.Collections;
 public class networkBidObject : MonoBehaviour {
 
 	public int[] bidValueByID;
-	
+	public int[] randomValues;
+
 	[RPC] virtual public void registerBidValue(Vector3 values)
 	{
 		bidValueByID [(int)values.x] = (int)values.y;
@@ -21,6 +22,26 @@ public class networkBidObject : MonoBehaviour {
 	virtual public void broadcastBidValue(Vector3 values)
 	{
 		networkView.RPC ("registerBidValue",RPCMode.AllBuffered,values);
+	}
+
+	[RPC] public void registerRandomValues(Vector3 values)
+	{
+		randomValues[(int)values.x] = (int)values.y;
+	}
+
+	public void broadcastRandomValues()
+	{
+		for (int i=0; i<100; i++)
+		{
+			networkView.RPC ("registerRandomValues",RPCMode.AllBuffered,new Vector3(i,Random.Range (0,1000)));
+		}
+	}
+
+
+
+	public int getCommonRandomValue(int index, int mod)
+	{
+		return randomValues [index] % mod;
 	}
 
 	public void debug()
@@ -55,9 +76,14 @@ public class networkBidObject : MonoBehaviour {
 		}
 		return currentMax;
 	}
+
+	void Awake() {
+		bidValueByID = new int[100];
+		randomValues = new int[1000];
+	}
 	// Use this for initialization
 	void Start () {
-		bidValueByID = new int[100];
+
 	}
 	
 	// Update is called once per frame

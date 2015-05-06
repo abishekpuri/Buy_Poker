@@ -119,7 +119,12 @@ public class Deck : MonoBehaviour {
 	{
 		for (int i=0; i<cards.Count; i++)
 		{
+
 			int swap_target = Random.Range (0,cards.Count);
+			// if connected to network, request for a common random seed
+			if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
+				swap_target = networkManager.networkObject.getCommonRandomValue(i,cards.Count);
+			}
 			Card temp = cards[i];
 			cards[i] = cards[swap_target];
 			cards[swap_target] = temp;
