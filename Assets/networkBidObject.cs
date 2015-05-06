@@ -21,7 +21,6 @@ public class networkBidObject : MonoBehaviour {
 	virtual public void broadcastBidValue(Vector3 values)
 	{
 		networkView.RPC ("registerBidValue",RPCMode.AllBuffered,values);
-
 	}
 
 	public void debug()

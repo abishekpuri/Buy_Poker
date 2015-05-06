@@ -41,7 +41,6 @@ public class GameMaster : MonoBehaviour {
 	public static bool displayGameResult = false;
 	public static bool networkRequired = false;// to sync up with opponent until the game starts.
 	public static bool multiplayerMode = false;
-	public static bool networkWaitingForOtherPlayers = false;	// to sync up in different rounds
 	public int wins;
 	public int auctionCardsLeft;
 	public int roundsLeft;
@@ -176,7 +175,6 @@ public class GameMaster : MonoBehaviour {
 		roundEnd = true;
 		gameEnd = false;
 		displayGameResult = false;
-		networkWaitingForOtherPlayers = false;
 		auctionCardsLeft = SystemManager.numCardsAuction;
 		StartCoroutine (coStart ());
 
@@ -231,18 +229,11 @@ public class GameMaster : MonoBehaviour {
 	//NOTE : It says I must add yield to the return because of some iterator problem, so I have.
 	public IEnumerator startRound() 
 	{
-		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
-			networkWaitingForOtherPlayers=true;
-		}
-		while (networkWaitingForOtherPlayers)
-		{
-			yield return new WaitForSeconds(0.05f);
-		}
 		roundEnd = false;
 		if (roundsLeft <= 0) {
-			StartCoroutine (endGame ());
-			yield return true;
-		}
+						StartCoroutine (endGame ());
+						yield return true;
+				}
 		roundsLeft--;
 
 		// hide combination value
