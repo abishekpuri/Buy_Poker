@@ -354,6 +354,10 @@ public class PlayerHand : Deck {
 	{
 		cash -= price;
 		BidValue = 0;
+		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length<1)))
+		{
+			networkManager.networkObject.broadcastBidValue (new Vector2(DeckID, (int)0));
+		}
 		Debug.Log ("Player "+DeckID+ "'s current cash = "+cash + "!!");
 	}
 

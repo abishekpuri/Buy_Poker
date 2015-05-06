@@ -147,13 +147,11 @@ public class SystemManager : MonoBehaviour {
 	public void confirmStartCash()
 	{
 		startCash = tempStartCash;
-
 	}
 
 	public void confirmCashIncome()
 	{
 		cashIncome = tempCashIncome;
-
 	}
 
 	public void confirmAll()
