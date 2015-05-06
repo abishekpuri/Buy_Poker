@@ -54,6 +54,14 @@ public class SystemManager : MonoBehaviour {
 		cashIncome = 60;
 	}
 
+	public void forDemo() 
+	{
+				PlayerPrefs.SetInt ("Points", 10);
+		for (int i = 0; i < 5; ++i) {
+			PlayerPrefs.SetInt ("Upgrade" + i, 0);
+		}
+		PlayerPrefs.Save ();
+		}
 	public void resetButton() 
 	{
 				PlayerPrefs.SetInt ("wins", 0);
