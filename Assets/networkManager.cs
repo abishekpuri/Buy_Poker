@@ -1,26 +1,56 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+
+/**
+ * Class networkManager.
+ * 
+ * Mainly uses Network interface nicely provided by unity.
+ * Also uses unity masterServer that can be accessed for free.
+ * 
+ * back-end is hidden very well behind the actual layer we are using.
+ * search-automation is done, only at a front-end side.
+ * 
+ * 
+ * Every player can, with the help of master server,
+ * - either register as a host.
+ * - or join an existing host.
+ * 
+ * 
+ * multiple player connection seems hard to implement. (at least it should take a lot of time and have to change a lot of existing code)
+ * Right now, networkManager work specifically for 2 players.
+ * the process of registering as host, or joining host is automated.
+ * If empty room is found, join.
+ * If not, (all room is full, or there is no room), create new room.
+ * 
+ * After connection,
+ * both players create a network object, which can communicate with each each other by calling functions on the other side.
+ * 
+ * 
+ * After all, unity made it so easy for us, and it works just like a magic!!
+ * 
+ * */
 public class networkManager : MonoBehaviour {
 
 	public string GAMENAME="chat";	// GAMENAME changes to "duel" in a multiplayer game, so that chat room and game room don't collide
 	public static float REFRESH_HOST_TIMEOUT = 3f;
-	public static float SEARCH_TIMEOUT=30f;
-	float search_wait_time=0;
-	float refresh_start_time;
-	float search_start_time;
+	public static float SEARCH_TIMEOUT=30f;		// automatically cancels search after SEARCH_TIMEOUT
+	float search_wait_time;	// how many seconds did you wait to search?
+	float refresh_start_time;	// starttime for searching for host.
+	float search_start_time;	// starttime for searching.
 
 	string statusMsg;
 
-	public Transform samplePref;
+	public Transform samplePref;	// samplePref is a preFab that is loaded on a unity scene file. (consists of networkObject script and networkView)
 
 	float btnX;
 	float btnY;
 	float btnW;
 	float btnH;
 
-	bool searching;
-	bool refreshing;
+	bool searching;		// currently searching (search button pressed)
+	bool refreshing;	// currently looking up for existing host.
 	HostData[] hostData;
 
 	public static networkBidObject networkObject;
@@ -127,7 +157,7 @@ public class networkManager : MonoBehaviour {
 	{
 		Debug.Log ("Server initialized!");
 	}
-
+	
 	void OnConnectedToServer()
 	{
 		Debug.Log ("connected to host!");
@@ -138,7 +168,7 @@ public class networkManager : MonoBehaviour {
 		networkObject.debug ();
 		GameMaster.UserID = 1;
 	}
-
+	
 	void OnPlayerConnected()
 	{
 		Debug.Log ("connected to player!");
@@ -154,6 +184,7 @@ public class networkManager : MonoBehaviour {
 	void OnDisconnectedFromServer()
 	{
 		Debug.Log ("disconnected from host!");
+		// destroy the network object on disconnect
 		Destroy (netObj.gameObject);
 
 	}
@@ -161,6 +192,7 @@ public class networkManager : MonoBehaviour {
 	void OnPlayerDisconnected()
 	{
 		Debug.Log ("player disconnected!");
+		// destroy the network object on disconnect
 		Destroy (netObj.gameObject);
 	}
 
@@ -181,6 +213,8 @@ public class networkManager : MonoBehaviour {
 		boxStyle.fontSize = Utils.adjustUISize (16,true);
 
 		GameMaster.multiplayerMode = true;
+
+		// this if statement is used over, over and over. Check if you are connected or not. should be a better way.
 		if (!Network.isClient && (!Network.isServer || Network.connections.Length<1)) {
 			GameMaster.networkRequired=true;
 			if (!searching)
