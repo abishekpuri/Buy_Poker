@@ -6,6 +6,8 @@ using System.Collections;
  * I had to sacrifice a good class design to make multiplayer game and chat room work at the same time.
  * 
  * 
+ * 
+ * 
  * */
 
 
@@ -15,12 +17,19 @@ public class networkBidObject : MonoBehaviour {
 	public int[] randomValues;
 	public int[] playersReady;
 
+
+	// this function gets called remotely.
+	// networkView.RPC ("registerBidValue",RPCMode.AllBuffered,values);
+	// calls this function in every players in network. In that way, players can share certain values, such as random values.
+	//There are also RPCMode.others
 	[RPC] virtual public void registerBidValue(Vector3 values)
 	{
 		bidValueByID [(int)values.x] = (int)values.y;
 	}
 
-	virtual public void broadcastBidValue(Vector3 values)
+
+	// broadcast bid value
+	virtual public void broadcastBidValue(Vector3 values)	// chat object overrides this function.
 	{
 		networkView.RPC ("registerBidValue",RPCMode.AllBuffered,values);
 	}
@@ -30,6 +39,7 @@ public class networkBidObject : MonoBehaviour {
 		randomValues[(int)values.x] = (int)values.y;
 	}
 
+	// the host-side player creates random values of range 0 to 1000, and sends these values over the network.
 	public void broadcastRandomValues()
 	{
 		for (int i=0; i<100; i++)
@@ -44,6 +54,7 @@ public class networkBidObject : MonoBehaviour {
 	}
 	public bool isPlayersReady()
 	{
+		// I was just too lazy to even write one for loop.
 		if (playersReady [1] > 0 && playersReady [2] > 0) {
 			playersReady[1]=0;
 			playersReady[2]=0;
@@ -81,6 +92,7 @@ public class networkBidObject : MonoBehaviour {
 		return currentPlayerID;
 	}
 
+	// super buggy.
 	public int getHighestBidValueOverNetwork()
 	{
 		int currentMax=0;

@@ -8,6 +8,17 @@ using System.Collections;
  * - it is better re-named
  * - had to messed up with class hierarchy so that multiplayer game on top of chat can be implemented. 
  * 
+ * 
+ * extends from networkBidObject.
+ * Since I am trying to use same networkManager for both chatroom and multiplayer game,
+ * there is just no way to access functions of this class in a pretty way.
+ * 
+ * overrides
+ * registerBidValue()
+ * broadcastBidValue() from networkBidObject.
+ * 
+ * 
+ * 
  * */
 
 

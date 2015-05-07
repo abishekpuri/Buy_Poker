@@ -24,6 +24,27 @@ using System.Collections.Generic;
  * 
  * 
  * */
+
+/*
+ * some notes on networking.
+ * I tried not to change too much things on what we already have.
+ * 
+ * When connected to network, GameMaster.UserID is changed.
+ * 
+ * Also, getHighestBidderID() and getHighestBidderValue() essentially gets overrided by network object.
+ * PlayerHand.bidValue also gets overrided by networkObejct.
+ * 
+ * 
+ * TODO:
+ * Sync auction timer value.
+ * Implement more than 2 person multiplayer game
+ * 
+ * 
+ * 
+ * 
+ * */
+
+
 public class GameMaster : MonoBehaviour {
 
 	// constant player ID value
@@ -41,7 +62,7 @@ public class GameMaster : MonoBehaviour {
 	public static bool displayGameResult = false;
 	public static bool networkRequired = false;// to sync up with opponent until the game starts.
 	public static bool multiplayerMode = false;
-	public static bool networkWaitingForPlayers = false;
+	public static bool networkWaitingForPlayers = false;	// to sync up with opponent until the new round starts.
 	public int wins;
 	public int auctionCardsLeft;
 	public int roundsLeft;
