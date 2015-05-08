@@ -265,55 +265,58 @@ public class GameMaster : MonoBehaviour {
 						StartCoroutine (endGame ());
 						yield return true;
 				}
-		roundsLeft--;
-
-		// hide combination value
-		for (int i=0; i<playerList.Count; i++) {
-			if (playerList[i].DeckID!=UserID)
-				playerList[i].showCombination=false;
-		}
-
-		// recall all cards one by one.
-		for (int i=0; i<deckList.Count; i++)
+		else
 		{
-			for (int j=0; j<deckList[i].CARDS.Count+5; j++)
-			{
-				if (deckList[i].DeckID!=0)
-				{
-					deckList[i].transferCardTo (searchDeckByID (0), false);
-						//playerList[j].evaluateHand();
-					searchDeckByID (0).closeDeck ();
-					yield return new WaitForSeconds(0.05f);
-				}
+			roundsLeft--;
+
+			// hide combination value
+			for (int i=0; i<playerList.Count; i++) {
+				if (playerList[i].DeckID!=UserID)
+					playerList[i].showCombination=false;
 			}
-			searchDeckByID (0).closeDeck ();
+
+			// recall all cards one by one.
+			for (int i=0; i<deckList.Count; i++)
+			{
+				for (int j=0; j<deckList[i].CARDS.Count+5; j++)
+				{
+					if (deckList[i].DeckID!=0)
+					{
+						deckList[i].transferCardTo (searchDeckByID (0), false);
+							//playerList[j].evaluateHand();
+						searchDeckByID (0).closeDeck ();
+						yield return new WaitForSeconds(0.05f);
+					}
+				}
+				searchDeckByID (0).closeDeck ();
+			}
+
+			// shuffling animation.
+			searchDeckByID (0).setupLayout (2);
+			yield return new WaitForSeconds(0.3f);
+			searchDeckByID (0).setupLayout (0);
+			searchDeckByID (0).shuffle ();
+			yield return new WaitForSeconds(0.3f);
+			searchDeckByID (0).setupLayout (2);
+			yield return new WaitForSeconds(0.3f);
+			searchDeckByID (0).shuffle ();
+			searchDeckByID (0).setupLayout (0);
+
+			// destroy all cards in the game.
+			/*for (int i = 0; i < deckList.Count; i++) {
+				deckList [i].destroyAll ();
+			}*/
+
+			// set the number of auction cards
+			auctionCardsLeft = SystemManager.numCardsAuction;
+
+			// reset player cash.
+			/*for (int i = 0; i < playerList.Count; ++i) {
+				playerList [i].setCash (200);
+			}*/
+
+			StartCoroutine(coStartRound ());
 		}
-
-		// shuffling animation.
-		searchDeckByID (0).setupLayout (2);
-		yield return new WaitForSeconds(0.3f);
-		searchDeckByID (0).setupLayout (0);
-		searchDeckByID (0).shuffle ();
-		yield return new WaitForSeconds(0.3f);
-		searchDeckByID (0).setupLayout (2);
-		yield return new WaitForSeconds(0.3f);
-		searchDeckByID (0).shuffle ();
-		searchDeckByID (0).setupLayout (0);
-
-		// destroy all cards in the game.
-		/*for (int i = 0; i < deckList.Count; i++) {
-			deckList [i].destroyAll ();
-		}*/
-
-		// set the number of auction cards
-		auctionCardsLeft = SystemManager.numCardsAuction;
-
-		// reset player cash.
-		/*for (int i = 0; i < playerList.Count; ++i) {
-			playerList [i].setCash (200);
-		}*/
-
-		StartCoroutine(coStartRound ());
 	}
 	/************************************* script for each round is written here...*******************************/
 	public IEnumerator coStartRound()	//Must be called through StartCoroutine()
