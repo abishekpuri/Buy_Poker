@@ -176,7 +176,7 @@ public class Deck : MonoBehaviour {
 	/*
 	 * Default case: collapse (Main deck)
 	 * Case 1: spread by overlapping with each other. To the right.
-	 * Case 2: same, spreads from middle. But almost collapsing.
+	 * Case 2: same, spreads from middle. But almost collapsing. (used for shuffling animation!)
 	 * Case 3: spreads out without overlap. To right.
 	 * Case 4: spreads out without overlap. Spreads from middle.
 	 * Case 5: rotates in a z axis.

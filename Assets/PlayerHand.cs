@@ -374,7 +374,13 @@ public class PlayerHand : Deck {
 			if (AIControlled)
 				BidValue=price;
 			else
+			{
 				BidValue=0;
+				if (!(!Network.isClient && (!Network.isServer || Network.connections.Length<1)))
+				{
+					networkManager.networkObject.broadcastBidValue (new Vector2(DeckID, (int)0));
+				}
+			}
 			return false;
 		}
 	}
@@ -419,21 +425,21 @@ public class PlayerHand : Deck {
 		if (DeckID == GameMaster.UserID && showGUI) {
 			if (roundPoints >= 5) {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 3, transform.localPosition.z));
-				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "50 Cash (10)", buttonStyle)) {
+				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "50 Cash\n(10)", buttonStyle)) {
 					buyPrize (10);
 					cash += 50;
 				}
 			}
 			if (roundPoints >= 10) {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 1.5f, transform.localPosition.z));
-				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Stop" + "\n" + "Auction (10)", buttonStyle)) {
+				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Stop" + "\n" + "Auction\n(10)", buttonStyle)) {
 					buyPrize (15);
 					GameMaster.endAuctionEarly ();
 				}
 			}
 			if (roundPoints >= 15) {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 0, transform.localPosition.z));
-				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Extra" + "\n" + "Card (15)", buttonStyle)) {
+				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Extra" + "\n" + "Card\n(15)", buttonStyle)) {
 					buyPrize (15);
 					GameMaster.requestCardTransfer (0, 1, true);
 				}

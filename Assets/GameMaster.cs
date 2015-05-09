@@ -376,10 +376,10 @@ public class GameMaster : MonoBehaviour {
 		gameEnd = true;
 		gameWinnerID = getGameWinnerID ();
 
-		if (gameWinnerID == 1 && !SystemManager.isCustom) {
+		if (gameWinnerID == UserID && !SystemManager.isCustom) {
 						searchHandByID (1).playerWinner (SystemManager.numPlayers);
 				}
-		if (gameWinnerID != 1) {
+		if (gameWinnerID != UserID) {
 						searchHandByID (1).playerLoser ();
 				}
 		Transform tempParticleSystem = (Transform)Instantiate (Resources.Load <Transform>("prefab/Particle System fadeout"), new Vector3(0,0,0), transform.rotation);
@@ -491,7 +491,7 @@ public class GameMaster : MonoBehaviour {
 		{
 			Vector3 resultScreenPos = Camera.main.WorldToScreenPoint(new Vector3(-0.5f, 3, 0));
 			style.fontSize = Utils.adjustUISize (18,true);
-			GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y- Utils.adjustUISize (50, false), Utils.adjustUISize (250, true), Utils.adjustUISize (60, false)), (gameWinnerID==1)?("You won!!"):("You lost!!"), style);
+			GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y- Utils.adjustUISize (50, false), Utils.adjustUISize (250, true), Utils.adjustUISize (60, false)), (gameWinnerID==UserID)?("You won!!"):("You lost!!"), style);
 			style.fontSize = Utils.adjustUISize (14,true);
 			GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y+ Utils.adjustUISize (20, false), Utils.adjustUISize (250, true), Utils.adjustUISize (50, false)), "WINNER : Player " + gameWinnerID + "!!", style);
 			if (GUI.Button (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y +Utils.adjustUISize (200, false), Utils.adjustUISize (250, true), Utils.adjustUISize (50, false)), "Back to menu", styleBtn)) {
