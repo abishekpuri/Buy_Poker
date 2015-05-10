@@ -15,6 +15,8 @@ using System.Collections;
  * */
 public class AuctionTimer : MonoBehaviour {
 
+	private int ticks;
+
 	private float timeRemaining;	// time remaining
 	private float speedMultiplier;	// countdown speed.
 	private bool auctionInProcess;
@@ -28,6 +30,7 @@ public class AuctionTimer : MonoBehaviour {
 
 	// Use this for initialization. Default time and speed settings
 	void Start () {
+		ticks = 0;
 		timeRemaining = 100;
 		speedMultiplier = 10;	// 10 per second.
 		auctionInProcess = true;
@@ -38,6 +41,9 @@ public class AuctionTimer : MonoBehaviour {
 	
 	// Update is Implicitly called once per frame
 	void Update () {
+			// increase ticks by one
+			ticks++;
+
 			// If auction is successful, transfer the card to respective playerHand.
 			if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) {
 					buttonClicked = true;
@@ -50,7 +56,19 @@ public class AuctionTimer : MonoBehaviour {
 
 			// Every frame, count down the timer.
 			if (timeRemaining >= 10 && auctionInProcess) {
-					timeRemaining -= Time.deltaTime * speedMultiplier;
+				timeRemaining -= Time.deltaTime * speedMultiplier;
+				
+				// server broadcasts current auction timer. That is, the host dominates the timer value
+				if (ticks%30 == 0 && Network.isServer && Network.connections.Length>=1)
+				{
+					networkManager.networkObject.broadcastAuctionCounter (timeRemaining);
+					//Debug.Log ("auction counter sync");
+				}
+				// clients receives the timer value.
+				if (ticks%30 == 15 && Network.isClient && Network.connections.Length>=1)
+				{
+					timeRemaining=networkManager.networkObject.auctionCounter;
+				}
 
 			} else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	//After delay time, it transfers card from auction deck to player hand.
 					//Debug.Log ("Deliver!!!");

@@ -204,6 +204,14 @@ public class networkManager : MonoBehaviour {
 		}
 	}
 
+	public void forceDisconnect()
+	{
+		MasterServer.UnregisterHost();
+		Network.Disconnect ();
+		Destroy (networkObject);
+
+	}
+
 	void OnGUI()
 	{
 		GUIStyle boxStyle = new GUIStyle (GUI.skin.button);
@@ -236,9 +244,7 @@ public class networkManager : MonoBehaviour {
 		else if (GUI.Button (new Rect (btnX, btnY, btnW, btnH/2), "Connected!!\n\n"+statusMsg,boxStyle))
 		{
 			Debug.Log ("Disconnected");
-			MasterServer.UnregisterHost();
-			Network.Disconnect ();
-			Destroy (networkObject);
+			forceDisconnect ();
 		}
 		else
 		{

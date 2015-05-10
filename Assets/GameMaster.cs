@@ -257,7 +257,7 @@ public class GameMaster : MonoBehaviour {
 		}
 
 		while (networkWaitingForPlayers) {
-			yield return new WaitForSeconds(0.05f);
+			yield return new WaitForSeconds(0.02f);
 		}
 		//Debug.Log ("Your ID = " +UserID);
 		roundEnd = false;
@@ -335,6 +335,15 @@ public class GameMaster : MonoBehaviour {
 
 		gameBegins = true;
 
+
+		// =============Synchronization code, =================
+		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
+			networkWaitingForPlayers=true;
+		}
+		networkManager.networkObject.playerIsReady (UserID);
+		while (networkWaitingForPlayers) {
+			yield return new WaitForSeconds(0.02f);
+		}
 		// =============Starts auction.======================
 		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
 			yield return StartCoroutine (auction ());

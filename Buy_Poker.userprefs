@@ -2,12 +2,12 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\AuctionTimer.cs">
     <Files>
-      <File FileName="Assets\GameMaster.cs" Line="504" Column="79" />
-      <File FileName="Assets\AuctionTimer.cs" Line="44" Column="23" />
-      <File FileName="Assets\SystemManager.cs" Line="20" Column="24" />
-      <File FileName="Assets\PlayerHand.cs" Line="362" Column="3" />
+      <File FileName="Assets\networkBidObject.cs" Line="108" Column="17" />
+      <File FileName="Assets\AuctionTimer.cs" Line="70" Column="56" />
+      <File FileName="Assets\GameMaster.cs" Line="354" Column="4" />
+      <File FileName="Assets\SystemManager.cs" Line="172" Column="17" />
+      <File FileName="Assets\PlayerHand.cs" Line="434" Column="16" />
       <File FileName="Assets\extendedNetworkObjectChat.cs" Line="1" Column="1" />
-      <File FileName="Assets\networkBidObject.cs" Line="1" Column="1" />
       <File FileName="Assets\Deck.cs" Line="1" Column="1" />
       <File FileName="Assets\Card.cs" Line="1" Column="1" />
       <File FileName="Assets\ChangeScene.cs" Line="1" Column="1" />
@@ -15,7 +15,7 @@
       <File FileName="Assets\DebugDeckBehavior.cs" Line="1" Column="1" />
       <File FileName="Assets\settingScene.cs" Line="1" Column="1" />
       <File FileName="Assets\Utils.cs" Line="1" Column="1" />
-      <File FileName="Assets\networkManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\networkManager.cs" Line="151" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

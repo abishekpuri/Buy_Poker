@@ -17,6 +17,8 @@ public class networkBidObject : MonoBehaviour {
 	public int[] randomValues;
 	public int[] playersReady;
 
+	public float auctionCounter;
+
 
 	// this function gets called remotely.
 	// networkView.RPC ("registerBidValue",RPCMode.AllBuffered,values);
@@ -27,11 +29,22 @@ public class networkBidObject : MonoBehaviour {
 		bidValueByID [(int)values.x] = (int)values.y;
 	}
 
+	//broadcast auction counter
+	public void broadcastAuctionCounter(float val)
+	{
+		networkView.RPC ("registerAuctionCounter",RPCMode.All,val);
+	}
+	// register auction counter
+	[RPC] public void registerAuctionCounter(float val)
+	{
+		auctionCounter = val;
+	}
+
 
 	// broadcast bid value
 	virtual public void broadcastBidValue(Vector3 values)	// chat object overrides this function.
 	{
-		networkView.RPC ("registerBidValue",RPCMode.AllBuffered,values);
+		networkView.RPC ("registerBidValue",RPCMode.All,values);
 	}
 
 	[RPC] public void registerRandomValues(Vector3 values)
@@ -44,7 +57,7 @@ public class networkBidObject : MonoBehaviour {
 	{
 		for (int i=0; i<100; i++)
 		{
-			networkView.RPC ("registerRandomValues",RPCMode.AllBuffered,new Vector3(i,Random.Range (0,1000)));
+			networkView.RPC ("registerRandomValues",RPCMode.All,new Vector3(i,Random.Range (0,1000)));
 		}
 	}
 
@@ -65,7 +78,7 @@ public class networkBidObject : MonoBehaviour {
 
 	public void playerIsReady(int ID)
 	{
-		networkView.RPC ("registerPlayerReadyStatus",RPCMode.AllBuffered,new Vector3(ID,1));
+		networkView.RPC ("registerPlayerReadyStatus",RPCMode.All,new Vector3(ID,1));
 	}
 
 	public int getCommonRandomValue(int index, int mod)
@@ -111,6 +124,7 @@ public class networkBidObject : MonoBehaviour {
 		bidValueByID = new int[100];
 		randomValues = new int[1000];
 		playersReady = new int[100];
+		auctionCounter = 100;
 		for (int i=0; i<100; i++) {
 			playersReady[i]=1;
 		}
