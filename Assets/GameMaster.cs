@@ -252,6 +252,7 @@ public class GameMaster : MonoBehaviour {
 	//NOTE : It says I must add yield to the return because of some iterator problem, so I have.
 	public IEnumerator startRound() 
 	{
+		// if network is enabled
 		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
 			networkWaitingForPlayers=true;
 		}
@@ -339,8 +340,9 @@ public class GameMaster : MonoBehaviour {
 		// =============Synchronization code, =================
 		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
 			networkWaitingForPlayers=true;
+			networkManager.networkObject.playerIsReady (UserID);
 		}
-		networkManager.networkObject.playerIsReady (UserID);
+
 		while (networkWaitingForPlayers) {
 			yield return new WaitForSeconds(0.02f);
 		}

@@ -423,14 +423,14 @@ public class PlayerHand : Deck {
 		Vector3 StatBoxscreenPos = Camera.main.WorldToScreenPoint (new Vector3 (transform.localPosition.x, transform.localPosition.y-1, transform.localPosition.z));
 		Vector3 awardButtonScreenPos;
 		if (DeckID == GameMaster.UserID && showGUI) {
-			if (roundPoints >= 5) {
+			if (roundPoints >= 10) {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 3, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "50 Cash\n(10)", buttonStyle)) {
 					buyPrize (10);
 					cash += 50;
 				}
 			}
-			if (roundPoints >= 10) {
+			if (roundPoints >= 15) {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 1.5f, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Stop" + "\n" + "Auction\n(10)", buttonStyle)) {
 					buyPrize (15);

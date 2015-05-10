@@ -54,21 +54,22 @@ public class AuctionTimer : MonoBehaviour {
 					Destroy (temp.gameObject, 1f);
 			}
 
+			// server broadcasts current auction timer. That is, the host dominates the timer value
+			if (ticks%30 == 0 && Network.isServer && Network.connections.Length>=1)
+			{
+				networkManager.networkObject.broadcastAuctionCounter (timeRemaining);
+				Debug.Log ("counter sync host side");
+			}
+			// clients receives the timer value.
+			if (ticks%30 == 15 && Network.isClient && Network.connections.Length>=1)
+			{
+				timeRemaining=networkManager.networkObject.auctionCounter;
+				Debug.Log ("counter sync client side");
+			}
+
 			// Every frame, count down the timer.
 			if (timeRemaining >= 10 && auctionInProcess) {
 				timeRemaining -= Time.deltaTime * speedMultiplier;
-				
-				// server broadcasts current auction timer. That is, the host dominates the timer value
-				if (ticks%30 == 0 && Network.isServer && Network.connections.Length>=1)
-				{
-					networkManager.networkObject.broadcastAuctionCounter (timeRemaining);
-					//Debug.Log ("auction counter sync");
-				}
-				// clients receives the timer value.
-				if (ticks%30 == 15 && Network.isClient && Network.connections.Length>=1)
-				{
-					timeRemaining=networkManager.networkObject.auctionCounter;
-				}
 
 			} else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	//After delay time, it transfers card from auction deck to player hand.
 					//Debug.Log ("Deliver!!!");
