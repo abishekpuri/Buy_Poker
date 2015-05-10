@@ -43,6 +43,25 @@ public class AuctionTimer : MonoBehaviour {
 	void Update () {
 			// increase ticks by one
 			ticks++;
+			
+			// server broadcasts current auction timer. That is, the host dominates the timer value
+			if (ticks%20 == 0 && Network.isServer && Network.connections.Length>=1)
+			{
+				networkManager.networkObject.broadcastAuctionCounter (timeRemaining);
+				//Debug.Log ("counter sync host side");
+			}
+			// clients receives the timer value.
+			if (ticks%20 == 10 && Network.isClient && Network.connections.Length>=1)
+			{
+				// little extrapolation technique used.
+				// For example, a server might not yet have broadcasted its auction timer. Then, clients would probably use the value of previous auction.
+				// Only trust received value if it is at acceptable range of values
+				if (Mathf.Abs(networkManager.networkObject.auctionCounter-timeRemaining)<30)
+				{
+					timeRemaining=networkManager.networkObject.auctionCounter;
+				}
+				//Debug.Log ("counter sync client side = "+ timeRemaining);
+			}
 
 			// If auction is successful, transfer the card to respective playerHand.
 			if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) {
@@ -54,23 +73,10 @@ public class AuctionTimer : MonoBehaviour {
 					Destroy (temp.gameObject, 1f);
 			}
 
-			// server broadcasts current auction timer. That is, the host dominates the timer value
-			if (ticks%30 == 0 && Network.isServer && Network.connections.Length>=1)
-			{
-				networkManager.networkObject.broadcastAuctionCounter (timeRemaining);
-				Debug.Log ("counter sync host side");
-			}
-			// clients receives the timer value.
-			if (ticks%30 == 15 && Network.isClient && Network.connections.Length>=1)
-			{
-				timeRemaining=networkManager.networkObject.auctionCounter;
-				Debug.Log ("counter sync client side");
-			}
-
 			// Every frame, count down the timer.
 			if (timeRemaining >= 10 && auctionInProcess) {
 				timeRemaining -= Time.deltaTime * speedMultiplier;
-
+				
 			} else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	//After delay time, it transfers card from auction deck to player hand.
 					//Debug.Log ("Deliver!!!");
 					GameMaster.requestCardTransfer (100, transferID, true);

@@ -29,7 +29,7 @@ public class networkBidObject : MonoBehaviour {
 		bidValueByID [(int)values.x] = (int)values.y;
 	}
 
-	//broadcast auction counter
+	//broadcast auction counter. On
 	public void broadcastAuctionCounter(float val)
 	{
 		networkView.RPC ("registerAuctionCounter",RPCMode.All,val);

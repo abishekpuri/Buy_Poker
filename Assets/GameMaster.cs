@@ -337,15 +337,6 @@ public class GameMaster : MonoBehaviour {
 		gameBegins = true;
 
 
-		// =============Synchronization code, =================
-		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
-			networkWaitingForPlayers=true;
-			networkManager.networkObject.playerIsReady (UserID);
-		}
-
-		while (networkWaitingForPlayers) {
-			yield return new WaitForSeconds(0.02f);
-		}
 		// =============Starts auction.======================
 		while (auctionCardsLeft!= 0 && !earlyAuctionEnd) {
 			yield return StartCoroutine (auction ());
@@ -439,6 +430,19 @@ public class GameMaster : MonoBehaviour {
 		requestCardTransfer (0,100,true);
 		yield return new WaitForSeconds (1f);
 		auctionInProgress = true;
+
+		// =============Synchronization code =================
+		if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
+			networkWaitingForPlayers=true;
+			networkManager.networkObject.playerIsReady (UserID);
+			Debug.Log ("Wating for players");
+		}
+		
+		while (networkWaitingForPlayers) {
+			yield return new WaitForSeconds(0.02f);
+		}
+
+		// ============= Starts auction timer =================
 		searchDeckByID (100).gameObject.AddComponent ("AuctionTimer");
 
 		// show topCard to AI and let them calculate bid value.
