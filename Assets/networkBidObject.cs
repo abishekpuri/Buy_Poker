@@ -16,9 +16,9 @@ public class networkBidObject : MonoBehaviour {
 	public int[] bidValueByID;
 	public int[] randomValues;
 	public int[] playersReady;
-
-	public float auctionCounter;
-
+	
+	public float auctionCounter;	// auction counter value synchronized from the host side.
+	public int transferID;			// card transfer ID after auction, synchronized from the host side.
 
 	// this function gets called remotely.
 	// networkView.RPC ("registerBidValue",RPCMode.AllBuffered,values);
@@ -40,6 +40,17 @@ public class networkBidObject : MonoBehaviour {
 		auctionCounter = val;
 	}
 
+	//broadcast transferID
+	public void broadcastTransferID(int val)
+	{
+		networkView.RPC ("registerTransferID",RPCMode.All, val);
+	}
+
+	// registers transfer ID
+	[RPC] public void registerTransferID(int val)
+	{
+		transferID = val;
+	}
 
 	// broadcast bid value
 	virtual public void broadcastBidValue(Vector3 values)	// chat object overrides this function.
@@ -125,6 +136,7 @@ public class networkBidObject : MonoBehaviour {
 		randomValues = new int[1000];
 		playersReady = new int[100];
 		auctionCounter = 100;
+		transferID = 0;
 		for (int i=0; i<100; i++) {
 			playersReady[i]=1;
 		}

@@ -37,6 +37,12 @@ public class AuctionTimer : MonoBehaviour {
 		buttonClicked = false;
 		particleEffectPrefab = Resources.Load <Transform>("prefab/Particle System");
 		buttonTexture = Resources.Load <Texture2D>("images/btnTexture");
+
+		// For example, a server might not yet have broadcasted its auction timer. Then, clients would probably use the value of previous auction.
+		// Client resets network register value to timeRemaining, until fresh value from the host arrives.
+		if (Network.isClient && Network.connections.Length >= 1) {
+			networkManager.networkObject.auctionCounter=100;
+		}
 	}
 	
 	// Update is Implicitly called once per frame
@@ -53,14 +59,12 @@ public class AuctionTimer : MonoBehaviour {
 			// clients receives the timer value.
 			if (ticks%20 == 10 && Network.isClient && Network.connections.Length>=1)
 			{
-				// little extrapolation technique used.
-				// For example, a server might not yet have broadcasted its auction timer. Then, clients would probably use the value of previous auction.
-				// Only trust received value if it is at acceptable range of values
-				if (Mathf.Abs(networkManager.networkObject.auctionCounter-timeRemaining)<30)
-				{
-					timeRemaining=networkManager.networkObject.auctionCounter;
-				}
-				//Debug.Log ("counter sync client side = "+ timeRemaining);
+				timeRemaining=networkManager.networkObject.auctionCounter;// - (Network.GetLastPing(Network.connections[0])/1000f)*speedMultiplier;
+				// little extrapolation technique used for better time synchronization at client side.
+				// condition to extrapolate : it must be counting down in the future.
+				if (timeRemaining >= 10 && auctionInProcess)
+					timeRemaining-= (Network.GetAveragePing(Network.connections[0])/1000f)*speedMultiplier;
+				Debug.Log ("counter sync client side = "+ timeRemaining);
 			}
 
 			// If auction is successful, transfer the card to respective playerHand.
@@ -71,20 +75,40 @@ public class AuctionTimer : MonoBehaviour {
 					transferID = GameMaster.getHighestBidderID ();
 					Transform temp = (Transform)Instantiate (particleEffectPrefab, transform.localPosition, transform.rotation);
 					Destroy (temp.gameObject, 1f);
+					// For multiplayer purpose.
+					// If button click is detected, that is, if there is a player with highest bidding value register over the network,
+					// host broadcasts the transferID value
+					if (Network.isServer && Network.connections.Length>=1)
+					{
+						networkManager.networkObject.broadcastTransferID (transferID);
+						Debug.Log ("broadcastTransferID");
+					}
 			}
 
 			// Every frame, count down the timer.
 			if (timeRemaining >= 10 && auctionInProcess) {
 				timeRemaining -= Time.deltaTime * speedMultiplier;
 				
-			} else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	//After delay time, it transfers card from auction deck to player hand.
+
+			}
+			//After delay time, it transfers card from auction deck to player hand.
+			else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	
 					//Debug.Log ("Deliver!!!");
 					GameMaster.requestCardTransfer (100, transferID, true);
 					((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
 					buttonClicked = false;
 					Destroy (this);
 					GameMaster.terminateCurrentAuction ();
-			} else if (timeRemaining < 10) {	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
+			}
+			// For multiplayer purpose.
+			// If button click is detected, that is, if there is a player with highest bidding value register over the network,
+			// at the same time as host is broadcasting transferID value, client is trying to receive it.
+			else if (buttonClicked && Network.isClient && Network.connections.Length>=1)
+			{
+				transferID = networkManager.networkObject.transferID;
+				Debug.Log ("Receive transfer ID = "+transferID);
+			}
+			else if (timeRemaining < 10) {	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
 					Destroy (this, 0.2f);
 					GameMaster.terminateCurrentAuction ();
 		}
