@@ -395,7 +395,7 @@ public class GameMaster : MonoBehaviour {
 		yield return new WaitForSeconds (1.5f);
 		searchDeckByID (102).setupLayout (0);
 		searchDeckByID (102).generateFullCardDeck ();
-		searchDeckByID (102).shuffle ();
+		//searchDeckByID (102).shuffle ();
 		searchDeckByID (102).setupLayout (6);
 		yield return new WaitForSeconds (0.5f);
 		displayGameResult = true;

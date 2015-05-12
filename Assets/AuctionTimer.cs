@@ -35,6 +35,7 @@ public class AuctionTimer : MonoBehaviour {
 		timeRemaining = 100;
 		networkHostTimeRemaining = 100;
 		speedMultiplier = 10;	// 10 per second.
+		networkManager.networkObject.transferID = 0;
 		auctionInProcess = true;
 		buttonClicked = false;
 		particleEffectPrefab = Resources.Load <Transform>("prefab/Particle System");
@@ -49,77 +50,87 @@ public class AuctionTimer : MonoBehaviour {
 	
 	// Update is Implicitly called once per frame
 	void Update () {
-			// increase ticks by one
-			ticks++;
-			
-			// server broadcasts current auction timer. That is, the host dominates the timer value
-			if (ticks%10 == 0 && Network.isServer && Network.connections.Length>=1)
-			{
-				networkManager.networkObject.broadcastAuctionCounter (timeRemaining);
-				//Debug.Log ("counter sync host side");
-			}
-			// clients receives the timer value, with extrapolation and interpolation.
-			if (Network.isClient && Network.connections.Length>=1)
-			{
-				// interpolation technique used. Client's auction counter value generally converges to the host value, instead of jumping to the value.
-				if (networkManager.networkObject.transferID==0)
-					networkHostTimeRemaining-=Time.deltaTime * speedMultiplier;
-				timeRemaining = timeRemaining+(networkHostTimeRemaining-timeRemaining)/5;
-				if (ticks%10 == 5)
-				{
-					networkHostTimeRemaining=networkManager.networkObject.auctionCounter;// - (Network.GetLastPing(Network.connections[0])/1000f)*speedMultiplier;
-					// little extrapolation technique used for better time synchronization at client side.
-					// condition to extrapolate : it must be counting down in the future.
-					if (networkHostTimeRemaining >= 10 && auctionInProcess)
-						networkHostTimeRemaining-= (Network.GetAveragePing(Network.connections[0])/1000f)*speedMultiplier;
-					//Debug.Log ("counter sync client side = "+ networkHostTimeRemaining);
-				}
-				
-			}
-			// If auction is successful, transfer the card to respective playerHand.
-			if (!buttonClicked && GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) {
-					buttonClicked = true;
-					auctionInProcess = false;
-					timerStopTime = Time.time;
-					transferID = GameMaster.getHighestBidderID ();
-					Transform temp = (Transform)Instantiate (particleEffectPrefab, transform.localPosition, transform.rotation);
-					Destroy (temp.gameObject, 1f);
-					// For multiplayer purpose.
-					// If button click is detected, that is, if there is a player with highest bidding value register over the network,
-					// host broadcasts the transferID value
-					if (Network.isServer && Network.connections.Length>=1)
-					{
-						networkManager.networkObject.broadcastTransferID (transferID);
-						//Debug.Log ("broadcastTransferID");
-					}
-			}
+		// increase ticks by one
+		ticks++;
+		// Every frame, count down the timer.
+		if (timeRemaining >= 10 && auctionInProcess) {
+			timeRemaining -= Time.deltaTime * speedMultiplier;
+		}
 
-			// Every frame, count down the timer.
-			if (timeRemaining >= 10 && auctionInProcess) {
-				timeRemaining -= Time.deltaTime * speedMultiplier;
+		/**
+		 * 
+		 * Network related section => timer synchronization code.
+		 * 
+		 * Extrapolation and intrapolation techniques are used
+		 * 
+		 * Host broadcasts timer value, and clients receives them.
+		 * 
+		 * */
+		// server broadcasts current auction timer. That is, the host dominates the timer value
+		if (ticks%10 == 0 && Network.isServer && Network.connections.Length>=1)
+		{
+			networkManager.networkObject.broadcastAuctionCounter (timeRemaining);
+			//Debug.Log ("counter sync host side");
+		}
+		// clients receives the timer value, with extrapolation and interpolation.
+		if (Network.isClient && Network.connections.Length>=1)
+		{
+			// interpolation technique used. Client's auction counter value generally converges to the host value, instead of jumping to the value.
+			if (networkManager.networkObject.transferID==0)
+				networkHostTimeRemaining-=Time.deltaTime * speedMultiplier;
+			timeRemaining = timeRemaining+(networkHostTimeRemaining-timeRemaining)/5;
+			if (ticks%10 == 5)
+			{
+				networkHostTimeRemaining=networkManager.networkObject.auctionCounter;// - (Network.GetLastPing(Network.connections[0])/1000f)*speedMultiplier;
+				// little extrapolation technique used for better time synchronization at client side.
+				// condition to extrapolate : it must be counting down in the future.
+				if (networkHostTimeRemaining >= 10 && auctionInProcess)
+					networkHostTimeRemaining-= (Network.GetAveragePing(Network.connections[0])/1000f)*speedMultiplier;
+				//Debug.Log ("counter sync client side = "+ networkHostTimeRemaining);
 			}
-			//After delay time, it transfers card from auction deck to player hand.
-			else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	
-					//Debug.Log ("Deliver!!!");
-					GameMaster.requestCardTransfer (100, transferID, true);
-					((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
-					buttonClicked = false;
-					if (Network.connections.Length>=1)
-						networkManager.networkObject.transferID=0;
-					GameMaster.terminateCurrentAuction ();
-					Destroy (this);
-			}
+			
+		}
+		// If auction is successful, transfer the card to respective playerHand.
+		if (!buttonClicked &&((GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) || networkManager.networkObject.transferID!=0)) {
+			buttonClicked = true;
+			auctionInProcess = false;
+			timerStopTime = Time.time;
+			transferID = GameMaster.getHighestBidderID ();
+			Transform temp = (Transform)Instantiate (particleEffectPrefab, transform.localPosition, transform.rotation);
+			Destroy (temp.gameObject, 1f);
 			// For multiplayer purpose.
 			// If button click is detected, that is, if there is a player with highest bidding value register over the network,
-			// at the same time as host is broadcasting transferID value, client is trying to receive it.
-			else if (buttonClicked && Network.isClient && Network.connections.Length>=1)
+			// host broadcasts the transferID value
+			if (Network.isServer && Network.connections.Length>=1)
 			{
-				transferID = networkManager.networkObject.transferID;
-				//Debug.Log ("Receive transfer ID = "+transferID);
+				networkManager.networkObject.broadcastTransferID (transferID);
+				//Debug.Log ("broadcastTransferID");
 			}
-			else if (timeRemaining < 10) {	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
-					Destroy (this, 0.2f);
-					GameMaster.terminateCurrentAuction ();
+		}
+
+			
+		//After delay time, it transfers card from auction deck to player hand.
+		else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	
+			//Debug.Log ("Deliver!!!");
+			GameMaster.requestCardTransfer (100, transferID, true);
+			((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
+			buttonClicked = false;
+			if (Network.connections.Length>=1)
+				networkManager.networkObject.transferID=0;
+			GameMaster.terminateCurrentAuction ();
+			Destroy (this);
+		}
+		// For multiplayer purpose.
+		// If button click is detected, that is, if there is a player with highest bidding value register over the network,
+		// at the same time as host is broadcasting transferID value, client is trying to receive it.
+		else if (buttonClicked && Network.isClient && Network.connections.Length>=1)
+		{
+			transferID = networkManager.networkObject.transferID;
+			//Debug.Log ("Receive transfer ID = "+transferID);
+		}
+		else if (timeRemaining < 10) {	// if timer counts down to zero, the object is destroyed and tells GameMaster to terminate auction.
+			Destroy (this, 0.2f);
+			GameMaster.terminateCurrentAuction ();
 		}
 	}
 
