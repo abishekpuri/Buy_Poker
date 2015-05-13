@@ -20,6 +20,7 @@ public class PlayerHand : Deck {
 	private int roundPoints;
 	// Bidvalue. AI reserves the certain bid value at start of auction, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
+	private int ticks;
 
 	//Permanent Upgrades Checker
 	// list for Hand value for hand evaluation.
@@ -109,9 +110,14 @@ public class PlayerHand : Deck {
 	public void buyPrize(int prizeVal) 
 	{
 				if (roundPoints >= prizeVal) {
-						roundPoints -= prizeVal;
+					roundPoints -= prizeVal;
 						//PlayerPrefs.SetInt ("Points", roundPoints);
 						//10 prize is getting a free new card
+					if (Network.connections.Length>0)
+					{
+						networkManager.networkObject.broadcastPlayersCash (new Vector3(DeckID,cash));
+						networkManager.networkObject.broadcastPlayersPoint (new Vector3(DeckID,roundPoints));
+					}
 				} 
 		}
 	public void evaluateHand()
@@ -401,8 +407,21 @@ public class PlayerHand : Deck {
 
 	// Update is called once per frame
 	void Update () {
+		ticks++;
 		if (GameMaster.gameBegins && !GameMaster.roundEnd)
 			cash += ((Time.deltaTime)*SystemManager.cashIncome)/60f;
+
+		if (Network.connections.Length > 0 && ticks%10==0) {
+			if (DeckID==GameMaster.UserID )
+			{
+				networkManager.networkObject.broadcastPlayersCash (new Vector3(DeckID,cash));
+				networkManager.networkObject.broadcastPlayersPoint (new Vector3(DeckID,roundPoints));
+			}
+			else{
+				cash = networkManager.networkObject.playersCash[DeckID];
+				roundPoints = networkManager.networkObject.playersPoint[DeckID];
+			}
+		}
 	}
 
 	void OnGUI()	//Overrided
@@ -426,8 +445,9 @@ public class PlayerHand : Deck {
 			if (roundPoints >= 10) {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 3, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "50 Cash\n(10)", buttonStyle)) {
-					buyPrize (10);
 					cash += 50;
+					buyPrize (10);
+
 				}
 			}
 			if (roundPoints >= 15) {
@@ -441,7 +461,15 @@ public class PlayerHand : Deck {
 				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 0, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Extra" + "\n" + "Card\n(15)", buttonStyle)) {
 					buyPrize (15);
-					GameMaster.requestCardTransfer (0, 1, true);
+
+					if (Network.connections.Length>0)
+					{
+						networkManager.networkObject.forceRequestCardTransfer (GameMaster.UserID);
+					}
+					else
+					{
+						GameMaster.requestCardTransfer (0, GameMaster.UserID, true);
+					}
 				}
 			}
 		}
