@@ -35,7 +35,8 @@ public class AuctionTimer : MonoBehaviour {
 		timeRemaining = 100;
 		networkHostTimeRemaining = 100;
 		speedMultiplier = 10;	// 10 per second.
-		networkManager.networkObject.transferID = 0;
+		if (Network.connections.Length>0)
+			networkManager.networkObject.transferID = 0;
 		auctionInProcess = true;
 		buttonClicked = false;
 		particleEffectPrefab = Resources.Load <Transform>("prefab/Particle System");
@@ -91,7 +92,7 @@ public class AuctionTimer : MonoBehaviour {
 			
 		}
 		// If auction is successful, transfer the card to respective playerHand.
-		if (!buttonClicked &&((GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) || networkManager.networkObject.transferID!=0)) {
+		if (!buttonClicked &&((GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) || (Network.connections.Length>0 && networkManager.networkObject.transferID!=0))) {
 			buttonClicked = true;
 			auctionInProcess = false;
 			timerStopTime = Time.time;
