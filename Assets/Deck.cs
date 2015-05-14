@@ -103,7 +103,17 @@ public class Deck : MonoBehaviour {
 
 			}
 			setupLayout(currentLayoutType);
+			audio.clip = Resources.Load <AudioClip>("audio/shuffling-cards");
+			audio.Play ();
+			StartCoroutine (audioStopAfter (0.3f));
 		}
+
+	}
+
+	private IEnumerator audioStopAfter(float time)
+	{
+		yield return new WaitForSeconds(time);
+		audio.Stop ();
 	}
 
 	public void generateFullCardDeck()
@@ -131,6 +141,7 @@ public class Deck : MonoBehaviour {
 		}
 		setScaleAndOrder ();
 		setupLayout (currentLayoutType);
+
 	}
 	
 	public void sort()
@@ -245,7 +256,7 @@ public class Deck : MonoBehaviour {
 			deckID = reserveDeckID;
 		cards = new List<Card>();
 		referenceTransform = GetComponent<Transform> ();
-
+		gameObject.AddComponent ("AudioSource");
 	}
 	// Use this for initialization
 	public void Start () {

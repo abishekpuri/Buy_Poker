@@ -195,6 +195,7 @@ public class GameMaster : MonoBehaviour {
 	// Use this for initialization. Overrides ***Start() in MonoBehavior***
 	void Start () {
 		//ResetPrefs();
+		gameObject.AddComponent ("AudioSource");
 		Debug.Log (SystemManager.dummyString);	// test static variables.
 		networkRequired = false;
 		multiplayerMode = false;
@@ -235,7 +236,6 @@ public class GameMaster : MonoBehaviour {
 		// Generate new card deck and shuffle them.
 		searchDeckByID (0).generateFullCardDeck ();
 		searchDeckByID (0).closeDeck ();
-		searchDeckByID (0).shuffle ();
 
 
 		// setup player hands. Decks 0, 100, 101 and 102 are pre-generated inside the gameScene.
@@ -299,6 +299,8 @@ public class GameMaster : MonoBehaviour {
 			}
 
 			// shuffling animation.
+			audio.clip = Resources.Load <AudioClip>("audio/shuffling-cards");
+			audio.Play ();
 			searchDeckByID (0).setupLayout (2);
 			yield return new WaitForSeconds(0.3f);
 			searchDeckByID (0).setupLayout (0);
@@ -334,6 +336,7 @@ public class GameMaster : MonoBehaviour {
 		//total_games = PlayerPrefs.GetInt ("total_games");
 
 		// ==========Deal cards and start the game.================
+		audio.Stop ();
 		yield return StartCoroutine (dealCards (SystemManager.numCardsDealt));	// return startCoroutine(); is same as thread.join(); Waits until the function returns.
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showGUI=true;
@@ -369,6 +372,8 @@ public class GameMaster : MonoBehaviour {
 		for (int i=0; i<playerList.Count; i++) {
 			playerList[i].showCombination=true;
 		}
+		audio.clip = Resources.Load <AudioClip>("audio/pin_drop");
+		audio.Play ();
 		//PlayerPrefs.SetInt ("total_games", total_games + 1);
 		roundEnd = true;
 
@@ -392,6 +397,8 @@ public class GameMaster : MonoBehaviour {
 				}
 		Transform tempParticleSystem = (Transform)Instantiate (Resources.Load <Transform>("prefab/Particle System fadeout"), new Vector3(0,0,0), transform.rotation);
 		tempParticleSystem.renderer.sortingLayerName="Particles";
+		audio.clip = Resources.Load <AudioClip>("audio/cinematic-impact");
+		audio.Play ();
 
 		yield return new WaitForSeconds (1f);
 		// destroy all cards in the game.
@@ -419,6 +426,9 @@ public class GameMaster : MonoBehaviour {
 			{
 				if (playerList[j].DeckID>0 && playerList[j].DeckID<100)
 				{
+					audio.Stop ();
+					audio.clip = Resources.Load <AudioClip>("audio/shuffling-cards");
+					audio.Play ();
 					searchDeckByID(0).transferCardTo (playerList[j], playerList[j].DeckID==UserID);
 					//playerList[j].evaluateHand();
 					yield return new WaitForSeconds(0.2f);
@@ -426,13 +436,17 @@ public class GameMaster : MonoBehaviour {
 			}
 			yield return new WaitForSeconds(0.2f);
 		}
+		audio.Stop ();
 		yield return new WaitForSeconds (2f);
 		for (int i=0; i<playerList.Count; i++)
 			playerList [i].evaluateHand ();
+
 	}
 
 	private IEnumerator auction()
 	{
+		audio.clip = Resources.Load <AudioClip>("audio/bamboo-whip-sound-effect");
+		audio.Play ();
 		requestCardTransfer (0,100,true);
 		yield return new WaitForSeconds (1f);
 		auctionInProgress = true;
@@ -487,6 +501,7 @@ public class GameMaster : MonoBehaviour {
 			}
 			yield return new WaitForSeconds (1f);
 		}
+
 		// while auction is in progress
 
 		// throws auction card into dump if no one pays for auction.
@@ -550,6 +565,7 @@ public class GameMaster : MonoBehaviour {
 						MasterServer.UnregisterHost();
 					Destroy (networkManager.networkObject);
 				}
+				SystemManager.reset();
 				Application.LoadLevel ("menuScene");
 			}
 		}
@@ -566,6 +582,7 @@ public class GameMaster : MonoBehaviour {
 						MasterServer.UnregisterHost();
 					Destroy (networkManager.networkObject);
 				}
+				SystemManager.reset();
 				Application.LoadLevel ("menuScene");
 			}
 

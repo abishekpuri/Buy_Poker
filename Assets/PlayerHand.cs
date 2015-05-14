@@ -405,7 +405,7 @@ public class PlayerHand : Deck {
 		AIControlled = false;
 		showCombination = GameMaster.UserID == DeckID;
 		BidValue = 0;
-		roundPoints = 20;
+		roundPoints = 0;
 		haloPrefab = Resources.Load <Transform>("prefab/haloPrefab");
 	}
 

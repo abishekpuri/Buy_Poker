@@ -31,6 +31,7 @@ public class AuctionTimer : MonoBehaviour {
 
 	// Use this for initialization. Default time and speed settings
 	void Start () {
+		gameObject.AddComponent ("AudioSource");
 		ticks = 0;
 		timeRemaining = 100;
 		networkHostTimeRemaining = 100;
@@ -93,6 +94,8 @@ public class AuctionTimer : MonoBehaviour {
 		}
 		// If auction is successful, transfer the card to respective playerHand.
 		if (!buttonClicked &&((GameMaster.getHighestBidValue () >= (int)timeRemaining && ((PlayerHand)GameMaster.searchDeckByID (GameMaster.getHighestBidderID ())).bidForAuction ((int)timeRemaining)) || (Network.connections.Length>0 && networkManager.networkObject.transferID!=0))) {
+			GameMaster.gm.audio.clip = Resources.Load <AudioClip>("audio/swoosh");
+			GameMaster.gm.audio.Play ();
 			buttonClicked = true;
 			auctionInProcess = false;
 			timerStopTime = Time.time;
@@ -113,6 +116,7 @@ public class AuctionTimer : MonoBehaviour {
 		//After delay time, it transfers card from auction deck to player hand.
 		else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	
 			//Debug.Log ("Deliver!!!");
+
 			GameMaster.requestCardTransfer (100, transferID, true);
 			((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
 			buttonClicked = false;

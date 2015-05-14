@@ -82,7 +82,7 @@ public class networkManager : MonoBehaviour {
 			hostData = MasterServer.PollHostList ();
 		}
 		// If no connection after SEARCH_TIMEOUT, stops searching.
-		if (searching && search_start_time + SEARCH_TIMEOUT < Time.time && Network.connections.Length<1) {
+		if (searching && search_start_time + SEARCH_TIMEOUT < Time.time/* && Network.connections.Length<1*/) {
 			Debug.Log ("Search failed!!");
 			statusMsg="search failed!";
 			searching =false;
@@ -179,6 +179,7 @@ public class networkManager : MonoBehaviour {
 		networkObject.debug ();
 		GameMaster.UserID = 2;
 		networkObject.broadcastRandomValues();
+
 	}
 
 	void OnDisconnectedFromServer()
@@ -186,7 +187,7 @@ public class networkManager : MonoBehaviour {
 		Debug.Log ("disconnected from host!");
 		// destroy the network object on disconnect
 		Destroy (netObj.gameObject);
-
+		Destroy (this);
 	}
 
 	void OnPlayerDisconnected()
@@ -194,6 +195,7 @@ public class networkManager : MonoBehaviour {
 		Debug.Log ("player disconnected!");
 		// destroy the network object on disconnect
 		Destroy (netObj.gameObject);
+		Destroy (this);
 	}
 
 	void OnMasterServerEvent(MasterServerEvent mse){
@@ -202,13 +204,15 @@ public class networkManager : MonoBehaviour {
 			Debug.Log ("Registered Server");
 			//statusMsg="waiting for clients";
 		}
+
 	}
 
 	public void forceDisconnect()
 	{
 		MasterServer.UnregisterHost();
 		Network.Disconnect ();
-		Destroy (networkObject);
+		if (networkObject)
+			Destroy (networkObject);
 
 	}
 
