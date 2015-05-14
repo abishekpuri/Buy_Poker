@@ -72,7 +72,13 @@ public class GameMaster : MonoBehaviour {
 
 
 	public static void endAuctionEarly() {
+		if (Network.connections.Length>0 && !earlyAuctionEnd)
+		{
+			earlyAuctionEnd=true;
+			networkManager.networkObject.forceEndAuctionForAll ();
+		}
 		earlyAuctionEnd = true;
+
 	}
 
 
@@ -439,6 +445,18 @@ public class GameMaster : MonoBehaviour {
 		}
 		
 		while (networkWaitingForPlayers) {
+			// in multiplayer mode, if a game is disconnected, then the game stops.
+			if (multiplayerMode && Network.connections.Length==0)
+			{
+				// destroy all cards in the game.
+				for (int i = 0; i < deckList.Count; i++) {
+					deckList [i].destroyAll ();
+					if (0 < deckList [i].DeckID && deckList [i].DeckID < 100) {
+						deckList.Remove (deckList [i]);
+					}
+				}
+				networkWaitingForPlayers=true;
+			}
 			yield return new WaitForSeconds(0.02f);
 		}
 
@@ -454,7 +472,22 @@ public class GameMaster : MonoBehaviour {
 		}
 
 		// start auction
-		while (auctionInProgress){yield return new WaitForSeconds (1f);}	// while auction is in progress
+		while (auctionInProgress){
+			// in multiplayer mode, if a game is disconnected, then the game stops.
+			if (multiplayerMode && Network.connections.Length==0)
+			{
+				// destroy all cards in the game.
+				for (int i = 0; i < deckList.Count; i++) {
+					deckList [i].destroyAll ();
+					if (0 < deckList [i].DeckID && deckList [i].DeckID < 100) {
+						deckList.Remove (deckList [i]);
+					}
+				}
+				break;
+			}
+			yield return new WaitForSeconds (1f);
+		}
+		// while auction is in progress
 
 		// throws auction card into dump if no one pays for auction.
 		requestCardTransfer (100,101,false);
@@ -510,8 +543,32 @@ public class GameMaster : MonoBehaviour {
 			style.fontSize = Utils.adjustUISize (14,true);
 			GUI.Box (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y+ Utils.adjustUISize (20, false), Utils.adjustUISize (250, true), Utils.adjustUISize (50, false)), "WINNER : Player " + gameWinnerID + "!!", style);
 			if (GUI.Button (new Rect (screenPos.x - Utils.adjustUISize (125, true), Camera.main.pixelHeight - resultScreenPos.y +Utils.adjustUISize (200, false), Utils.adjustUISize (250, true), Utils.adjustUISize (50, false)), "Back to menu", styleBtn)) {
+				if (Network.connections.Length>0)
+				{
+					Network.Disconnect();
+					if (Network.isServer)
+						MasterServer.UnregisterHost();
+					Destroy (networkManager.networkObject);
+				}
 				Application.LoadLevel ("menuScene");
 			}
+		}
+		else
+		{
+			Vector3 backBtnPos = Camera.main.WorldToScreenPoint(new Vector3(4.5f, 4.5f, 0));
+			style.fontSize = Utils.adjustUISize (14,true);
+
+			if (GUI.Button (new Rect (backBtnPos.x, Camera.main.pixelHeight - backBtnPos.y, Utils.adjustUISize (200, true), Utils.adjustUISize (50, false)), "Back to menu", styleBtn)) {
+				if (Network.connections.Length>0)
+				{
+					Network.Disconnect();
+					if (Network.isServer)
+						MasterServer.UnregisterHost();
+					Destroy (networkManager.networkObject);
+				}
+				Application.LoadLevel ("menuScene");
+			}
+
 		}
 		/*if (GUI.Button (new Rect (screenPos.x-390, Camera.main.pixelHeight - screenPos.y + 150, 80, 20), "Reset")) {
 						ResetPrefs ();

@@ -14,11 +14,11 @@ using System.Collections;
 
 public class networkBidObject : MonoBehaviour {
 
-	public int[] bidValueByID;
-	public int[] randomValues;
-	public int[] playersReady;
-	public float[] playersCash;
-	public int[] playersPoint;
+	public int[] bidValueByID;		// every players broadcast their own bidValue by button pressing action.
+	public int[] randomValues;		// synchronized by from side.
+	public int[] playersReady;		// to synchronize state transitions.
+	public float[] playersCash;		// every players broadcast their own cash value (makes it fragile against cheating, ah but who cares)
+	public int[] playersPoint;		// every players broadcast their own point value
 	
 	public float auctionCounter;	// auction counter value synchronized from the host side.
 	public int transferID;			// card transfer ID after auction, synchronized from the host side.
@@ -118,7 +118,7 @@ public class networkBidObject : MonoBehaviour {
 	}
 	public bool isPlayersReady()
 	{
-		// I was just too lazy to even write one for loop.
+		// I was just too lazy to even write one for loop. Should be modified for scalability (3 or more players)
 		if (playersReady [1] > 0 && playersReady [2] > 0) {
 			playersReady[1]=0;
 			playersReady[2]=0;

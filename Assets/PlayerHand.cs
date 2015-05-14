@@ -40,7 +40,8 @@ public class PlayerHand : Deck {
 	// below are non-ingame temporary variables. Feel free to change the variables anywhere.
 	public bool showGUI = false;
 	public bool showCombination = true;
-
+	public Transform haloPrefab;
+	public Transform haloPrefabReference;
 
 	public float Cash
 	{
@@ -52,7 +53,7 @@ public class PlayerHand : Deck {
 		get{ return roundPoints;}
 	}
 	~PlayerHand() {
-
+		Destroy (haloPrefabReference);
 	}
 	public virtual void purchaseUpgrade(int Upgrade)
 	{
@@ -394,6 +395,8 @@ public class PlayerHand : Deck {
 	// Use this for initialization
 	void Start () {
 		base.Start ();
+		if (DeckID==GameMaster.UserID)
+			haloPrefabReference = (Transform)Instantiate (haloPrefab,transform.position,transform.rotation);
 	}
 
 	void Awake(){
@@ -402,7 +405,8 @@ public class PlayerHand : Deck {
 		AIControlled = false;
 		showCombination = GameMaster.UserID == DeckID;
 		BidValue = 0;
-		roundPoints = 0;
+		roundPoints = 20;
+		haloPrefab = Resources.Load <Transform>("prefab/haloPrefab");
 	}
 
 	// Update is called once per frame
@@ -443,7 +447,7 @@ public class PlayerHand : Deck {
 		Vector3 awardButtonScreenPos;
 		if (DeckID == GameMaster.UserID && showGUI) {
 			if (roundPoints >= 10) {
-				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 3, transform.localPosition.z));
+				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (5.2f, 3, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "50 Cash\n(10)", buttonStyle)) {
 					cash += 50;
 					buyPrize (10);
@@ -451,14 +455,14 @@ public class PlayerHand : Deck {
 				}
 			}
 			if (roundPoints >= 15) {
-				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 1.5f, transform.localPosition.z));
+				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (5.2f, 1.5f, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Stop" + "\n" + "Auction\n(10)", buttonStyle)) {
 					buyPrize (15);
 					GameMaster.endAuctionEarly ();
 				}
 			}
 			if (roundPoints >= 15) {
-				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (6, 0, transform.localPosition.z));
+				awardButtonScreenPos = Camera.main.WorldToScreenPoint (new Vector3 (5.2f, 0, transform.localPosition.z));
 				if (GUI.Button (new Rect (awardButtonScreenPos.x, Camera.main.pixelHeight - awardButtonScreenPos.y, buttonStyleAdjustedUISizeX, buttonStyleAdjustedUISizeY), "Extra" + "\n" + "Card\n(15)", buttonStyle)) {
 					buyPrize (15);
 

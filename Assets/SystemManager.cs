@@ -48,8 +48,8 @@ public class SystemManager : MonoBehaviour {
 	{
 		numPlayers = 2;
 		numCardsDealt = 2;
-		numCardsAuction = 3;
-		numRounds = 3;
+		numCardsAuction = 5;
+		numRounds = 5;
 		startCash = 100;
 		cashIncome = 60;
 	}
