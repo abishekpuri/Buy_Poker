@@ -5,12 +5,8 @@ using System.Collections;
  * AuctionTimer has two parts. As soon as this object is instantiated, it starts counting.
  * Also, Button UI is also bound to this object.
  * 
- * This Class contains hardCoded part, and needs to be solved:
- * 1. Button pressing action does not distinguish the player id
- * 2. Button pressing action cannot be done automatically, by AI
  * 
- * 
- * If the counter is interrupted by player or if it counts to 10, it destroys itself.
+ * If any player wins the bid or if it counts to 10, it requests card transfer to GameMaster, and destroys itself.
  * 
  * */
 public class AuctionTimer : MonoBehaviour {
@@ -113,8 +109,9 @@ public class AuctionTimer : MonoBehaviour {
 		}
 
 			
-		//After delay time, it transfers card from auction deck to player hand.
-		else if (buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	
+		//A second delay after one player wins the bid, it transfers card from auction deck to player hand.
+		// if transferID=0 (network mode), then wait until the data arrive
+		else if (transferID!=0 && buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	
 			//Debug.Log ("Deliver!!!");
 
 			GameMaster.requestCardTransfer (100, transferID, true);

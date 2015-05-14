@@ -47,14 +47,14 @@ using System.Collections.Generic;
 
 public class GameMaster : MonoBehaviour {
 
-	// constant player ID value
+	// constant player ID value, changed when connected to network
 	public static int UserID = 1;
 
 	public static GameMaster gm;		// Enables gameMaster instance to be referenced from other classes, so that non-static functions can be called. It is currently never used.
 	public static List<Deck> deckList;// = new List<Deck>();	//GameMaster keeps track of all decks in game.
 	public static List<PlayerHand> playerList;// = new List<PlayerHand>();		//GameMaster keeps track of all players in game
-	private static bool auctionInProgress = false;
-	public static bool earlyAuctionEnd = false;
+	private static bool auctionInProgress = false;		// to pause the game flow while auction is in process
+	public static bool earlyAuctionEnd = false;		// in-game powerup
 	public static int winnerID;
 	public static bool gameBegins = false;
 	public static bool roundEnd = true;

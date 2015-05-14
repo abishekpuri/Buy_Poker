@@ -23,9 +23,9 @@ public class SystemManager : MonoBehaviour {
 
 	public static string dummyString = "nothing yet";
 	public static int numPlayers = 3;
-	public static int numCardsDealt = 3;
-	public static int numCardsAuction = 2;
-	public static int numRounds = 3;
+	public static int numCardsDealt = 2;
+	public static int numCardsAuction = 7;
+	public static int numRounds = 5;
 	public static int startCash = 200;	//
 	public static int cashIncome = 60;	// per minute
 	public static bool isCustom = false;
@@ -39,9 +39,9 @@ public class SystemManager : MonoBehaviour {
 	public static void reset() 
 	{
 		numPlayers = 3;
-		numCardsDealt = 3;
-		numCardsAuction = 2;
-		numRounds = 3;
+		numCardsDealt = 2;
+		numCardsAuction = 7;
+		numRounds = 5;
 		startCash = 200;
 		cashIncome = 60;
 	}
@@ -49,8 +49,8 @@ public class SystemManager : MonoBehaviour {
 	public void setForMultiplayer()
 	{
 		numPlayers = 2;
-		numCardsDealt = 2;
-		numCardsAuction = 5;
+		numCardsDealt = 1;
+		numCardsAuction = 7;
 		numRounds = 5;
 		startCash = 100;
 		cashIncome = 60;

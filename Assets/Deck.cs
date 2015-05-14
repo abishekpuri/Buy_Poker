@@ -103,6 +103,7 @@ public class Deck : MonoBehaviour {
 
 			}
 			setupLayout(currentLayoutType);
+			// sound effect
 			audio.clip = Resources.Load <AudioClip>("audio/shuffling-cards");
 			audio.Play ();
 			StartCoroutine (audioStopAfter (0.3f));
@@ -222,7 +223,7 @@ public class Deck : MonoBehaviour {
 			pos[0] = new Vector3 (indexReference*0.3f,0,0);
 			pos[1] = new Vector3 (indexReference*(-120f)/(cards.Count),0,0.001f);
 			break;
-		case 6:			// DO NOT USE THIS WITH ANY MORE THAN 100 CARDS. You will see (1-cos) wave drawn on Y-axis
+		case 6:			// You will see (1-cos) wave drawn on Y-axis
 			float maximumTilt = 30f;
 			maximumTilt *= Mathf.Sqrt (cards.Count)/7;		//maximum angle normalization
 			float middleCardIndex = cards.Count/2f-0.5f;		//reference point for yDist=0
