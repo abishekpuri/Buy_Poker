@@ -21,6 +21,8 @@ public class PlayerHand : Deck {
 	// Bidvalue. AI reserves the certain bid value at start of auction, and player retrieves the bid value by pressing auctionTimer button.
 	private int BidValue;
 	private int ticks;
+	private int Aggression;
+	private int Bluff;
 
 	//Permanent Upgrades Checker
 	// list for Hand value for hand evaluation.
@@ -34,7 +36,7 @@ public class PlayerHand : Deck {
 	
 	// AI related variables.
 	private int Multiplier = 1;
-	public List<List<Card> > OpponentCards;
+	public List<Card> GoneCards = new List<Card>();
 	public List<float> WinningBidPercentage = new List<float>();
 
 	// below are non-ingame temporary variables. Feel free to change the variables anywhere.
@@ -68,19 +70,19 @@ public class PlayerHand : Deck {
 	{
 		base.destroyAll ();
 		while (winningHand.Count>0) {
-			Destroy (winningHand [0].gameObject);
-			winningHand.Remove (winningHand [0]);
-		}
+						Destroy (winningHand [0].gameObject);
+						winningHand.Remove (winningHand [0]);
+				}
+		while (GoneCards.Count>0) {
+						Destroy (GoneCards [0].gameObject);
+						GoneCards.Remove (GoneCards [0]);
+				}
 	}
 
 	public void setCash(float value) {
 				cash = value;
 		}
-	public void setAIControl()
-	{
-		AIControlled = true;
-		showCombination = false;
-	}
+
 	public void playerWinner(int numPlayers)
 	{
 		//Debug.Log (deckID + ": " + Points);
@@ -121,8 +123,11 @@ public class PlayerHand : Deck {
 					}
 				} 
 		}
-	public void evaluateHand()
+	public void evaluateHand(List<Card> candy = null)
 	{
+		if (candy == null) {
+						candy = cards;
+				}
 		int counter = 0;
 		bool straight = false;
 		List<int> value = new List<int> ();
@@ -133,13 +138,13 @@ public class PlayerHand : Deck {
 			}
 			value.Add (0);
 		}
-		for (int i = 0; i < cards.Count; i++) {
-			if (cards [i].Rank == 1) {
+		for (int i = 0; i < candy.Count; i++) {
+			if (candy [i].Rank == 1) {
 				value [14] ++;
 			} else {
-				value [cards [i].Rank]++;
+				value [candy [i].Rank]++;
 			}
-			suit [cards [i].Suit]++;
+			suit [candy [i].Suit]++;
 		}
 		//Check for A to 5 straight
 		if (value [14] > 0) {
@@ -175,7 +180,6 @@ public class PlayerHand : Deck {
 		int flush = suit.FindAll (a => a >= 5).Count;
 		if ((flush != 0) && straight) {
 			CombinationRank = 1;
-			//WARNING : THIS WILL NOT WORK IF PLAYER HAS TWO FLUSHES
 			FlushValue = suit.FindLastIndex(a=> a>=5);
 			CombinationType = "Straight Flush";
 		} else if (four_kind >= 1) {
@@ -226,7 +230,6 @@ public class PlayerHand : Deck {
 		}
 		setWinningHand ();
 	}
-	//Warning : setWinningHand not working for flush/straight, for flush it is showing all cards
 	private void setWinningHand() 
 	{
 		string[] single = {"High Card","One Pair","Three of a Kind","Four of a Kind"};
@@ -296,12 +299,19 @@ public class PlayerHand : Deck {
 						Debug.Log (WinningBidPercentage [i]);
 				}
 		}
-
+	public void setAIControl()
+	{
+		System.Random rndm = new System.Random ();
+		AIControlled = true;
+		showCombination = false;
+		Aggression = rndm.Next (1, 4);
+		Bluff = rndm.Next (2, 4);
+	}
 	public void CalculateAIBid(Card auctionCard)
 	{
 		/*To prevent players from catching on to AI's lower point for useless cards, we will track all bets made below 50% of 
 		 * total cash, and remember the percentge, adjusting ours accordingly*/
-
+			GoneCards.Add (auctionCard);
 		float avgBetPercentage = 0;
 		float bottomCap = PlayerPrefs.GetFloat("bottomCap");
 		for (int i = 0; i < WinningBidPercentage.Count; ++i) {
@@ -319,7 +329,7 @@ public class PlayerHand : Deck {
 								bottomCap -= 0.05f;
 								PlayerPrefs.SetFloat ("bottomCap", bottomCap);
 						}
-				}
+		}
 		/*Strategy 1 : Calculate the Value of the current card using a weighted vector system that increases semi exponentially to
 		 * factor in the difficulty in moving up a level in the later stages. We then find the power value using this vector system
 		 * and normalize it using total power. This gives us a raw value of the card we can then adjust according to aggresion,
@@ -331,28 +341,41 @@ public class PlayerHand : Deck {
 		 then pay 50% of current cash. Otherwise, only bid 10% of current cash.*/
 				System.Random rndm = new System.Random ();
 				int current_rank = CombinationRank;
+				int new_rank = 0;
+				int new_score = 0;
 				int current_score = CombinationValue;
-				bool bluff = (rndm.Next (1, 10) <= 5 ? true : false);
-
+				//This will tell wether the player will bluff now or not
+				bool bluffNow = (rndm.Next (1, 10) <= 5 ? true : false);
+		//This will tell wether the player will make a protective play or not
+				bool protectNow = (rndm.Next (1, 10) <= 5 ? true : false);
+				//This will calculate the value of the current card
 				CARDS.Add (auctionCard);
 				this.evaluateHand ();
+			    new_rank = CombinationRank;
+				new_score = CombinationValue;
+				float rankVal = Aggression/10;
+		//See if this card will improve our hand, then we adjust the improvement to approximate the chances of winning
 				if (current_rank > CombinationRank) {
-			float rankVal = (float)(current_rank - CombinationRank);
-			rankVal /= 10;
-			rankVal += 0.50f;
-			BidValue = (int)(cash *  rankVal);
-		} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
-						BidValue = (int)(0.3 * cash);
-		} else {
-						//Create a bluff, this card cannot help at all, but 10% of the time, the program will act like its an important card.
-						if (bluff) {
-								BidValue = (int)((0.4+rndm.Next(1,3)/10) * cash);
-						} else {
-								BidValue = (int)(bottomCap * cash);
+						rankVal += (float)(current_rank - CombinationRank);
+						rankVal /= 10;
+						rankVal += 0.40f;
+				} else if ((current_rank == CombinationRank) && (current_score > CombinationValue)) {
+						rankVal += 0.3f;
+				} else {
+						this.evaluateHand (GoneCards);
+						if (current_rank < CombinationRank && protectNow) {
+								rankVal += 0.4f;
 						}
+				}
+		this.evaluateHand ();
+		//Create a bluff, this card cannot help at all, but 10% of the time, the program will act like its an important card.
+		if (bluffNow) {
+			BidValue = (int)(Math.Max(rankVal,Bluff/10)* cash);
+		} else {
+			BidValue = (int)(Math.Max (rankVal,bottomCap) * cash);
 		}
-		if (BidValue >= 90) {
-						BidValue = 90;
+		if (BidValue >= (int)(0.9*Cash)) {
+						BidValue = (int)(0.9*Cash);
 				}
 		CARDS.Remove (auctionCard);
 	}
