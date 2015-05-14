@@ -147,8 +147,16 @@ public class AuctionTimer : MonoBehaviour {
 		GUIStyle buttonStyle = new GUIStyle (GUI.skin.button);
 		buttonStyle.normal.textColor = new Color (1f, 0.81568632f, 0.3156862754f, 1f);
 		buttonStyle.fontSize = Utils.adjustUISize (20,true);
-		buttonStyle.hover.textColor = Color.yellow;
-		buttonStyle.active.textColor = Color.cyan;
+		if (GameMaster.searchHandByID (GameMaster.UserID).Cash >= timeRemaining) {
+			buttonStyle.normal.textColor = Color.yellow;
+			buttonStyle.active.textColor = Color.cyan;
+		}
+		else {
+			buttonStyle.normal.textColor = Color.red;
+			buttonStyle.hover.textColor = Color.red;
+			buttonStyle.active.textColor = Color.red;
+		}
+
 		buttonStyle.fontStyle = FontStyle.Bold;
 		buttonStyle.normal.background = buttonTexture;
 		buttonStyle.hover.background = buttonTexture;

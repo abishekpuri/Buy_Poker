@@ -60,16 +60,9 @@
      <Compile Include="Assets\networkBidObject.cs" />
      <Compile Include="Assets\networkManager.cs" />
      <Compile Include="Assets\settingScene.cs" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>G:/Workspace/COMP4451/Buy_Poker/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{CEA680B2-0095-A0B0-D4D2-1BAA3B2DE950}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
