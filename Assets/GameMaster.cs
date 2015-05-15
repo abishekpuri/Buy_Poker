@@ -292,7 +292,7 @@ public class GameMaster : MonoBehaviour {
 						deckList[i].transferCardTo (searchDeckByID (0), false);
 							//playerList[j].evaluateHand();
 						searchDeckByID (0).closeDeck ();
-						yield return new WaitForSeconds(0.05f);
+						yield return new WaitForSeconds(0.1f);
 					}
 				}
 				searchDeckByID (0).closeDeck ();

@@ -139,7 +139,7 @@ public class networkBidObject : MonoBehaviour {
 
 	public void debug()
 	{
-		Debug.Log ("!!!!!referenced");
+		//Debug.Log ("!!!!!referenced");
 	}
 
 	public int getHighestBidderIDOverNetwork()

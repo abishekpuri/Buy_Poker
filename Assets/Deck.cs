@@ -77,6 +77,10 @@ public class Deck : MonoBehaviour {
 	//===================================== Public container functions =====================================
 	public void transferCardTo(Deck another, bool cardOpen, int rank=0, int suit=0)
 	{
+		int debugSourceCountBefore = cards.Count;
+		int debugDestCountBefore = another.cards.Count;
+		Debug.Log ("cards count of source, from = "+cards.Count);
+		Debug.Log ("cards count of destination, from = "+another.cards.Count);
 		if (cards.Count>0)
 		{
 			// transfer top card
@@ -108,7 +112,11 @@ public class Deck : MonoBehaviour {
 			audio.Play ();
 			StartCoroutine (audioStopAfter (0.3f));
 		}
-
+		Debug.Log ("cards count of source, to = "+cards.Count);
+		Debug.Log ("cards count of destination, to = "+another.cards.Count);
+		if (debugSourceCountBefore - cards.Count != another.cards.Count - debugDestCountBefore) {
+			Debug.LogWarning ("Warning!!! Transfer card function malfunctioning");
+		}
 	}
 
 	private IEnumerator audioStopAfter(float time)

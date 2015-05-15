@@ -227,6 +227,7 @@ public class networkManager : MonoBehaviour {
 		GameMaster.multiplayerMode = true;
 
 		// this if statement is used over, over and over. Check if you are connected or not. should be a better way.
+		// !!!! I realized This whole statement can be changed by one line, but I am quite lazy to do that right now
 		if (!Network.isClient && (!Network.isServer || Network.connections.Length<1)) {
 			GameMaster.networkRequired=true;
 			if (!searching)

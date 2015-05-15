@@ -91,7 +91,7 @@ public class PlayerHand : Deck {
 		Points += Multiplier;
 		PlayerPrefs.SetInt ("Points", Points);
 		PlayerPrefs.Save ();
-		Debug.Log (deckID + ": " + PlayerPrefs.GetInt ("Points"));
+		//Debug.Log (deckID + ": " + PlayerPrefs.GetInt ("Points"));
 	}
 	public void playerLoser() 
 	{
@@ -99,7 +99,7 @@ public class PlayerHand : Deck {
 		Points += 1;
 		PlayerPrefs.SetInt ("Points", Points);
 		PlayerPrefs.Save ();
-		Debug.Log (deckID + ": " + PlayerPrefs.GetInt ("Points"));
+		//Debug.Log (deckID + ": " + PlayerPrefs.GetInt ("Points"));
 	}
 	public void Winner() 
 	{
@@ -164,7 +164,7 @@ public class PlayerHand : Deck {
 				CombinationValue = (counter == 0 ? i : CombinationValue);
 				counter++;
 				if (deckID == 1) {
-					Debug.Log (counter);
+					//Debug.Log (counter);
 				}
 			} else {
 				counter = 0;
@@ -250,9 +250,9 @@ public class PlayerHand : Deck {
 				List<Card> secondPart = cards.FindAll (a => a.Rank == SecondaryCombinationValue);
 				winningHand.AddRange (secondPart);
 		} else if (CombinationType == "Flush") {
-				Debug.Log ("FlushValue = "+FlushValue);
+				//Debug.Log ("FlushValue = "+FlushValue);
 				List<Card> flushCards = cards.FindAll (a => a.Suit == FlushValue);
-				Debug.Log ("FlushCardsCount = "+flushCards.Count);
+				//Debug.Log ("FlushCardsCount = "+flushCards.Count);
 				int count = 4;
 				while (count >= 0) {
 				winningHand.Add (flushCards[0]);
@@ -296,7 +296,7 @@ public class PlayerHand : Deck {
 	//Debugging Function to check if winning bids are being entered
 	public void showWinningBids() {
 				for (int i = 0; i < WinningBidPercentage.Count; ++i) {
-						Debug.Log (WinningBidPercentage [i]);
+						//Debug.Log (WinningBidPercentage [i]);
 				}
 		}
 	public void setAIControl()
@@ -388,7 +388,7 @@ public class PlayerHand : Deck {
 		{
 			networkManager.networkObject.broadcastBidValue (new Vector2(DeckID, (int)0));
 		}
-		Debug.Log ("Player "+DeckID+ "'s current cash = "+cash + "!!");
+		//Debug.Log ("Player "+DeckID+ "'s current cash = "+cash + "!!");
 	}
 
 	public bool bidForAuction(int price)

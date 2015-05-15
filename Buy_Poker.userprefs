@@ -1,16 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\networkBidObject.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\AuctionTimer.cs">
     <Files>
-      <File FileName="Assets\AuctionTimer.cs" Line="138" Column="2" />
-      <File FileName="Assets\PlayerHand.cs" Line="16" Column="2" />
-      <File FileName="Assets\SystemManager.cs" Line="189" Column="1" />
-      <File FileName="Assets\GameMaster.cs" Line="141" Column="5" />
-      <File FileName="Assets\Deck.cs" Line="226" Column="16" />
-      <File FileName="Assets\Card.cs" Line="46" Column="2" />
-      <File FileName="Assets\extendedNetworkObjectChat.cs" Line="54" Column="35" />
+      <File FileName="Assets\AuctionTimer.cs" Line="42" Column="39" />
+      <File FileName="..\..\Unity workspace\Buy'em Poker\Buy_Poker Build ver 1.0 15052015\Assets\AuctionTimer.cs" Line="1" Column="1" />
+      <File FileName="Assets\Deck.cs" Line="1" Column="1" />
+      <File FileName="Assets\GameMaster.cs" Line="554" Column="4" />
+      <File FileName="Assets\Card.cs" Line="1" Column="1" />
+      <File FileName="Assets\networkBidObject.cs" Line="1" Column="1" />
       <File FileName="Assets\networkManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\networkBidObject.cs" Line="90" Column="2" />
+      <File FileName="Assets\PlayerHand.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
