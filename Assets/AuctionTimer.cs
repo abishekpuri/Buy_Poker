@@ -10,21 +10,21 @@ using System.Collections;
  * 
  * */
 public class AuctionTimer : MonoBehaviour {
-
+	
 	private int ticks;
-
+	
 	private float timeRemaining;	// time remaining
 	private float networkHostTimeRemaining;	// network host time remaining.
 	private float speedMultiplier;	// countdown speed.
 	private bool auctionInProcess;
 	private bool buttonClicked;		
 	private int transferID;
-
+	
 	private Transform particleEffectPrefab;
 	private Texture2D buttonTexture;
 	private double timerStopTime;	//when buttonClicked=true, timer stops to 
 	const double BUTTON_DELAY = 1;		// delay before destroying itself.
-
+	
 	// Use this for initialization. Default time and speed settings
 	void Start () {
 		gameObject.AddComponent ("AudioSource");
@@ -38,11 +38,12 @@ public class AuctionTimer : MonoBehaviour {
 		buttonClicked = false;
 		particleEffectPrefab = Resources.Load <Transform>("prefab/Particle System");
 		buttonTexture = Resources.Load <Texture2D>("images/btnTexture");
-
+		
 		// For example, a server might not yet have broadcasted its auction timer. Then, clients would probably use the value of previous auction.
 		// Client resets network register value to timeRemaining, until fresh value from the host arrives.
 		if (Network.isClient && Network.connections.Length >= 1) {
 			networkManager.networkObject.auctionCounter=100;
+			networkManager.networkObject.broadcastBidValue (new Vector2(GameMaster.UserID,0));
 		}
 	}
 	
@@ -54,7 +55,7 @@ public class AuctionTimer : MonoBehaviour {
 		if (timeRemaining >= 10 && auctionInProcess) {
 			timeRemaining -= Time.deltaTime * speedMultiplier;
 		}
-
+		
 		/**
 		 * 
 		 * Network related section => timer synchronization code.
@@ -80,11 +81,13 @@ public class AuctionTimer : MonoBehaviour {
 			if (ticks%10 == 5)
 			{
 				networkHostTimeRemaining=networkManager.networkObject.auctionCounter;// - (Network.GetLastPing(Network.connections[0])/1000f)*speedMultiplier;
+				Debug.Log ("counter sync client side, raw value= "+ networkHostTimeRemaining);
 				// little extrapolation technique used for better time synchronization at client side.
 				// condition to extrapolate : it must be counting down in the future.
 				if (networkHostTimeRemaining >= 10 && auctionInProcess)
 					networkHostTimeRemaining-= (Network.GetAveragePing(Network.connections[0])/1000f)*speedMultiplier;
-				//Debug.Log ("counter sync client side = "+ networkHostTimeRemaining);
+				Debug.Log ("counter sync client side, audjusted to latency= "+ networkHostTimeRemaining);
+				Debug.Log ("Average ping= "+ Network.GetAveragePing(Network.connections[0]));
 			}
 			
 		}
@@ -107,13 +110,13 @@ public class AuctionTimer : MonoBehaviour {
 				//Debug.Log ("broadcastTransferID");
 			}
 		}
-
-			
+		
+		
 		//A second delay after one player wins the bid, it transfers card from auction deck to player hand.
 		// if transferID=0 (network mode), then wait until the data arrive
 		else if (transferID!=0 && buttonClicked && timerStopTime + BUTTON_DELAY < Time.time) {	
 			//Debug.Log ("Deliver!!!");
-
+			
 			GameMaster.requestCardTransfer (100, transferID, true);
 			((PlayerHand)GameMaster.searchDeckByID (transferID)).takeAuctionCard ((int)timeRemaining);
 			buttonClicked = false;
@@ -135,7 +138,7 @@ public class AuctionTimer : MonoBehaviour {
 			GameMaster.terminateCurrentAuction ();
 		}
 	}
-
+	
 	// override OnGUI() from monobehavior. Implicitly called by unity.
 	// apparently, GUI is refreshed every frame.
 	void OnGUI()
@@ -153,12 +156,12 @@ public class AuctionTimer : MonoBehaviour {
 			buttonStyle.hover.textColor = Color.red;
 			buttonStyle.active.textColor = Color.red;
 		}
-
+		
 		buttonStyle.fontStyle = FontStyle.Bold;
 		buttonStyle.normal.background = buttonTexture;
 		buttonStyle.hover.background = buttonTexture;
 		buttonStyle.active.background = buttonTexture;
-
+		
 		// Converts localPosition of the transform to position vector in screenSpace, then to GUI space. I found some unidentified bug, and it needs rectification.
 		Vector3 pos = transform.localPosition;//(Vector2)Camera.WorldToScreenPoint(pos)
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(pos.x, pos.y-1, pos.z));
