@@ -545,7 +545,8 @@ public class GameMaster : MonoBehaviour {
 					if (!(!Network.isClient && (!Network.isServer || Network.connections.Length < 1))) {
 						networkManager.networkObject.playerIsReady(UserID);
 					}
-					StartCoroutine (startRound ());
+                    if (!networkWaitingForPlayers)  // bugfix
+					    StartCoroutine (startRound ());
 				}
 
 			}
